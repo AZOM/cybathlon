@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">ZEDControl</string>
 
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="togglebutton_power_on">Power ON</string>
+    <string name="togglebutton_power_off">Power OFF</string>
+    <string name="button_lift_front_wheels">Lift front wheels</string>
+    <string name="button_lift_rear_wheels">Lift rear wheels</string>
+    <string name="button_safe_driving">Drive with fall protection</string>
+    <string name="button_lower_front_wheels">Lower front wheels</string>
+    <string name="button_lower_rear_wheels">Lower rear wheels</string>
+    <string name="button_free_driving">Free driving</string>
 </resources>

@@ -7,13 +7,12 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * The main full-screen activity that shows all the available controls for user interaction.
  */
 public class MainActivity extends AppCompatActivity {
 
     private View mContentView;
-    private View mControlsView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        mContentView = findViewById(R.id.fullscreen_content);
-        mControlsView = findViewById(R.id.fullscreen_content_controls);
+        mContentView = findViewById(R.id.fragment_container);
 
         initControls();
     }
@@ -30,12 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initControls() {
         //TODO: init all controls (buttons) belonging to activity_main
-        findViewById(R.id.dummy_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((TextView) mContentView).setText("clicked");
-            }
-        });
+
     }
 
 

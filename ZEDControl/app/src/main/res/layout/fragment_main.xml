@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ToggleButton
+        android:id="@+id/togglebutton_power"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:checked="true"
+        android:textOff="@string/togglebutton_power_off"
+        android:textOn="@string/togglebutton_power_on" />
+
+    <LinearLayout
+        android:id="@+id/layout_controls_stairs_up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/togglebutton_power"
+        android:background="@color/black_overlay"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_level_front_wheels"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:text="@string/button_lift_front_wheels" />
+
+        <Button
+            android:id="@+id/button_level_rear_wheel"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:text="@string/button_lift_rear_wheels" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_controls_safe_driving"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_controls_stairs_up"
+        android:background="@color/black_overlay"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_safe_drive"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="@string/button_safe_driving" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_controls_stairs_down"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_controls_safe_driving"
+        android:background="@color/black_overlay"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_lower_front_wheels"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:text="@string/button_lower_front_wheels" />
+
+        <Button
+            android:id="@+id/button_lower_rear_wheel"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:text="@string/button_lower_rear_wheels" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layout_controls_bottom"
+        style="?metaButtonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_overlay"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/dummy_button3"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="@string/button_free_driving" />
+
+    </LinearLayout>
+
+</RelativeLayout>
