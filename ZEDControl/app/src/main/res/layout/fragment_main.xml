@@ -20,7 +20,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button_level_front_wheels"
+            android:id="@+id/button_lift_front_wheels"
             style="?metaButtonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="100dp"
@@ -28,7 +28,7 @@
             android:text="@string/button_lift_front_wheels" />
 
         <Button
-            android:id="@+id/button_level_rear_wheel"
+            android:id="@+id/button_lift_rear_wheel"
             style="?metaButtonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="100dp"
@@ -46,7 +46,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/button_safe_drive"
+            android:id="@+id/button_fall_protection"
             style="?metaButtonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="100dp"
@@ -91,7 +91,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/dummy_button3"
+            android:id="@+id/button_driving_free"
             style="?metaButtonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="100dp"

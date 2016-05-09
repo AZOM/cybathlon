@@ -21,14 +21,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mContentView = findViewById(R.id.fragment_container);
-
-        initControls();
-    }
-
-
-    private void initControls() {
-        //TODO: init all controls (buttons) belonging to activity_main
-
     }
 
 
