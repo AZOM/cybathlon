@@ -1,10 +1,8 @@
 package ch.hsr.zedcontrol;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
 
 /**
  * The main full-screen activity that shows all the available controls for user interaction.
@@ -21,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mContentView = findViewById(R.id.layout_main);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, new MainFragment())
+                .commit();
     }
 
 

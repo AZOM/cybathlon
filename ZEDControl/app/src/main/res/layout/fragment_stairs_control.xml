@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/button_lift_front_wheels"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:drawableStart="@drawable/stairs_up"
+        android:text="@string/button_lift_front_wheels"
+        android:theme="@style/AppTheme.Button" />
+
+    <Button
+        android:id="@+id/button_lift_rear_wheel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:drawableStart="@drawable/stairs_up"
+        android:text="@string/button_lift_rear_wheels"
+        android:theme="@style/AppTheme.Button" />
+
+    <Button
+        android:id="@+id/button_fall_protection"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:drawableStart="@drawable/fall_protection"
+        android:text="@string/button_safe_driving" />
+
+
+    <Button
+        android:id="@+id/button_lower_front_wheels"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:drawableStart="@drawable/stairs_down"
+        android:text="@string/button_lower_front_wheels" />
+
+    <Button
+        android:id="@+id/button_lower_rear_wheel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:drawableStart="@drawable/stairs_down"
+        android:text="@string/button_lower_rear_wheels" />
+
+    <LinearLayout
+        android:id="@+id/layout_controls_bottom"
+        style="?metaButtonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:background="@color/black_overlay"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_driving_free"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/button_free_driving" />
+
+    </LinearLayout>
+
+</LinearLayout>
