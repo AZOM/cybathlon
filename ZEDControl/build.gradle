@@ -12,11 +12,15 @@ buildscript {
     }
 }
 
+
 allprojects {
     repositories {
         jcenter()
+        //usb-serial library
+        maven { url "https://jitpack.io" }
     }
 }
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

@@ -101,11 +101,9 @@ public class StairsControlsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "pop back to MainFragment and activate free driving");
-                Toast.makeText(getActivity(), R.string.toast_activate_free_driving,
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.toast_activate_free_driving, Toast.LENGTH_LONG).show();
 
-                getFragmentManager().popBackStack(MainFragment.TAG,
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getFragmentManager().popBackStack(MainFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
     }
