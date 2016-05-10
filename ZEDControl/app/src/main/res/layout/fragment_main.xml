@@ -14,23 +14,25 @@
     <LinearLayout
         android:id="@+id/layout_controls_stairs_up"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_below="@id/togglebutton_power"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_lift_front_wheels"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:drawableLeft="@drawable/stairs_up"
             android:text="@string/button_lift_front_wheels"
             android:theme="@style/AppTheme.Button" />
 
         <Button
             android:id="@+id/button_lift_rear_wheel"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:drawableLeft="@drawable/stairs_up"
             android:text="@string/button_lift_rear_wheels"
             android:theme="@style/AppTheme.Button" />
 
@@ -47,6 +49,7 @@
             android:id="@+id/button_fall_protection"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:drawableLeft="@drawable/fall_protection"
             android:text="@string/button_safe_driving" />
 
     </LinearLayout>
@@ -54,22 +57,24 @@
     <LinearLayout
         android:id="@+id/layout_controls_stairs_down"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_below="@id/layout_controls_safe_driving"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_lower_front_wheels"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:drawableLeft="@drawable/stairs_down"
             android:text="@string/button_lower_front_wheels" />
 
         <Button
             android:id="@+id/button_lower_rear_wheel"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:drawableLeft="@drawable/stairs_down"
             android:text="@string/button_lower_rear_wheels" />
 
     </LinearLayout>
