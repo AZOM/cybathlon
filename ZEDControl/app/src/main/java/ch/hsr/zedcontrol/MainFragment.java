@@ -28,6 +28,7 @@ public class MainFragment extends Fragment {
         return view;
     }
 
+
     private void initButtons(View view) {
         initToggleButtonPowerOnOff(view);
         initButtonModeStairs(view);
@@ -41,9 +42,9 @@ public class MainFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    Log.i(TAG, "power should be ON");
+                    Log.i(TAG, "Power ON");
                 } else {
-                    Log.i(TAG, "power should be OFF");
+                    Log.i(TAG, "Power OFF");
                 }
             }
         });
@@ -56,7 +57,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new StairsControlFragment())
+                        .replace(R.id.fragment_container, new StairsControlsFragment())
                         .addToBackStack(TAG)
                         .commit();
             }

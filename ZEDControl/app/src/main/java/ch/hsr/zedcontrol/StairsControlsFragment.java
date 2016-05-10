@@ -14,9 +14,9 @@ import android.widget.Toast;
 /**
  * Container for the UI controls to go up and down the stairs.
  */
-public class StairsControlFragment extends Fragment {
+public class StairsControlsFragment extends Fragment {
 
-    public static String TAG = StairsControlFragment.class.getSimpleName();
+    public static String TAG = StairsControlsFragment.class.getSimpleName();
 
     @Nullable
     @Override
