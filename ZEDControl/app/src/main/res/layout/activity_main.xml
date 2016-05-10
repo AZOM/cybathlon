@@ -1,25 +1,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_container"
+    android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="@color/colorPrimary"
+    android:fitsSystemWindows="true"
     android:keepScreenOn="true"
     tools:context="ch.hsr.zedcontrol.MainActivity">
 
     <TextView
         android:id="@+id/status_battery"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:text="Battery status wheelchair"
         android:textSize="21sp" />
 
     <fragment
+        android:id="@+id/fragment_container"
         android:name="ch.hsr.zedcontrol.MainFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/status_battery" />
+        android:layout_below="@id/status_battery"
+        tools:layout="@layout/fragment_main" />
 
 </RelativeLayout>

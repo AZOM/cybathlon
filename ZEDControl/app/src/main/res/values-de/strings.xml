@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">ZEDControl</string>
     <string name="button_free_driving">Freies fahren</string>
-    <string name="togglebutton_power_on">Antriebe EIN</string>
-    <string name="togglebutton_power_off">Antriebe AUS</string>
+    <string name="button_power_on">Antriebe EIN</string>
+    <string name="button_power_off">Antriebe AUS</string>
     <string name="button_lift_front_wheels">Vorderräder anheben</string>
     <string name="button_lift_rear_wheels">Hinterräder anheben</string>
     <string name="button_lower_front_wheels">Vorderräder absenken</string>

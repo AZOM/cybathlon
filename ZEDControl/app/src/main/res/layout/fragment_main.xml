@@ -8,32 +8,31 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:checked="true"
-        android:textOff="@string/togglebutton_power_off"
-        android:textOn="@string/togglebutton_power_on" />
+        android:textOff="@string/button_power_off"
+        android:textOn="@string/button_power_on" />
 
     <LinearLayout
         android:id="@+id/layout_controls_stairs_up"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/togglebutton_power"
-        android:background="@color/black_overlay"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_lift_front_wheels"
-            style="?metaButtonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="1"
-            android:text="@string/button_lift_front_wheels" />
+            android:text="@string/button_lift_front_wheels"
+            android:theme="@style/AppTheme.Button" />
 
         <Button
             android:id="@+id/button_lift_rear_wheel"
-            style="?metaButtonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="1"
-            android:text="@string/button_lift_rear_wheels" />
+            android:text="@string/button_lift_rear_wheels"
+            android:theme="@style/AppTheme.Button" />
 
     </LinearLayout>
 
@@ -42,12 +41,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout_controls_stairs_up"
-        android:background="@color/black_overlay"
         android:orientation="vertical">
 
         <Button
             android:id="@+id/button_fall_protection"
-            style="?metaButtonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:text="@string/button_safe_driving" />
@@ -59,12 +56,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout_controls_safe_driving"
-        android:background="@color/black_overlay"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_lower_front_wheels"
-            style="?metaButtonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="1"
@@ -72,7 +67,6 @@
 
         <Button
             android:id="@+id/button_lower_rear_wheel"
-            style="?metaButtonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="1"

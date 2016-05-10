@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        mContentView = findViewById(R.id.fragment_container);
+        mContentView = findViewById(R.id.layout_main);
     }
 
 

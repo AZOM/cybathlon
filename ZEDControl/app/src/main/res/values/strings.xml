@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">ZEDControl</string>
 
-    <string name="togglebutton_power_on">Power ON</string>
-    <string name="togglebutton_power_off">Power OFF</string>
+    <string name="button_power_on">Power ON</string>
+    <string name="button_power_off">Power OFF</string>
     <string name="button_lift_front_wheels">Lift front wheels</string>
     <string name="button_lift_rear_wheels">Lift rear wheels</string>
     <string name="button_safe_driving">Drive with fall protection</string>
