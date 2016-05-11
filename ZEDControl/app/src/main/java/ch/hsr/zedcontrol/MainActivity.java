@@ -2,11 +2,13 @@ package ch.hsr.zedcontrol;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -35,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         String error = intent.getStringExtra(ConnectionManager.EXTRA_USB_PERMISSION_ERROR);
                         if (error != null) {
-                            //FIXME: consider using an error dialog
-                            Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
+                            showAlert(getString(R.string.error), error);
                         }
                     }
                     break;
@@ -110,5 +111,19 @@ public class MainActivity extends AppCompatActivity {
         _connectionManager.dispose(this);
 
         super.onDestroy();
+    }
+
+
+    private void showAlert(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message + "\nTry to unplug and reconnect the USB cable again.")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

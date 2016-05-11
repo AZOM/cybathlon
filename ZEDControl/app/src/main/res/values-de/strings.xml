@@ -9,4 +9,7 @@
     <string name="button_lower_front_wheels">Vorderräder absenken</string>
     <string name="button_lower_rear_wheels">Hinterräder absenken</string>
     <string name="button_safe_driving">Fahren mit Fall-schutz</string>
+    <string name="button_driving_stairs">Treppe</string>
+    <string name="error">Fehler</string>
+    <string name="toast_activate_free_driving">Freies Fahren aktiviert</string>
 </resources>
