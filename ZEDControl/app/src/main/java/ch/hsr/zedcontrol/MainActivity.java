@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        //TODO: eventually do this in onStop() - since onDestroy() is not called when swiping app away
         LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
         _connectionManager.dispose(this);
 
