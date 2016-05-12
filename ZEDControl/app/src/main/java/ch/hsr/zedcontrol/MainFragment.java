@@ -22,6 +22,8 @@ public class MainFragment extends Fragment {
 
     public static String TAG = MainFragment.class.getSimpleName();
 
+    private boolean _isToggleButtonPowerChecked = false;
+
     private ConnectionManager _connectionManager;
 
     @Nullable
@@ -44,9 +46,13 @@ public class MainFragment extends Fragment {
 
     private void initToggleButtonPowerOnOff(View view) {
         ToggleButton toggleButtonOnOff = (ToggleButton) view.findViewById(R.id.togglebutton_power);
+        toggleButtonOnOff.setChecked(_isToggleButtonPowerChecked);
+
         toggleButtonOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                _isToggleButtonPowerChecked = isChecked;
+
                 if (isChecked) {
                     Log.i(TAG, "Requesting mode: POWER_ON");
                     _connectionManager.requestMode(RoboRIOModes.POWER_ON);
