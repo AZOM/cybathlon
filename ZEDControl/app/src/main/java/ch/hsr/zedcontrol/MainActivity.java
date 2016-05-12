@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         private void handleActionSerialPortOpen(Context context) {
             connectionManager.requestMode(RoboRIOModes.LOCK);
+            //TODO: add isLocked based on answer in ConnectionManager._usbReadCallback for the lock (enable buttons)
             Toast.makeText(context, R.string.connected, Toast.LENGTH_LONG).show();
         }
 

@@ -196,8 +196,13 @@ public class ConnectionManager {
      * @param mode The requested mode
      */
     public void requestMode(RoboRIOModes mode) {
-        //TODO: implement and test!
-        Log.i(TAG, "requestMode: " + mode);
+        if(_serialPort == null) {
+            Log.w(TAG, "requestMode() -> _serialPort is null - ignore this call.");
+            return;
+        }
+
+        Log.i(TAG, "requestMode() -> writing to serial port: " + mode);
+        _serialPort.write(mode.toString().getBytes());
     }
 
 
