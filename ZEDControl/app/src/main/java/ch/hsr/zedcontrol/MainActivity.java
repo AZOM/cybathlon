@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     private View _contentView;
 
-    private ConnectionManager _connectionManager;
+    // can be shared with Fragments - avoid a Singleton and still always have the same state.
+    protected ConnectionManager connectionManager;
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initConnectionManager() {
-        _connectionManager = new ConnectionManager(this);
+        connectionManager = new ConnectionManager(this);
 
         IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         //FIXME: onDestroy() is not called when swiping app away
         LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
-        _connectionManager.dispose(this);
+        connectionManager.dispose(this);
 
         super.onDestroy();
     }

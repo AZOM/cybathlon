@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+
+import ch.hsr.zedcontrol.roborio.ConnectionManager;
+import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 
 /**
  * Container for the UI controls to go up and down the stairs.
@@ -18,10 +20,16 @@ public class StairsControlsFragment extends Fragment {
 
     public static String TAG = StairsControlsFragment.class.getSimpleName();
 
+    private ConnectionManager _connectionManager;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_stairs_control, container, false);
+
+        // obtain instance with current state from parent activity
+        _connectionManager = ((MainActivity) getActivity()).connectionManager;
 
         initButtons(view);
 
@@ -36,7 +44,7 @@ public class StairsControlsFragment extends Fragment {
         initButtonLowerFrontWheels(view);
         initButtonLowerRearWheels(view);
 
-        initButtonDriveFree(view);
+        initButtonBack(view);
     }
 
 
@@ -45,7 +53,8 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Should LIFT front wheels");
+                Log.i(TAG, "Requesting mode: LIFT_FRONT_WHEELS");
+                _connectionManager.requestMode(RoboRIOModes.LIFT_FRONT_WHEELS);
             }
         });
     }
@@ -56,7 +65,8 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Should LIFT rear wheels");
+                Log.i(TAG, "Requesting mode: LIFT_REAR_WHEELS");
+                _connectionManager.requestMode(RoboRIOModes.LIFT_REAR_WHEELS);
             }
         });
     }
@@ -67,7 +77,8 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Should enable driving with fall protection");
+                Log.i(TAG, "Requesting mode:DRIVE_FALL_PROTECTION");
+                _connectionManager.requestMode(RoboRIOModes.DRIVE_FALL_PROTECTION);
             }
         });
     }
@@ -78,7 +89,8 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Should LOWER front wheels");
+                Log.i(TAG, "Requesting mode: LOWER_FRONT_WHEELS");
+                _connectionManager.requestMode(RoboRIOModes.LOWER_FRONT_WHEELS);
             }
         });
     }
@@ -89,20 +101,18 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Should LOWER rear wheels");
+                Log.i(TAG, "Requesting mode:LOWER_REAR_WHEELS");
+                _connectionManager.requestMode(RoboRIOModes.LOWER_REAR_WHEELS);
             }
         });
     }
 
 
-    private void initButtonDriveFree(View view) {
-        Button button = (Button) view.findViewById(R.id.button_driving_free);
+    private void initButtonBack(View view) {
+        Button button = (Button) view.findViewById(R.id.button_back);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "pop back to MainFragment and activate free driving");
-                Toast.makeText(getActivity(), R.string.toast_activate_free_driving, Toast.LENGTH_LONG).show();
-
                 getFragmentManager().popBackStack(MainFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });

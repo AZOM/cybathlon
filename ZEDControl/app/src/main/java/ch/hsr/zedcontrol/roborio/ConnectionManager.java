@@ -189,6 +189,16 @@ public class ConnectionManager {
 
 
     /**
+     * Sends the command for the given mode to the open serial port.
+     * @param mode The requested mode
+     */
+    public void requestMode(RoboRIOModes mode) {
+        //TODO: implement and test!
+        Log.i(TAG, "requestMode: " + mode);
+    }
+
+
+    /**
      * Closes all open connections and unregisters the receivers.
      *
      * @param context The Context object, ideally the same caller that instantiated this instance.
