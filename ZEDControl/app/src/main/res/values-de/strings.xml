@@ -16,4 +16,5 @@
     <string name="device_attached">Ger\u00E4t  angeschlossen</string>
     <string name="device_detached">Ger\u00E4te entfernt</string>
     <string name="back">zur\u00FCck</string>
+    <string name="label_battery_voltage">Batteriespannung:</string>
 </resources>

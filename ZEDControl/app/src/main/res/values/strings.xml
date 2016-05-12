@@ -16,4 +16,5 @@
     <string name="device_attached">Device attached</string>
     <string name="device_detached">Device detached</string>
     <string name="back">back</string>
+    <string name="label_battery_voltage">Battery voltage:</string>
 </resources>

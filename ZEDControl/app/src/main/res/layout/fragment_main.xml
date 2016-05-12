@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context="ch.hsr.zedcontrol.MainActivity">
 
     <ToggleButton
         android:id="@+id/togglebutton_power"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:textOff="@string/button_power_off"
-        android:textOn="@string/button_power_on" />
+        android:textOn="@string/button_power_on"/>
 
     <Button
         android:id="@+id/button_driving_stairs"
@@ -17,7 +19,7 @@
         android:layout_below="@id/togglebutton_power"
         android:layout_centerVertical="true"
         android:drawableStart="@drawable/stairs"
-        android:text="@string/button_driving_stairs" />
+        android:text="@string/button_driving_stairs"/>
 
     <LinearLayout
         android:id="@+id/layout_controls_bottom"
@@ -33,7 +35,7 @@
             style="?metaButtonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:text="@string/button_free_driving" />
+            android:text="@string/button_free_driving"/>
 
     </LinearLayout>
 
