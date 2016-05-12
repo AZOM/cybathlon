@@ -1,5 +1,7 @@
 package ch.hsr.zedcontrol.roborio;
 
+import org.jetbrains.annotations.Contract;
+
 /**
  * Contains all commands (String) that can be sent to the roboRIO peripheral.
  */
@@ -26,10 +28,12 @@ public enum RoboRIOModes {
         command = s;
     }
 
+    @Contract("null -> false")
     public boolean equalsCommand(String otherCommand) {
         return otherCommand != null && command.equals(otherCommand);
     }
 
+    @Contract(pure = true)
     public String toString() {
         return this.command;
     }

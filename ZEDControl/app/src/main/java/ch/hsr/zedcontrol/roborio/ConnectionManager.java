@@ -9,6 +9,7 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -172,6 +173,7 @@ public class ConnectionManager {
     }
 
 
+    @Nullable
     private UsbDevice findConnectedUsbDeviceWithVendorId(int vendorId) {
         HashMap<String, UsbDevice> usbDevices = _usbManager.getDeviceList();
 
