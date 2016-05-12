@@ -28,9 +28,6 @@ public class StairsControlsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_stairs_control, container, false);
 
-        // obtain instance with current state from parent activity
-        _connectionManager = ((MainActivity) getActivity()).connectionManager;
-
         initButtons(view);
 
         return view;
@@ -117,4 +114,12 @@ public class StairsControlsFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // obtain instance with current state from parent activity
+        _connectionManager =((MainActivity) getActivity()).connectionManager;
+    }
+
 }

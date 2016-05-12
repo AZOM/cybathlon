@@ -29,9 +29,6 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // obtain instance with current state from parent activity
-        _connectionManager =((MainActivity) getActivity()).connectionManager;
-
         initButtons(view);
 
         return view;
@@ -86,6 +83,14 @@ public class MainFragment extends Fragment {
                 Toast.makeText(getActivity(), R.string.toast_activate_free_driving, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // obtain instance with current state from parent activity
+        _connectionManager =((MainActivity) getActivity()).connectionManager;
     }
 
 }

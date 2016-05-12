@@ -68,14 +68,18 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, new MainFragment())
                 .commit();
-
-        initConnectionManager();
     }
 
 
-    private void initConnectionManager() {
-        connectionManager = new ConnectionManager(this);
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        initConnectionReceiver();
+        connectionManager = new ConnectionManager(this);
+    }
+
+    private void initConnectionReceiver() {
         IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
@@ -106,12 +110,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onDestroy() {
-        //FIXME: onDestroy() is not called when swiping app away
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
+    protected void onStop() {
+        super.onStop();
+        //FIXME: onStop() is not called when swiping app away
         connectionManager.dispose(this);
-
-        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
     }
 
 
