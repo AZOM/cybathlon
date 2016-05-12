@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:context="ch.hsr.zedcontrol.MainActivity">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_controls"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical"
+    tools:context="ch.hsr.zedcontrol.MainActivity">
 
     <ToggleButton
         android:id="@+id/togglebutton_power"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:textOff="@string/button_power_off"
-        android:textOn="@string/button_power_on"/>
+        android:textOn="@string/button_power_on"
+        android:textSize="21sp"/>
 
     <Button
         android:id="@+id/button_driving_stairs"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_below="@id/togglebutton_power"
-        android:layout_centerVertical="true"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:drawableStart="@drawable/stairs"
-        android:text="@string/button_driving_stairs"/>
+        android:text="@string/button_driving_stairs"
+        android:textSize="42sp"/>
 
-    <LinearLayout
-        android:id="@+id/layout_controls_bottom"
-        style="?metaButtonBarStyle"
+    <Button
+        android:id="@+id/button_driving_free"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/black_overlay"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/button_free_driving"
+        android:textSize="21sp"/>
 
-        <Button
-            android:id="@+id/button_driving_free"
-            style="?metaButtonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:text="@string/button_free_driving"/>
-
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>
