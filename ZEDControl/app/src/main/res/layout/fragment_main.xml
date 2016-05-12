@@ -7,7 +7,6 @@
         android:id="@+id/togglebutton_power"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:checked="true"
         android:textOff="@string/button_power_off"
         android:textOn="@string/button_power_on" />
 

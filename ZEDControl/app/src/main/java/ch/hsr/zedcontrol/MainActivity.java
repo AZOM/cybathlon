@@ -14,7 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import ch.hsr.zedcontrol.connect.ConnectionManager;
+import ch.hsr.zedcontrol.roborio.ConnectionManager;
 
 /**
  * The main full-screen activity that shows all the available controls for user interaction.
@@ -26,14 +26,14 @@ public class MainActivity extends AppCompatActivity {
     private View _contentView;
 
     private ConnectionManager _connectionManager;
-    private BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case ConnectionManager.ACTION_USB_PERMISSION:
                     Boolean success = intent.getBooleanExtra(ConnectionManager.EXTRA_USB_PERMISSION_SUCCESS, false);
                     if (success) {
-                        Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, R.string.connected, Toast.LENGTH_LONG).show();
                     } else {
                         String error = intent.getStringExtra(ConnectionManager.EXTRA_USB_PERMISSION_ERROR);
                         if (error != null) {
@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
 
                 case UsbManager.ACTION_USB_DEVICE_ATTACHED:
                     Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED");
-                    Toast.makeText(getApplicationContext(), "Device attached", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.device_attached, Toast.LENGTH_SHORT).show();
                     break;
 
                 case UsbManager.ACTION_USB_DEVICE_DETACHED:
                     Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_DETACHED");
-                    Toast.makeText(getApplicationContext(), "Device detached", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.device_detached, Toast.LENGTH_LONG).show();
                     break;
             }
         }
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        //TODO: eventually do this in onStop() - since onDestroy() is not called when swiping app away
+        //FIXME: onDestroy() is not called when swiping app away
         LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
         _connectionManager.dispose(this);
 

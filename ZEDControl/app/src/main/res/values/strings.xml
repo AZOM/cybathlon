@@ -12,4 +12,7 @@
     <string name="toast_activate_free_driving">Activated free driving</string>
     <string name="button_driving_stairs">Stairs</string>
     <string name="error">Error</string>
+    <string name="connected">Connected</string>
+    <string name="device_attached">Device attached</string>
+    <string name="device_detached">Device detached</string>
 </resources>

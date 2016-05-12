@@ -4,12 +4,15 @@
     <string name="button_free_driving">Freies fahren</string>
     <string name="button_power_on">Antriebe EIN</string>
     <string name="button_power_off">Antriebe AUS</string>
-    <string name="button_lift_front_wheels">Vorderräder anheben</string>
-    <string name="button_lift_rear_wheels">Hinterräder anheben</string>
-    <string name="button_lower_front_wheels">Vorderräder absenken</string>
-    <string name="button_lower_rear_wheels">Hinterräder absenken</string>
+    <string name="button_lift_front_wheels">Vorderr\u00E4der anheben</string>
+    <string name="button_lift_rear_wheels">Hinterr\u00E4der anheben</string>
+    <string name="button_lower_front_wheels">Vorderr\u00E4der absenken</string>
+    <string name="button_lower_rear_wheels">Hinterr\u00E4der absenken</string>
     <string name="button_safe_driving">Fahren mit Fall-schutz</string>
     <string name="button_driving_stairs">Treppe</string>
     <string name="error">Fehler</string>
     <string name="toast_activate_free_driving">Freies Fahren aktiviert</string>
+    <string name="connected">Verbunden</string>
+    <string name="device_attached">Ger\u00E4t  angeschlossen</string>
+    <string name="device_detached">Ger\u00E4te entfernt</string>
 </resources>

@@ -1,4 +1,4 @@
-package ch.hsr.zedcontrol.connect;
+package ch.hsr.zedcontrol.roborio;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
