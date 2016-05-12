@@ -18,13 +18,17 @@ import com.felhr.usbserial.UsbSerialInterface;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
+import ch.hsr.zedcontrol.R;
+
 /**
  * Handles the connection to the peripheral (roboRIO)
  */
 public class ConnectionManager {
-    public static final String ACTION_USB_PERMISSION = ".ACTION_USB_PERMISSION";
-    public static final String EXTRA_USB_PERMISSION_ERROR = "/EXTRA_USB_PERMISSION_ERROR";
-    public static final String EXTRA_USB_PERMISSION_SUCCESS = "/EXTRA_USB_PERMISSION_SUCCESS";
+    public static final String ACTION_SERIAL_PORT_OPEN = ".ACTION_SERIAL_PORT_OPEN";
+    public static final String ACTION_SERIAL_PORT_ERROR = ".ACTION_SERIAL_PORT_ERROR";
+    public static final String EXTRA_SERIAL_PORT_ERROR = "/EXTRA_SERIAL_PORT_ERROR";
+
+    private static final String ACTION_USB_PERMISSION = ".ACTION_USB_PERMISSION";
 
     private static String TAG = ConnectionManager.class.getSimpleName();
 
@@ -40,62 +44,60 @@ public class ConnectionManager {
             switch (intent.getAction()) {
                 case ACTION_USB_PERMISSION:
                     Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_PERMISSION");
-                    handleActionUsbPermission(context, intent);
+                    boolean granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false);
+                    handleActionUsbPermission(context, granted);
                     break;
 
                 case UsbManager.ACTION_USB_DEVICE_ATTACHED:
-                    Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED");
-                    // ignore USB devices we do not know
                     if (scanUsbDevicesForVendorId(context, VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE)) {
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                        Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED");
+                    } else {
+                        Log.w(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED -> unknown device");
                     }
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                     break;
 
                 case UsbManager.ACTION_USB_DEVICE_DETACHED:
                     Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_DETACHED");
-                    closeSerialPort();
+                    tryCloseSerialPort();
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                     break;
             }
         }
 
-        private void handleActionUsbPermission(Context context, Intent intent) {
-            boolean granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false);
-            if (!granted) {
-                Log.w(TAG, "handleActionUsbPermission() -> Permission not granted.");
-                intent.putExtra(EXTRA_USB_PERMISSION_SUCCESS, false);
-                intent.putExtra(EXTRA_USB_PERMISSION_ERROR, "Permission not granted.");
+        private void handleActionUsbPermission(Context context, boolean usbPermissionGranted) {
+            Intent intent = new Intent(ACTION_SERIAL_PORT_ERROR);
+
+            if (!usbPermissionGranted) {
+                Log.w(TAG, "_usbActionReceiver.handleActionUsbPermission() -> Permission not granted.");
+                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_permission_not_granted));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 return;
             }
 
             UsbDeviceConnection connection = _usbManager.openDevice(_usbDevice);
             if (connection == null) {
-                Log.e(TAG, "handleActionUsbPermission() -> connection is null - _usbManager.openDevice() FAILED.");
-                intent.putExtra(EXTRA_USB_PERMISSION_SUCCESS, false);
-                intent.putExtra(EXTRA_USB_PERMISSION_ERROR, "Could not establish connection.");
+                Log.e(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _usbManager.openDevice() FAILED.");
+                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_no_usb_connection));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 return;
             }
 
             _serialPort = UsbSerialDevice.createUsbSerialDevice(_usbDevice, connection);
             if (_serialPort == null) {
-                Log.e(TAG, "handleActionUsbPermission() -> _serialPort is null.");
-                intent.putExtra(EXTRA_USB_PERMISSION_SUCCESS, false);
-                intent.putExtra(EXTRA_USB_PERMISSION_ERROR, "Could not create usb serial device.");
+                Log.e(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort is null.");
+                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_create_serialport));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 return;
             }
 
             if (_serialPort.open()) {
                 initSerialPort();
-                Log.i(TAG, "handleActionUsbPermission() -> _serialPort open!");
-                intent.putExtra(EXTRA_USB_PERMISSION_SUCCESS, true);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                Log.i(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort open!");
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ACTION_SERIAL_PORT_OPEN));
             } else {
-                Log.e(TAG, "handleActionUsbPermission() -> _serialPort could not be opened.");
-                intent.putExtra(EXTRA_USB_PERMISSION_SUCCESS, false);
-                intent.putExtra(EXTRA_USB_PERMISSION_ERROR, "Serial port could not be opened.");
+                Log.e(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort could not be opened.");
+                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_open_serialport));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
         }
@@ -117,7 +119,7 @@ public class ConnectionManager {
             try {
                 data = new String(arg0, "UTF-8");
                 //TODO: do something with data
-                Log.d(TAG, "_usbReadCallback.onReceivedData: " + data.concat("/n"));
+                Log.i(TAG, "_usbReadCallback.onReceivedData: " + data.concat("/n"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -190,6 +192,7 @@ public class ConnectionManager {
 
     /**
      * Sends the command for the given mode to the open serial port.
+     *
      * @param mode The requested mode
      */
     public void requestMode(RoboRIOModes mode) {
@@ -205,15 +208,15 @@ public class ConnectionManager {
      */
     public void dispose(@NonNull Context context) {
         context.unregisterReceiver(_usbActionReceiver);
-        closeSerialPort();
+        tryCloseSerialPort();
     }
 
 
-    private void closeSerialPort() {
+    private void tryCloseSerialPort() {
         try {
             _serialPort.close();
         } catch (NullPointerException e) {
-            Log.w(TAG, "closeSerialPort() -> catch NullPointerException, was the port open already?");
+            Log.w(TAG, "tryCloseSerialPort() -> catch NullPointerException, was the port open already?");
         }
     }
 

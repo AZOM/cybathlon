@@ -17,4 +17,8 @@
     <string name="device_detached">Device detached</string>
     <string name="back">back</string>
     <string name="label_battery_voltage">Battery voltage:</string>
+    <string name="error_permission_not_granted">Permission for USB device not granted.</string>
+    <string name="error_no_usb_connection">Could not establish connection to UsbDevice.</string>
+    <string name="error_create_serialport">Could not create UsbSerialDevice.</string>
+    <string name="error_open_serialport">Serial port could not be opened.</string>
 </resources>

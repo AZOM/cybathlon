@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
+import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 
 /**
  * The main full-screen activity that shows all the available controls for user interaction.
@@ -31,27 +32,35 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
-                case ConnectionManager.ACTION_USB_PERMISSION:
-                    Boolean success = intent.getBooleanExtra(ConnectionManager.EXTRA_USB_PERMISSION_SUCCESS, false);
-                    if (success) {
-                        Toast.makeText(context, R.string.connected, Toast.LENGTH_LONG).show();
-                    } else {
-                        String error = intent.getStringExtra(ConnectionManager.EXTRA_USB_PERMISSION_ERROR);
-                        if (error != null) {
-                            showAlert(getString(R.string.error), error);
-                        }
-                    }
+                case ConnectionManager.ACTION_SERIAL_PORT_OPEN:
+                    handleActionSerialPortOpen(context);
+                    break;
+
+                case ConnectionManager.ACTION_SERIAL_PORT_ERROR:
+                    handleActionSerialPortError(intent);
                     break;
 
                 case UsbManager.ACTION_USB_DEVICE_ATTACHED:
-                    Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED");
                     Toast.makeText(context, R.string.device_attached, Toast.LENGTH_SHORT).show();
                     break;
 
                 case UsbManager.ACTION_USB_DEVICE_DETACHED:
-                    Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_DETACHED");
                     Toast.makeText(context, R.string.device_detached, Toast.LENGTH_LONG).show();
                     break;
+            }
+        }
+
+        private void handleActionSerialPortOpen(Context context) {
+            connectionManager.requestMode(RoboRIOModes.LOCK);
+            Toast.makeText(context, R.string.connected, Toast.LENGTH_LONG).show();
+        }
+
+        private void handleActionSerialPortError(Intent intent) {
+            String error = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_ERROR);
+            if (error != null) {
+                showAlert(getString(R.string.error), error);
+            } else {
+                Log.w(TAG, "_connectionReceiver.onReceive() -> no error message received.");
             }
         }
     };
@@ -80,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initConnectionReceiver() {
-        IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_USB_PERMISSION);
+        IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_SERIAL_PORT_OPEN);
+        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_ERROR);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
 
@@ -113,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         //FIXME: onStop() is not called when swiping app away
+        connectionManager.requestMode(RoboRIOModes.UNLOCK);
         connectionManager.dispose(this);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
     }
