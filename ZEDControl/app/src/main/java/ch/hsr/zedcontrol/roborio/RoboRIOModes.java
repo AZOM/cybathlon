@@ -12,7 +12,8 @@ public enum RoboRIOModes {
     NO_MODE("Mode:0;"),
 
     POWER_OFF("Mode:M_PowerOff:0;"),
-    POWER_ON("Mode:M_StartUp:0;"),
+
+    START_UP("Mode:M_StartUp:0;"),
 
     DRIVE_FREE("Mode:M_Drive:0;"),
 
@@ -36,5 +37,15 @@ public enum RoboRIOModes {
     @Contract(pure = true)
     public String toString() {
         return this.command;
+    }
+
+    public static RoboRIOModes getModeFromStringDescription(String modeString) {
+        for (RoboRIOModes mode : RoboRIOModes.values()) {
+            if (mode.toString().equals(modeString)) {
+                return mode;
+            }
+        }
+
+        throw new IllegalArgumentException("Could not find mode for: " + modeString);
     }
 }

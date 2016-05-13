@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
@@ -26,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
     private View _contentView;
 
+    /**
+     * Only if this is true the App can send commands to the usb-serial-port to roboRIO
+     */
+    private boolean _hasLock = true; // production = false
+
     // can be shared with Fragments - avoid a Singleton and still always have the same state.
     protected ConnectionManager connectionManager;
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
@@ -33,11 +39,23 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case ConnectionManager.ACTION_SERIAL_PORT_OPEN:
-                    handleActionSerialPortOpen(context);
+                    connectionManager.requestMode(RoboRIOModes.LOCK);
                     break;
 
                 case ConnectionManager.ACTION_SERIAL_PORT_ERROR:
                     handleActionSerialPortError(intent);
+                    break;
+
+                case ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK:
+                    invalidateUi(intent);
+                    break;
+
+                case ConnectionManager.ACTION_SERIAL_PORT_READ_MODE:
+                    handleActionSerialPortReadMode(intent);
+                    break;
+
+                case ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY:
+                    updateUiVoltage(intent);
                     break;
 
                 case UsbManager.ACTION_USB_DEVICE_ATTACHED:
@@ -47,25 +65,38 @@ public class MainActivity extends AppCompatActivity {
                 case UsbManager.ACTION_USB_DEVICE_DETACHED:
                     Toast.makeText(context, R.string.device_detached, Toast.LENGTH_LONG).show();
                     break;
+
+                default:
+                    Log.w(TAG, "_connectionReceiver.onReceive() -> unhandled action: " + intent.getAction());
             }
         }
 
-        private void handleActionSerialPortOpen(Context context) {
-            connectionManager.requestMode(RoboRIOModes.LOCK);
-            //TODO: add isLocked based on answer in ConnectionManager._usbReadCallback for the lock (enable buttons)
-            Toast.makeText(context, R.string.connected, Toast.LENGTH_LONG).show();
-        }
-
-        private void handleActionSerialPortError(Intent intent) {
-            String error = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_ERROR);
-            if (error != null) {
-                showAlert(getString(R.string.error), error);
-            } else {
-                Log.w(TAG, "_connectionReceiver.onReceive() -> no error message received.");
-            }
-        }
     };
 
+
+    private void handleActionSerialPortError(Intent intent) {
+        String error = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_ERROR);
+        if (error != null) {
+            showAlert(getString(R.string.error), error);
+        } else {
+            Log.w(TAG, "_connectionReceiver.onReceive() -> no error message received.");
+        }
+    }
+
+
+    private void handleActionSerialPortReadMode(Intent intent) {
+        String message = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
+        //TODO: parse message and react appropriately
+    }
+
+
+    private void updateUiVoltage(Intent intent) {
+        String voltageString = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_BATTERY);
+        TextView tv = (TextView) findViewById(R.id.battery_voltage);
+        if (tv != null) {
+            tv.setText(voltageString);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +118,16 @@ public class MainActivity extends AppCompatActivity {
 
         initConnectionReceiver();
         connectionManager = new ConnectionManager(this);
+
+        //TODO: consider calling connectionManager.scanUsbDevicesForVendorId()
     }
 
     private void initConnectionReceiver() {
         IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_SERIAL_PORT_OPEN);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_ERROR);
+        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK);
+        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_MODE);
+        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
 
@@ -141,5 +177,15 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+
+    private void invalidateUi(final Intent intent) {
+        _hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
+
+        if(_hasLock) {
+            Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
+        }
+        //TODO: Deactivate all buttons if _hasLock is false
     }
 }

@@ -54,8 +54,8 @@ public class MainFragment extends Fragment {
                 _isToggleButtonPowerChecked = isChecked;
 
                 if (isChecked) {
-                    Log.i(TAG, "Requesting mode: POWER_ON");
-                    _connectionManager.requestMode(RoboRIOModes.POWER_ON);
+                    Log.i(TAG, "Requesting mode: START_UP");
+                    _connectionManager.requestMode(RoboRIOModes.START_UP);
                 } else {
                     Log.i(TAG, "Requesting mode: POWER_OFF");
                     _connectionManager.requestMode(RoboRIOModes.POWER_OFF);
