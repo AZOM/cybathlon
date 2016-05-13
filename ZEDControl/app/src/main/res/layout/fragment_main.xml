@@ -24,7 +24,7 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:drawableStart="@drawable/stairs"
-        android:text="@string/button_driving_stairs"
+        android:text="@string/button_stairs_modes"
         android:textSize="42sp"/>
 
     <Button

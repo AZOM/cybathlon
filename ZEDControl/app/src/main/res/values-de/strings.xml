@@ -9,7 +9,7 @@
     <string name="button_lower_front_wheels">Vorderr\u00E4der absenken</string>
     <string name="button_lower_rear_wheels">Hinterr\u00E4der absenken</string>
     <string name="button_safe_driving">Fahren mit Fall-schutz</string>
-    <string name="button_driving_stairs">Treppe</string>
+    <string name="button_stairs_modes">Treppe</string>
     <string name="error">Fehler</string>
     <string name="toast_activate_free_driving">Freies Fahren aktiviert</string>
     <string name="connected">Verbunden</string>

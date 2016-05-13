@@ -30,8 +30,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:drawableStart="@drawable/fall_protection"
-        android:text="@string/button_safe_driving"/>
-
+        android:text="@string/button_safe_driving"
+        android:theme="@style/AppTheme.Button"/>
 
     <Button
         android:id="@+id/button_lower_front_wheels"
@@ -39,7 +39,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:drawableStart="@drawable/stairs_down"
-        android:text="@string/button_lower_front_wheels"/>
+        android:text="@string/button_lower_front_wheels"
+        android:theme="@style/AppTheme.Button"/>
 
     <Button
         android:id="@+id/button_lower_rear_wheel"
@@ -47,7 +48,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:drawableStart="@drawable/stairs_down"
-        android:text="@string/button_lower_rear_wheels"/>
+        android:text="@string/button_lower_rear_wheels"
+        android:theme="@style/AppTheme.Button"/>
 
     <LinearLayout
         android:id="@+id/layout_controls_bottom"

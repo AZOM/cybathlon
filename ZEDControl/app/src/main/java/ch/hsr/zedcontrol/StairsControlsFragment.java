@@ -74,7 +74,7 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode:DRIVE_FALL_PROTECTION");
+                Log.i(TAG, "Requesting mode: DRIVE_FALL_PROTECTION");
                 _connectionManager.requestMode(RoboRIOModes.DRIVE_FALL_PROTECTION);
             }
         });
@@ -98,7 +98,7 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode:LOWER_REAR_WHEELS");
+                Log.i(TAG, "Requesting mode: LOWER_REAR_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LOWER_REAR_WHEELS);
             }
         });
