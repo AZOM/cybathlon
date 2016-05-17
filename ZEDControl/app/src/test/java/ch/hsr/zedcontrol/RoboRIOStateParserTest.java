@@ -12,7 +12,6 @@ import ch.hsr.zedcontrol.roborio.RoboRIOStateException;
 import ch.hsr.zedcontrol.roborio.RoboRIOStateParser;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -113,7 +112,7 @@ public class RoboRIOStateParserTest {
     }
 
     @Test
-    public void parse_stateNoneNoError_returnsEmptyString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
+    public void parse_stateNoneNoError_returnsStateString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
         // Arrange
         String testData = "State::0:false:;";
 
@@ -121,7 +120,7 @@ public class RoboRIOStateParserTest {
         ArrayList<String> response = RoboRIOStateParser.parse(testData);
 
         // Assert
-        assertEquals("", response.get(0));
+        assertEquals("State::0;", response.get(0));
     }
 
     @Test
@@ -140,7 +139,6 @@ public class RoboRIOStateParserTest {
         }
     }
 
-
     @Test
     public void parse_lineWithTwoCommands_returnsTwoValidResults() throws RoboRIOLockException, RoboRIOModeException, RoboRIOStateException {
         // Arrange
@@ -152,7 +150,7 @@ public class RoboRIOStateParserTest {
         // Assert
         assertEquals(2, results.size());
         assertEquals(RoboRIOModes.LOCK.toString(), results.get(0));
-        assertEquals("", results.get(1));
+        assertEquals("State::0;", results.get(1));
     }
 
 }

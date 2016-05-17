@@ -20,11 +20,9 @@ public class RoboRIOStateParser {
         final String[] lines = data.split(";");
 
         for (String line : lines) {
-            String parsedLine = parseLine(line);
+            final String parsedLine = parseLine(line);
 
-            if (parsedLine == null) {
-                Log.wtf(TAG, "parse() -> could not parse line for: " + line);
-            } else {
+            if (parsedLine != null) {
                 result.add(parsedLine);
             }
         }
@@ -34,91 +32,95 @@ public class RoboRIOStateParser {
 
     @Nullable
     private static String parseLine(@NonNull String line) throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
-        if (line.startsWith("Battery:")) {
-            return new BatteryData(line).voltage + " V";
+        final String[] words = line.split(":");
+
+        switch (words[0]) {
+            case "Battery":
+                return new BatteryData(words).voltage + " V";
+
+            case "State":
+                return parseStateData(words);
+
+            case "Lock":
+            case "Unlock":
+                return parseLockData(words);
+
+            case "Mode":
+                return parseModeData(words);
+
+            default:
+                Log.wtf(TAG, "parseLine() -> could not parse line for: " + words[0]);
+                return null;
         }
-
-        if (line.startsWith("State:")) {
-            final StateData stateData = new StateData(line);
-
-            if (stateData.hasError) {
-                throw new RoboRIOStateException(stateData.errorMessage);
-            }
-
-            return stateData.modeName;
-        }
-
-        if (line.startsWith("Lock:") || line.startsWith("Unlock:")) {
-            final LockData lockData = new LockData(line);
-
-            if (lockData.hasError) {
-                throw new RoboRIOLockException(lockData.errorMessage);
-            }
-
-            return lockData.getLockDescription();
-        }
-
-        if (line.startsWith("Mode:")) {
-            final ModeData modeData = new ModeData(line);
-
-            if (modeData.hasError) {
-                throw new RoboRIOModeException(modeData.errorMessage);
-            }
-
-            return modeData.getModeDescription();
-        }
-
-        // unknown
-        return null;
     }
+
+
+    // Used because we want a different Exception here - else it is the same as parseModeData
+    private static String parseStateData(String[] words) throws RoboRIOStateException {
+        final ModeData stateData = new ModeData(words);
+
+        if (stateData.hasError) {
+            throw new RoboRIOStateException(stateData.errorMessage);
+        }
+
+        return stateData.getModeDescription();
+    }
+
+
+    private static String parseLockData(String[] words) throws RoboRIOLockException {
+        final LockData lockData = new LockData(words);
+
+        if (lockData.hasError) {
+            throw new RoboRIOLockException(lockData.errorMessage);
+        }
+
+        return lockData.getLockDescription();
+    }
+
+
+    private static String parseModeData(String[] words) throws RoboRIOModeException {
+        final ModeData modeData = new ModeData(words);
+
+        if (modeData.hasError) {
+            throw new RoboRIOModeException(modeData.errorMessage);
+        }
+
+        return modeData.getModeDescription();
+    }
+
 
     private static class BatteryData {
         protected final String keyWord;
         protected final double voltage;
 
-        public BatteryData(String data) {
-            // split into separate substrings (format is like: Battery:12.34;)
-            final String[] strings = data.split(":");
-
-            keyWord = strings[0];
-            voltage = Double.parseDouble(strings[1]);
-        }
-    }
-
-    private static class StateData {
-        protected final String keyWord;
-        protected final String modeName;
-        protected final int subModeNr;
-        protected final boolean hasError;
-        protected String errorMessage;
-
-        public StateData(String data) {
-            // split into separate substrings (format is like: State:M_StartUp:0:false:;)
-            final String[] strings = data.split(":");
-
-            keyWord = strings[0];
-            modeName = strings[1];
-            subModeNr = Integer.parseInt(strings[2]);
-            hasError = Boolean.parseBoolean(strings[3]);
-            if (hasError) {
-                errorMessage = strings[4];
+        public BatteryData(String[] words) {
+            if (words.length < 2) {
+                throw new IllegalArgumentException("BatteryData: expected length of 2 but was: " + words.length);
             }
+
+            keyWord = words[0];
+            voltage = Double.parseDouble(words[1]);
         }
     }
+
 
     private static class LockData {
         protected final String keyWord;
         protected final boolean hasError;
         protected String errorMessage;
 
-        public LockData(String data) {
-            // split into separate substrings (format is like: Lock:true:errorMessage;)
-            final String[] strings = data.split(":");
+        public LockData(String[] words) {
+            if (words.length < 2) {
+                throw new IllegalArgumentException("LockData: expected at least length of 2 but was: " + words.length);
+            }
 
-            keyWord = strings[0];
-            hasError = Boolean.parseBoolean(strings[1]);
+            keyWord = words[0];
+            hasError = Boolean.parseBoolean(words[1]);
             if (hasError) {
-                errorMessage = strings[2];
+                if (words.length < 3) {
+                    throw new IllegalArgumentException("LockData: expected length of 3 but was: " + words.length);
+                }
+                errorMessage = words[2];
             }
         }
 
@@ -127,6 +129,7 @@ public class RoboRIOStateParser {
         }
     }
 
+
     private static class ModeData {
         protected final String keyWord;
         protected final String modeName;
@@ -134,16 +137,20 @@ public class RoboRIOStateParser {
         protected final boolean hasError;
         protected String errorMessage;
 
-        public ModeData(String data) {
-            // split into separate substrings (format is like: Mode:M_StartUp:0:true:errorMessage;)
-            final String[] strings = data.split(":");
+        public ModeData(String[] words) {
+            if (words.length < 4) {
+                throw new IllegalArgumentException("ModeData: expected at least length of 4 but was: " + words.length);
+            }
 
-            keyWord = strings[0];
-            modeName = strings[1];
-            subModeNr = Integer.parseInt(strings[2]);
-            hasError = Boolean.parseBoolean(strings[3]);
+            keyWord = words[0];
+            modeName = words[1];
+            subModeNr = Integer.parseInt(words[2]);
+            hasError = Boolean.parseBoolean(words[3]);
             if (hasError) {
-                errorMessage = strings[4];
+                if (words.length < 5) {
+                    throw new IllegalArgumentException("ModeData: expected length of 5 but was: " + words.length);
+                }
+                errorMessage = words[4];
             }
         }
 
