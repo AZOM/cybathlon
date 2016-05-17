@@ -21,7 +21,7 @@ public class MainFragment extends Fragment {
 
     public static String TAG = MainFragment.class.getSimpleName();
 
-    private boolean _isToggleButtonPowerChecked = false;
+    private boolean _isToggleButtonDriveModeChecked = false;
 
     private ConnectionManager _connectionManager;
 
@@ -37,27 +37,52 @@ public class MainFragment extends Fragment {
 
 
     private void initButtons(View view) {
-        initToggleButtonPowerOnOff(view);
+        initButtonPowerOff(view);
+        initButtonStartUp(view);
+        initToggleButtonDriveMode(view);
         initButtonModeStairs(view);
-        initButtonDriveFree(view);
     }
 
 
-    private void initToggleButtonPowerOnOff(View view) {
-        ToggleButton toggleButtonOnOff = (ToggleButton) view.findViewById(R.id.togglebutton_power);
-        toggleButtonOnOff.setChecked(_isToggleButtonPowerChecked);
+    private void initButtonPowerOff(View view) {
+        Button button = (Button) view.findViewById(R.id.button_power_off);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "Requesting mode: POWER_OFF");
+                _connectionManager.requestMode(RoboRIOModes.POWER_OFF);
+            }
+        });
+    }
+
+
+    private void initButtonStartUp(View view) {
+        Button button = (Button) view.findViewById(R.id.button_start_up);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "Requesting mode: START_UP");
+                _connectionManager.requestMode(RoboRIOModes.START_UP);
+            }
+        });
+    }
+
+
+    private void initToggleButtonDriveMode(View view) {
+        ToggleButton toggleButtonOnOff = (ToggleButton) view.findViewById(R.id.togglebutton_drive_mode);
+        toggleButtonOnOff.setChecked(_isToggleButtonDriveModeChecked);
 
         toggleButtonOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                _isToggleButtonPowerChecked = isChecked;
+                _isToggleButtonDriveModeChecked = isChecked;
 
                 if (isChecked) {
-                    Log.i(TAG, "Requesting mode: START_UP");
-                    _connectionManager.requestMode(RoboRIOModes.START_UP);
+                    Log.i(TAG, "Requesting mode: DRIVE_FREE");
+                    _connectionManager.requestMode(RoboRIOModes.DRIVE_FREE);
                 } else {
-                    Log.i(TAG, "Requesting mode: POWER_OFF");
-                    _connectionManager.requestMode(RoboRIOModes.POWER_OFF);
+                    Log.i(TAG, "Requesting mode: NO_MODE");
+                    _connectionManager.requestMode(RoboRIOModes.NO_MODE);
                 }
             }
         });
@@ -73,18 +98,6 @@ public class MainFragment extends Fragment {
                         .replace(R.id.fragment_container, new StairsControlsFragment())
                         .addToBackStack(TAG)
                         .commit();
-            }
-        });
-    }
-
-
-    private void initButtonDriveFree(View view) {
-        Button button = (Button) view.findViewById(R.id.button_driving_free);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: DRIVE_FREE");
-                _connectionManager.requestMode(RoboRIOModes.DRIVE_FREE);
             }
         });
     }

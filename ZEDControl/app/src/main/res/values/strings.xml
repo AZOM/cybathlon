@@ -2,15 +2,16 @@
     <!-- MainActivity -->
     <string name="app_name">ZEDControl</string>
     <string name="label_battery_voltage">Battery voltage:</string>
+    <string name="empty_voltage">\u003Cvoltage\u003E</string>
     <string name="lost_lock">Lost control</string>
     <string name="message_lost_lock">This App just lost control of the wheel chair.\nIf reconnect fails, try to disconnect and re-plug the USB-cable again.</string>
 
     <!-- MainFragment -->
-    <string name="button_power_on">Power ON</string>
+    <string name="button_start_up">Initialize</string>
     <string name="button_power_off">Power OFF</string>
     <string name="button_stairs_modes">Stairs</string>
-    <string name="button_free_driving">Free driving</string>
-    <string name="toast_activate_free_driving">Free driving activated</string>
+    <string name="button_mode_free_driving">Free driving</string>
+    <string name="button_mode_none">No mode</string>
 
     <!-- StairsControlsFragment -->
     <string name="button_lift_front_wheels">Lift front wheels</string>

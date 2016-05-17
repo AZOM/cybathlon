@@ -1,38 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_controls"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentTop="true"
     android:orientation="vertical"
     tools:context="ch.hsr.zedcontrol.MainActivity">
 
-    <ToggleButton
-        android:id="@+id/togglebutton_power"
+    <LinearLayout
+        android:id="@+id/layout_motor_controls"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:textOff="@string/button_power_off"
-        android:textOn="@string/button_power_on"
-        android:textSize="21sp"/>
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/button_driving_stairs"
+        <Button
+            android:id="@+id/button_power_off"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/button_power_off"/>
+
+        <Button
+            android:id="@+id/button_start_up"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="@string/button_start_up"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_controls"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:drawableStart="@drawable/stairs"
-        android:text="@string/button_stairs_modes"
-        android:textSize="42sp"/>
+        android:layout_height="match_parent"
+        android:layout_below="@id/layout_motor_controls"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button_driving_free"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="@string/button_free_driving"
-        android:textSize="21sp"/>
+        <ToggleButton
+            android:id="@+id/togglebutton_drive_mode"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textOff="@string/button_mode_none"
+            android:textOn="@string/button_mode_free_driving"
+            android:textSize="21sp"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/button_driving_stairs"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:drawableStart="@drawable/stairs"
+            android:text="@string/button_stairs_modes"
+            android:textSize="42sp"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
