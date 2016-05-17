@@ -9,7 +9,7 @@ import ch.hsr.zedcontrol.roborio.RoboRIOLockException;
 import ch.hsr.zedcontrol.roborio.RoboRIOModeException;
 import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 import ch.hsr.zedcontrol.roborio.RoboRIOStateException;
-import ch.hsr.zedcontrol.roborio.RoboRIOStateParser;
+import ch.hsr.zedcontrol.roborio.parsing.RoboRIOStateParser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;

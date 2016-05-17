@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ch.hsr.zedcontrol.R;
+import ch.hsr.zedcontrol.roborio.parsing.RoboRIOStateParser;
 
 /**
  * Handles the connection to the peripheral (roboRIO)
