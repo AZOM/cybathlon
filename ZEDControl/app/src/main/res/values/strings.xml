@@ -16,7 +16,7 @@
     <!-- StairsControlsFragment -->
     <string name="button_lift_front_wheels">Lift front wheels</string>
     <string name="button_lift_rear_wheels">Lift rear wheels</string>
-    <string name="button_safe_driving">Drive with fall protection</string>
+    <string name="button_mode_drive_fall_protection">Drive with fall protection</string>
     <string name="button_lower_front_wheels">Lower front wheels</string>
     <string name="button_lower_rear_wheels">Lower rear wheels</string>
 

@@ -37,15 +37,6 @@
         android:layout_below="@id/layout_motor_controls"
         android:orientation="vertical">
 
-        <ToggleButton
-            android:id="@+id/togglebutton_drive_mode"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textOff="@string/button_mode_none"
-            android:textOn="@string/button_mode_free_driving"
-            android:textSize="21sp"/>
-
         <Button
             android:id="@+id/button_driving_stairs"
             android:layout_width="match_parent"
@@ -54,6 +45,15 @@
             android:drawableStart="@drawable/stairs"
             android:text="@string/button_stairs_modes"
             android:textSize="42sp"/>
+
+        <ToggleButton
+            android:id="@+id/togglebutton_drive_mode"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textOff="@string/button_mode_none"
+            android:textOn="@string/button_mode_free_driving"
+            android:textSize="21sp"/>
 
     </LinearLayout>
 

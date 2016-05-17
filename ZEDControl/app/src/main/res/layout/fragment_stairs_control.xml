@@ -1,63 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="ch.hsr.zedcontrol.MainActivity">
-
-    <Button
-        android:id="@+id/button_lift_front_wheels"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:drawableStart="@drawable/stairs_up"
-        android:text="@string/button_lift_front_wheels"
-        android:theme="@style/AppTheme.Button"/>
-
-    <Button
-        android:id="@+id/button_lift_rear_wheel"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:drawableStart="@drawable/stairs_up"
-        android:text="@string/button_lift_rear_wheels"
-        android:theme="@style/AppTheme.Button"/>
-
-    <Button
-        android:id="@+id/button_fall_protection"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:drawableStart="@drawable/fall_protection"
-        android:text="@string/button_safe_driving"
-        android:theme="@style/AppTheme.Button"/>
-
-    <Button
-        android:id="@+id/button_lower_front_wheels"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:drawableStart="@drawable/stairs_down"
-        android:text="@string/button_lower_front_wheels"
-        android:theme="@style/AppTheme.Button"/>
-
-    <Button
-        android:id="@+id/button_lower_rear_wheel"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:drawableStart="@drawable/stairs_down"
-        android:text="@string/button_lower_rear_wheels"
-        android:theme="@style/AppTheme.Button"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/layout_controls"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="ch.hsr.zedcontrol.MainActivity">
 
     <LinearLayout
-        android:id="@+id/layout_controls_bottom"
+        android:id="@+id/layout_lift_wheels"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_lift_front_wheels"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/stairs_up"
+            android:text="@string/button_lift_front_wheels"/>
+
+        <Button
+            android:id="@+id/button_lift_rear_wheel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/stairs_up"
+            android:text="@string/button_lift_rear_wheels"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_mode_drive_fall_protection"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@id/layout_lift_wheels"
+        android:drawableEnd="@drawable/fall_protection"
+        android:drawableStart="@drawable/fall_protection"
+        android:text="@string/button_mode_drive_fall_protection"/>
+
+    <LinearLayout
+        android:id="@+id/layout_lower_wheels"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@id/button_mode_drive_fall_protection"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_lower_front_wheels"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/stairs_down"
+            android:text="@string/button_lower_front_wheels"/>
+
+        <Button
+            android:id="@+id/button_lower_rear_wheel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/stairs_down"
+            android:text="@string/button_lower_rear_wheels"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_controls_parent_bottom"
         style="?metaButtonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="16dp"
-        android:layout_weight="1"
         android:background="@color/black_overlay"
         android:orientation="vertical">
 
@@ -66,8 +80,9 @@
             style="?metaButtonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/back"/>
+            android:text="@string/back"
+            android:theme="@style/AppTheme.Button"/>
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

@@ -70,7 +70,7 @@ public class StairsControlsFragment extends Fragment {
 
 
     private void initButtonFallProtection(View view) {
-        Button button = (Button) view.findViewById(R.id.button_fall_protection);
+        Button button = (Button) view.findViewById(R.id.button_mode_drive_fall_protection);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
