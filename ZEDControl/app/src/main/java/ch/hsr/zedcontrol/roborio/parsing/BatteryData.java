@@ -13,7 +13,7 @@ public class BatteryData implements ParserData {
         }
 
         keyWord = words[0];
-        voltage = Double.parseDouble(words[1]);
+        voltage = Double.parseDouble(words[1].replace(";", ""));
     }
 
     @Override

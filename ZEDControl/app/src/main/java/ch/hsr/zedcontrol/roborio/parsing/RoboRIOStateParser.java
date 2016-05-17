@@ -17,21 +17,55 @@ public class RoboRIOStateParser {
 
     private static final String TAG = RoboRIOStateParser.class.getSimpleName();
 
-    public static ArrayList<String> parse(@NonNull String data) throws RoboRIOLockException, RoboRIOStateException, RoboRIOModeException {
+    private StringBuilder _lineBuffer = new StringBuilder();
+
+
+    /**
+     * Takes a string as input and tries to interpret it as a valid answer from the serial-bus. Every line shall end in
+     * ';'.
+     *
+     * @param data The input data.
+     * @return An ArrayList of successfully (complete) parsed lines.
+     * @throws RoboRIOLockException
+     * @throws RoboRIOStateException
+     * @throws RoboRIOModeException
+     */
+    public ArrayList<String> parse(@NonNull String data) throws RoboRIOLockException, RoboRIOStateException, RoboRIOModeException {
         ArrayList<String> result = new ArrayList<>();
 
-        // Split string into separate messages, since data can be like: Lock:false:;State::0:false:;
-        final String[] lines = data.split(";");
+        // Split input into separate lines and keep the separator!
+        // data can contain multiple complete lines (ended by ';') like : Lock:false:;State::0:false:;
+        // or incomplete line like: Lo
+        // or: ock:false:;
+        final String[] lines = data.split("(?<=;)");
 
         for (String line : lines) {
-            final String parsedLine = parseLine(line);
 
-            if (parsedLine != null) {
-                result.add(parsedLine);
+            if (_lineBuffer.toString().contains(";")) {
+                result.add(handleLineComplete());
+            } else {
+                // line is incomplete -> add to _lineBuffer
+                _lineBuffer.append(line);
+
+                // We have to check again, if the line is complete now to be able to process it.
+                if (_lineBuffer.toString().contains(";")) {
+                    result.add(handleLineComplete());
+                }
             }
+
         }
 
         return result;
+    }
+
+
+    private String handleLineComplete() throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
+        final String parsedLine = parseLine(_lineBuffer.toString());
+
+        // reset the _lineBuffer, since a complete line has been written
+        _lineBuffer.setLength(0);
+
+        return parsedLine;
     }
 
 
@@ -54,10 +88,12 @@ public class RoboRIOStateParser {
                 return parseModeData(words);
 
             default:
-                Log.wtf(TAG, "parseLine() -> could not parse line for: " + words[0]);
+                // command unknown, or incomplete -> handled by internal buffer
+                Log.wtf(TAG, "parseLine() -> command unknown, or incomplete: " + words[0]);
                 return null;
         }
     }
+
 
     private static String parseBatteryData(String[] words) {
         final BatteryData batteryData = new BatteryData(words);

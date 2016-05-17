@@ -19,7 +19,7 @@ public class LockData implements ParserData {
             if (words.length < 3) {
                 throw new IllegalArgumentException("LockData: expected length of 3 but was: " + words.length);
             }
-            errorMessage = words[2];
+            errorMessage = words[2].replace(";", "");
         }
     }
 

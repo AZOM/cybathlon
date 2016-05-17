@@ -23,7 +23,7 @@ public class ModeData implements ParserData {
             if (words.length < 5) {
                 throw new IllegalArgumentException("ModeData: expected length of 5 but was: " + words.length);
             }
-            errorMessage = words[4];
+            errorMessage = words[4].replace(";", "");
         }
     }
 
