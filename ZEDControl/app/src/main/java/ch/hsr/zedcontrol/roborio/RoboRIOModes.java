@@ -39,13 +39,19 @@ public enum RoboRIOModes {
         return this.command;
     }
 
+
+    /**
+     * Get an enum value from string.
+     * @param modeString The string that shall be converted to enum value.
+     * @return RoboRioModes enum value or null, if string did not match any enum value.
+     */
     public static RoboRIOModes getModeFromStringDescription(String modeString) {
         for (RoboRIOModes mode : RoboRIOModes.values()) {
-            if (mode.toString().equals(modeString)) {
+            if (mode.equalsCommand(modeString)) {
                 return mode;
             }
         }
 
-        throw new IllegalArgumentException("Could not find mode for: " + modeString);
+       return null;
     }
 }
