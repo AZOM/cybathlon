@@ -13,9 +13,9 @@ import ch.hsr.zedcontrol.roborio.RoboRIOStateException;
 /**
  * Parses the data from UsbSerialInterface.UsbReadCallback to something meaningful.
  */
-public class RoboRIOStateParser {
+public class RoboRIOParser {
 
-    private static final String TAG = RoboRIOStateParser.class.getSimpleName();
+    private static final String TAG = RoboRIOParser.class.getSimpleName();
 
     private StringBuilder _lineBuffer = new StringBuilder();
 

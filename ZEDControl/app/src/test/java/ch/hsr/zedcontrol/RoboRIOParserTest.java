@@ -10,19 +10,19 @@ import ch.hsr.zedcontrol.roborio.RoboRIOLockException;
 import ch.hsr.zedcontrol.roborio.RoboRIOModeException;
 import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 import ch.hsr.zedcontrol.roborio.RoboRIOStateException;
-import ch.hsr.zedcontrol.roborio.parsing.RoboRIOStateParser;
+import ch.hsr.zedcontrol.roborio.parsing.RoboRIOParser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 
-public class RoboRIOStateParserTest {
+public class RoboRIOParserTest {
 
-    private RoboRIOStateParser _parser;
+    private RoboRIOParser _parser;
 
     @Before
     public void setUp() {
-        _parser = new RoboRIOStateParser();
+        _parser = new RoboRIOParser();
     }
 
     @Test

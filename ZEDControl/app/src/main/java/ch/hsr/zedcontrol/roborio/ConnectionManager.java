@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ch.hsr.zedcontrol.R;
-import ch.hsr.zedcontrol.roborio.parsing.ParserData;
-import ch.hsr.zedcontrol.roborio.parsing.RoboRIOStateParser;
+import ch.hsr.zedcontrol.roborio.parsing.RoboRIOParser;
 
 /**
  * Handles the connection to the peripheral (roboRIO)
@@ -53,7 +52,7 @@ public class ConnectionManager {
     private UsbDevice _usbDevice;
     private UsbSerialDevice _serialPort;
     private RoboRIOModes _lastRequestedMode = null;
-    private RoboRIOStateParser _parser = new RoboRIOStateParser();
+    private RoboRIOParser _parser = new RoboRIOParser();
 
     private final UsbSerialInterface.UsbReadCallback _usbReadCallback = new UsbSerialInterface.UsbReadCallback() {
         @Override
@@ -62,7 +61,7 @@ public class ConnectionManager {
                 final String rawData = new String(arg0, "UTF-8");
                 Log.i(TAG, "_usbReadCallback.onReceivedData: " + rawData);
 
-                //TODO: let the RoboRIOStateParser return different objects for each case??
+                //TODO: let the RoboRIOParser return different objects for each case??
                 final ArrayList<String> results = _parser.parse(rawData);
                 final String keyWord = rawData.split(":")[0];
 
