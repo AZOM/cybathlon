@@ -75,18 +75,33 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void handleActionSerialPortError(Intent intent) {
-        String error = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_ERROR);
-        if (error != null) {
-            showAlert(getString(R.string.error), error);
-        } else {
-            Log.w(TAG, "_connectionReceiver.onReceive() -> no error message received.");
+        String errorMessage = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_ERROR);
+        showErrorAlert(getString(R.string.error), errorMessage);
+
+        if (errorMessage == null) {
+            Log.wtf(TAG, "handleActionSerialPortError() -> Missing errorMessage.");
         }
     }
 
 
+    private void showErrorAlert(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+
     private void handleActionSerialPortReadMode(Intent intent) {
-        String message = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
-        //TODO: parse message and react appropriately
+        String mode = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
+        //FIXME: show user-friendly text in toast
+        Toast.makeText(this, "ACK: " + mode, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -166,26 +181,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void showAlert(String title, String message) {
+    private void invalidateUi(final Intent intent) {
+        _hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
+
+        if (_hasLock) {
+            Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
+            //TODO: Enable all buttons
+        } else {
+            showLostLockAlert(getString(R.string.lost_lock), getString(R.string.message_lost_lock));
+            //TODO: Disable all buttons
+        }
+    }
+
+
+    private void showLostLockAlert(String title, String message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)
-                .setMessage(message + "\nTry to unplug and reconnect the USB cable again.")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                .setMessage(message)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                    }
+                })
+                .setPositiveButton(getString(R.string.reconnect), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        connectionManager.requestMode(RoboRIOModes.LOCK);
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-    }
-
-
-    private void invalidateUi(final Intent intent) {
-        _hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
-
-        if(_hasLock) {
-            Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
-        }
-        //TODO: Deactivate all buttons if _hasLock is false
     }
 }

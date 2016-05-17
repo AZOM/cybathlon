@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
@@ -86,7 +85,6 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: DRIVE_FREE");
                 _connectionManager.requestMode(RoboRIOModes.DRIVE_FREE);
-                Toast.makeText(getActivity(), R.string.toast_activate_free_driving, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -96,7 +94,7 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // obtain instance with current state from parent activity
-        _connectionManager =((MainActivity) getActivity()).connectionManager;
+        _connectionManager = ((MainActivity) getActivity()).connectionManager;
     }
 
 }
