@@ -18,7 +18,7 @@ public class RoboRIOStateParserTest {
     @Test
     public void parse_LockInfoNoError_returnsLockString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
         // Arrange
-        String testData = "Lock:OK;";
+        String testData = "Lock:false;";
 
         // Act
         String response = RoboRIOStateParser.parse(testData);
@@ -30,7 +30,7 @@ public class RoboRIOStateParserTest {
     @Test
     public void parse_LockInfoWithError_throwsRoboRIOLockException() throws RoboRIOStateException, RoboRIOModeException {
         // Arrange
-        String testData = "Lock:NOK(Already locked by foo);";
+        String testData = "Lock:true:Already locked by foo;";
 
         // Act
         try {
@@ -45,7 +45,7 @@ public class RoboRIOStateParserTest {
     @Test
     public void parse_UnlockInfoNoError_returnsUnlockString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
         // Arrange
-        String testData = "Unlock:OK;";
+        String testData = "Unlock:false;";
 
         // Act
         String response = RoboRIOStateParser.parse(testData);
@@ -57,7 +57,7 @@ public class RoboRIOStateParserTest {
     @Test
     public void parse_UnlockInfoWithError_throwsRoboRIOLockException() throws RoboRIOStateException, RoboRIOModeException {
         // Arrange
-        String testData = "Unlock:NOK(Can this ever happen?!);";
+        String testData = "Unlock:true:Can this ever happen?!;";
 
         // Act
         try {
@@ -72,7 +72,7 @@ public class RoboRIOStateParserTest {
     @Test
     public void parse_modeStartUpNoError_returnsStartUpString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
         // Arrange
-        String testData = "Mode:M_StartUp:0:OK;";
+        String testData = "Mode:M_StartUp:0:false:;";
 
         // Act
         String response = RoboRIOStateParser.parse(testData);
@@ -84,7 +84,7 @@ public class RoboRIOStateParserTest {
     @Test
     public void parse_modeStartUpWithError_throwsRoboRIOModeException() throws RoboRIOStateException, RoboRIOLockException {
         // Arrange
-        String testData = "Mode:M_StartUp:0:NOK(This is my error message);";
+        String testData = "Mode:M_StartUp:0:true:This is my error message;";
 
         // Act
         try {

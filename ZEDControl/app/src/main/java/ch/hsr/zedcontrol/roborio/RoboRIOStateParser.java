@@ -45,18 +45,17 @@ public class RoboRIOStateParser {
         protected String errorMessage;
 
         public LockData(String data) {
-            // split into separate substrings (format is like: Lock:OK;)
+            // split into separate substrings (format is like: Lock:true:errorMessage;)
             final String[] strings = data.split(":");
 
             keyWord = strings[0];
-            hasError = strings[1].startsWith("NOK");
+            hasError = Boolean.parseBoolean(strings[1]);
             if (hasError) {
-                //FIXME: nicer way of doing this?
-                errorMessage = strings[1].replace("NOK(", "").replace(")", "").replace(";", "");
+                errorMessage = strings[2].replace(";", "");
             }
         }
 
-        public String getModeDescription() {
+        public String getLockDescription() {
             return keyWord + ";";
         }
     }
@@ -69,16 +68,15 @@ public class RoboRIOStateParser {
         protected String errorMessage;
 
         public ModeData(String data) {
-            // split into separate substrings (format is like: Mode:M_StartUp:0:OK;)
+            // split into separate substrings (format is like: Mode:M_StartUp:0:true:errorMessage;)
             final String[] strings = data.split(":");
 
             keyWord = strings[0];
             modeName = strings[1];
             subModeNr = Integer.parseInt(strings[2]);
-            hasError = strings[3].startsWith("NOK");
+            hasError = Boolean.parseBoolean(strings[3]);
             if (hasError) {
-                //FIXME: nicer way of doing this?
-                errorMessage = strings[3].replace("NOK(", "").replace(")", "").replace(";", "");
+                errorMessage = strings[4].replace(";", "");
             }
         }
 
@@ -111,7 +109,7 @@ public class RoboRIOStateParser {
                 throw new RoboRIOLockException(lockData.errorMessage);
             }
 
-            return lockData.getModeDescription();
+            return lockData.getLockDescription();
         }
 
         if (data.startsWith("Mode:")) {
