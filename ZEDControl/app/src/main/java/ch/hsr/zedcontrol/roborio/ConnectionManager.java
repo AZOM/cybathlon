@@ -17,6 +17,7 @@ import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import ch.hsr.zedcontrol.R;
@@ -50,6 +51,76 @@ public class ConnectionManager {
     private UsbDevice _usbDevice;
     private UsbSerialDevice _serialPort;
     private RoboRIOModes _lastRequestedMode = null;
+
+    private final UsbSerialInterface.UsbReadCallback _usbReadCallback = new UsbSerialInterface.UsbReadCallback() {
+        @Override
+        public void onReceivedData(byte[] arg0) {
+            try {
+                final String rawData = new String(arg0, "UTF-8");
+                Log.i(TAG, "_usbReadCallback.onReceivedData: " + rawData);
+
+                //TODO: let the RoboRIOStateParser return different objects for each case??
+                final ArrayList<String> results = RoboRIOStateParser.parse(rawData);
+                final String keyWord = rawData.split(":")[0];
+
+                for (String result : results) {
+                    handleResult(result, keyWord);
+                }
+
+            } catch (UnsupportedEncodingException e) {
+                Log.e(TAG, e.toString());
+            } catch (RoboRIOLockException | RoboRIOStateException | RoboRIOModeException e) {
+                Log.e(TAG, e.toString());
+                Intent intent = new Intent(ACTION_SERIAL_PORT_ERROR);
+                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, e.getMessage());
+                _localBroadcastManager.sendBroadcast(intent);
+            }
+        }
+
+        private void handleResult(String result, String keyWord) {
+            switch (keyWord) {
+                case "Lock":
+                    broadcastLock(true);
+                    break;
+
+                case "Unlock":
+                    broadcastLock(false);
+                    break;
+
+                case "Battery":
+                    handleResultBattery(result);
+                    break;
+
+                case "State":
+                    Log.d(TAG, "_usbReadCallback.handleResult() -> keep-alive signal for state: " + result);
+                    break;
+
+                case "Mode":
+                    handleResultMode(result);
+                    break;
+
+                default:
+                    Log.wtf(TAG, "_usbReadCallback.handleResult() -> Unhandled case: " + keyWord);
+                    break;
+            }
+        }
+
+        private void handleResultBattery(String result) {
+            Intent voltageIntent = new Intent(ACTION_SERIAL_PORT_READ_BATTERY);
+            voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, result);
+            _localBroadcastManager.sendBroadcast(voltageIntent);
+        }
+
+        private void handleResultMode(String result) {
+            if (_lastRequestedMode.equalsCommand(result)) {
+                _lastRequestedMode = null;
+            }
+
+            Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
+            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, result);
+            _localBroadcastManager.sendBroadcast(modeIntent);
+        }
+    };
 
     private final BroadcastReceiver _usbActionReceiver = new BroadcastReceiver() {
         @Override
@@ -125,73 +196,6 @@ public class ConnectionManager {
         }
     };
 
-    UsbSerialInterface.UsbReadCallback _usbReadCallback = new UsbSerialInterface.UsbReadCallback() {
-        @Override
-        public void onReceivedData(byte[] arg0) {
-            try {
-                final String data = new String(arg0, "UTF-8");
-                Log.i(TAG, "_usbReadCallback.onReceivedData: " + data);
-
-                //TODO: let the RoboRIOStateParser return different objects for each case??
-                final String parsed = RoboRIOStateParser.parse(data);
-
-                final String startOfString = data.split(":")[0];
-                switch (startOfString) {
-                    case "Lock":
-                        broadcastLock(true);
-                        break;
-
-                    case "Unlock":
-                        broadcastLock(false);
-                        break;
-
-                    case "Battery":
-                        Intent voltageIntent = new Intent(ACTION_SERIAL_PORT_READ_BATTERY);
-                        voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, parsed);
-                        _localBroadcastManager.sendBroadcast(voltageIntent);
-                        break;
-
-                    case "State":
-                        Log.d(TAG, "_usbReadCallback.onReceivedData() -> keep-alive signal for state: " + parsed);
-                        break;
-
-                    case "Mode":
-                        handleMode(parsed);
-                        break;
-
-                    default:
-                        Log.w(TAG, "_usbReadCallback.onReceivedData() -> Unhandled case: " + startOfString);
-                        break;
-                }
-
-            } catch (UnsupportedEncodingException e) {
-                Log.e(TAG, e.toString());
-            } catch (RoboRIOLockException | RoboRIOStateException | RoboRIOModeException e) {
-                Log.e(TAG, e.toString());
-                Intent intent = new Intent(ACTION_SERIAL_PORT_ERROR);
-                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, e.getMessage());
-                _localBroadcastManager.sendBroadcast(intent);
-            }
-        }
-
-        private void handleMode(String parsedAnswer) {
-            if (_lastRequestedMode.equalsCommand(parsedAnswer)) {
-                _lastRequestedMode = null;
-            }
-
-            Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
-            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, parsedAnswer);
-            _localBroadcastManager.sendBroadcast(modeIntent);
-        }
-    };
-
-
-    private void broadcastLock(boolean hasLock) {
-        Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
-        intent.putExtra(EXTRA_SERIAL_PORT_READ_LOCK, hasLock);
-        _localBroadcastManager.sendBroadcast(intent);
-    }
-
 
     /**
      * Constructor for ConnectionManager needs a Context to be able to use Android methods.
@@ -205,6 +209,11 @@ public class ConnectionManager {
         registerBroadcastReceiver(context);
     }
 
+    private void broadcastLock(boolean hasLock) {
+        Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
+        intent.putExtra(EXTRA_SERIAL_PORT_READ_LOCK, hasLock);
+        _localBroadcastManager.sendBroadcast(intent);
+    }
 
     private void registerBroadcastReceiver(@NonNull Context context) {
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
@@ -271,7 +280,8 @@ public class ConnectionManager {
             return;
         }
 
-        if(_lastRequestedMode != null) {
+        // Getting a LOCK should always pass
+        if (_lastRequestedMode != null && mode != RoboRIOModes.LOCK) {
             Log.w(TAG, "requestMode() -> still waiting for answer of last request: " + _lastRequestedMode);
             return;
         }

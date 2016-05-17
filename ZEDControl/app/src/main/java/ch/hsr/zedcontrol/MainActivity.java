@@ -24,16 +24,13 @@ import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
+    // can be shared with Fragments - avoid a Singleton and still always have the same state.
+    protected ConnectionManager connectionManager;
     private View _contentView;
-
     /**
      * Only if this is true the App can send commands to the usb-serial-port to roboRIO
      */
     private boolean _hasLock = true; // production = false
-
-    // can be shared with Fragments - avoid a Singleton and still always have the same state.
-    protected ConnectionManager connectionManager;
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

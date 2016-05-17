@@ -29,19 +29,9 @@ public enum RoboRIOModes {
         command = s;
     }
 
-    @Contract("null -> false")
-    public boolean equalsCommand(String otherCommand) {
-        return otherCommand != null && command.equals(otherCommand);
-    }
-
-    @Contract(pure = true)
-    public String toString() {
-        return this.command;
-    }
-
-
     /**
      * Get an enum value from string.
+     *
      * @param modeString The string that shall be converted to enum value.
      * @return RoboRioModes enum value or null, if string did not match any enum value.
      */
@@ -52,6 +42,16 @@ public enum RoboRIOModes {
             }
         }
 
-       return null;
+        return null;
+    }
+
+    @Contract("null -> false")
+    public boolean equalsCommand(String otherCommand) {
+        return otherCommand != null && command.equals(otherCommand);
+    }
+
+    @Contract(pure = true)
+    public String toString() {
+        return this.command;
     }
 }

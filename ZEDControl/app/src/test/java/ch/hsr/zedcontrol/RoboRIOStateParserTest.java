@@ -3,6 +3,8 @@ package ch.hsr.zedcontrol;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import ch.hsr.zedcontrol.roborio.RoboRIOLockException;
 import ch.hsr.zedcontrol.roborio.RoboRIOModeException;
 import ch.hsr.zedcontrol.roborio.RoboRIOModes;
@@ -10,6 +12,7 @@ import ch.hsr.zedcontrol.roborio.RoboRIOStateException;
 import ch.hsr.zedcontrol.roborio.RoboRIOStateParser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -21,10 +24,10 @@ public class RoboRIOStateParserTest {
         String testData = "Lock:false;";
 
         // Act
-        String response = RoboRIOStateParser.parse(testData);
+        ArrayList<String> response = RoboRIOStateParser.parse(testData);
 
         // Assert
-        assertEquals(RoboRIOModes.LOCK.toString(), response);
+        assertEquals(RoboRIOModes.LOCK.toString(), response.get(0));
     }
 
     @Test
@@ -48,10 +51,10 @@ public class RoboRIOStateParserTest {
         String testData = "Unlock:false;";
 
         // Act
-        String response = RoboRIOStateParser.parse(testData);
+        ArrayList<String> response = RoboRIOStateParser.parse(testData);
 
         // Assert
-        assertEquals(RoboRIOModes.UNLOCK.toString(), response);
+        assertEquals(RoboRIOModes.UNLOCK.toString(), response.get(0));
     }
 
     @Test
@@ -75,10 +78,10 @@ public class RoboRIOStateParserTest {
         String testData = "Mode:M_StartUp:0:false:;";
 
         // Act
-        String response = RoboRIOStateParser.parse(testData);
+        ArrayList<String> response = RoboRIOStateParser.parse(testData);
 
         // Assert
-        assertEquals(RoboRIOModes.START_UP.toString(), response);
+        assertEquals(RoboRIOModes.START_UP.toString(), response.get(0));
     }
 
     @Test
@@ -103,10 +106,10 @@ public class RoboRIOStateParserTest {
         String testData = "Battery:12.34;";
 
         // Act
-        String response = RoboRIOStateParser.parse(testData);
+        ArrayList<String> response = RoboRIOStateParser.parse(testData);
 
         // Assert
-        assertEquals("12.34 V", response);
+        assertEquals("12.34 V", response.get(0));
     }
 
     @Test
@@ -115,10 +118,10 @@ public class RoboRIOStateParserTest {
         String testData = "State::0:false:;";
 
         // Act
-        String response = RoboRIOStateParser.parse(testData);
+        ArrayList<String> response = RoboRIOStateParser.parse(testData);
 
         // Assert
-        assertEquals("", response);
+        assertEquals("", response.get(0));
     }
 
     @Test
@@ -135,6 +138,21 @@ public class RoboRIOStateParserTest {
             // Assert
             assertEquals("This is my error message", e.getMessage());
         }
+    }
+
+
+    @Test
+    public void parse_lineWithTwoCommands_returnsTwoValidResults() throws RoboRIOLockException, RoboRIOModeException, RoboRIOStateException {
+        // Arrange
+        String testData = "Lock:false:;State::0:false:;";
+
+        // Act
+        ArrayList<String> results = RoboRIOStateParser.parse(testData);
+
+        // Assert
+        assertEquals(2, results.size());
+        assertEquals(RoboRIOModes.LOCK.toString(), results.get(0));
+        assertEquals("", results.get(1));
     }
 
 }

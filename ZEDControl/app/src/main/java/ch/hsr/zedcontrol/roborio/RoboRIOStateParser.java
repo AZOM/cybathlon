@@ -1,11 +1,76 @@
 package ch.hsr.zedcontrol.roborio;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Parses the data from UsbSerialInterface.UsbReadCallback to something meaningful.
  */
 public class RoboRIOStateParser {
+
+    private static final String TAG = RoboRIOStateParser.class.getSimpleName();
+
+    public static ArrayList<String> parse(@NonNull String data) throws RoboRIOLockException, RoboRIOStateException, RoboRIOModeException {
+        ArrayList<String> result = new ArrayList<>();
+
+        // Split string into separate messages, since data can be like: Lock:false:;State::0:false:;
+        final String[] lines = data.split(";");
+
+        for (String line : lines) {
+            String parsedLine = parseLine(line);
+
+            if (parsedLine == null) {
+                Log.wtf(TAG, "parse() -> could not parse line for: " + line);
+            } else {
+                result.add(parsedLine);
+            }
+        }
+
+        return result;
+    }
+
+    @Nullable
+    private static String parseLine(@NonNull String line) throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
+        if (line.startsWith("Battery:")) {
+            return new BatteryData(line).voltage + " V";
+        }
+
+        if (line.startsWith("State:")) {
+            final StateData stateData = new StateData(line);
+
+            if (stateData.hasError) {
+                throw new RoboRIOStateException(stateData.errorMessage);
+            }
+
+            return stateData.modeName;
+        }
+
+        if (line.startsWith("Lock:") || line.startsWith("Unlock:")) {
+            final LockData lockData = new LockData(line);
+
+            if (lockData.hasError) {
+                throw new RoboRIOLockException(lockData.errorMessage);
+            }
+
+            return lockData.getLockDescription();
+        }
+
+        if (line.startsWith("Mode:")) {
+            final ModeData modeData = new ModeData(line);
+
+            if (modeData.hasError) {
+                throw new RoboRIOModeException(modeData.errorMessage);
+            }
+
+            return modeData.getModeDescription();
+        }
+
+        // unknown
+        return null;
+    }
 
     private static class BatteryData {
         protected final String keyWord;
@@ -16,7 +81,7 @@ public class RoboRIOStateParser {
             final String[] strings = data.split(":");
 
             keyWord = strings[0];
-            voltage = Double.parseDouble(strings[1].replace(";", ""));
+            voltage = Double.parseDouble(strings[1]);
         }
     }
 
@@ -25,7 +90,7 @@ public class RoboRIOStateParser {
         protected final String modeName;
         protected final int subModeNr;
         protected final boolean hasError;
-        protected final String errorMessage;
+        protected String errorMessage;
 
         public StateData(String data) {
             // split into separate substrings (format is like: State:M_StartUp:0:false:;)
@@ -35,7 +100,9 @@ public class RoboRIOStateParser {
             modeName = strings[1];
             subModeNr = Integer.parseInt(strings[2]);
             hasError = Boolean.parseBoolean(strings[3]);
-            errorMessage = strings[4].replace(";", "");
+            if (hasError) {
+                errorMessage = strings[4];
+            }
         }
     }
 
@@ -51,7 +118,7 @@ public class RoboRIOStateParser {
             keyWord = strings[0];
             hasError = Boolean.parseBoolean(strings[1]);
             if (hasError) {
-                errorMessage = strings[2].replace(";", "");
+                errorMessage = strings[2];
             }
         }
 
@@ -76,7 +143,7 @@ public class RoboRIOStateParser {
             subModeNr = Integer.parseInt(strings[2]);
             hasError = Boolean.parseBoolean(strings[3]);
             if (hasError) {
-                errorMessage = strings[4].replace(";", "");
+                errorMessage = strings[4];
             }
         }
 
@@ -85,43 +152,4 @@ public class RoboRIOStateParser {
         }
     }
 
-
-    public static String parse(@NonNull String data) throws RoboRIOLockException, RoboRIOStateException, RoboRIOModeException {
-
-        if (data.startsWith("Battery:")) {
-            return new BatteryData(data).voltage + " V";
-        }
-
-        if (data.startsWith("State:")) {
-            final StateData stateData = new StateData(data);
-
-            if (stateData.hasError) {
-                throw new RoboRIOStateException(stateData.errorMessage);
-            }
-
-            return stateData.modeName;
-        }
-
-        if (data.startsWith("Lock:") || data.startsWith("Unlock:")) {
-            final LockData lockData = new LockData(data);
-
-            if (lockData.hasError) {
-                throw new RoboRIOLockException(lockData.errorMessage);
-            }
-
-            return lockData.getLockDescription();
-        }
-
-        if (data.startsWith("Mode:")) {
-            final ModeData modeData = new ModeData(data);
-
-            if (modeData.hasError) {
-                throw new RoboRIOModeException(modeData.errorMessage);
-            }
-
-            return modeData.getModeDescription();
-        }
-
-        return null;
-    }
 }

@@ -119,7 +119,7 @@ public class StairsControlsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // obtain instance with current state from parent activity
-        _connectionManager =((MainActivity) getActivity()).connectionManager;
+        _connectionManager = ((MainActivity) getActivity()).connectionManager;
     }
 
 }
