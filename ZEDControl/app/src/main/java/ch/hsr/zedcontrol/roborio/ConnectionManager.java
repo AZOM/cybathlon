@@ -41,7 +41,7 @@ public class ConnectionManager {
 
     private static final String ACTION_USB_PERMISSION = ".ACTION_USB_PERMISSION";
 
-    private static String TAG = ConnectionManager.class.getSimpleName();
+    private static final String TAG = ConnectionManager.class.getSimpleName();
 
     private static final int VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE = 1027;
 
@@ -49,6 +49,7 @@ public class ConnectionManager {
     private UsbManager _usbManager;
     private UsbDevice _usbDevice;
     private UsbSerialDevice _serialPort;
+    private RoboRIOModes _lastRequestedMode = null;
 
     private final BroadcastReceiver _usbActionReceiver = new BroadcastReceiver() {
         @Override
@@ -155,9 +156,7 @@ public class ConnectionManager {
                         break;
 
                     case "Mode":
-                        Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
-                        modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, parsed);
-                        _localBroadcastManager.sendBroadcast(modeIntent);
+                        handleMode(parsed);
                         break;
 
                     default:
@@ -173,6 +172,16 @@ public class ConnectionManager {
                 intent.putExtra(EXTRA_SERIAL_PORT_ERROR, e.getMessage());
                 _localBroadcastManager.sendBroadcast(intent);
             }
+        }
+
+        private void handleMode(String parsedAnswer) {
+            if (_lastRequestedMode.equalsCommand(parsedAnswer)) {
+                _lastRequestedMode = null;
+            }
+
+            Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
+            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, parsedAnswer);
+            _localBroadcastManager.sendBroadcast(modeIntent);
         }
     };
 
@@ -250,7 +259,9 @@ public class ConnectionManager {
 
 
     /**
-     * Sends the command for the given mode to the open serial port.
+     * Sends the command for the given mode to the open serial port. Only one mode-request can be sent at a time. The
+     * ConnectionManager will ignore any further requests until the ACK has been received from
+     * UsbSerialInterface.UsbReadCallback
      *
      * @param mode The requested mode
      */
@@ -260,8 +271,12 @@ public class ConnectionManager {
             return;
         }
 
-        //TODO: lock the UI until the callback returned with the answer?
+        if(_lastRequestedMode != null) {
+            Log.w(TAG, "requestMode() -> still waiting for answer of last request: " + _lastRequestedMode);
+            return;
+        }
 
+        _lastRequestedMode = mode;
         Log.i(TAG, "requestMode() -> writing to serial port: " + mode);
         _serialPort.write(mode.toString().getBytes());
     }
