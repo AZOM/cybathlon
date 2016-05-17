@@ -3,7 +3,7 @@ package ch.hsr.zedcontrol.roborio.parsing;
 /**
  * Represents data from the serial bus that is retrieved when a Lock/Unlock has happened.
  */
-class LockData {
+public class LockData implements ParserData {
     protected final String keyWord;
     protected final boolean hasError;
     protected String errorMessage;
@@ -23,7 +23,9 @@ class LockData {
         }
     }
 
-    public String getLockDescription() {
+
+    @Override
+    public String getDescription() {
         return keyWord + ";";
     }
 }

@@ -3,7 +3,7 @@ package ch.hsr.zedcontrol.roborio.parsing;
 /**
  * Represents data from the serial bus that is retrieved when a Mode is acknowledged or a State is posted.
  */
-class ModeData {
+public class ModeData implements ParserData {
     protected final String keyWord;
     protected final String modeName;
     protected final int subModeNr;
@@ -27,7 +27,9 @@ class ModeData {
         }
     }
 
-    public String getModeDescription() {
+
+    @Override
+    public String getDescription() {
         return keyWord + ":" + modeName + ":" + subModeNr + ";";
     }
 }

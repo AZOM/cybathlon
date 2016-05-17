@@ -41,7 +41,7 @@ public class RoboRIOStateParser {
 
         switch (words[0]) {
             case "Battery":
-                return new BatteryData(words).voltage + " V";
+                return parseBatteryData(words);
 
             case "State":
                 return parseStateData(words);
@@ -59,6 +59,12 @@ public class RoboRIOStateParser {
         }
     }
 
+    private static String parseBatteryData(String[] words) {
+        final BatteryData batteryData = new BatteryData(words);
+
+        return batteryData.getDescription();
+    }
+
 
     // Used because we want a different Exception here - else it is the same as parseModeData
     private static String parseStateData(String[] words) throws RoboRIOStateException {
@@ -68,7 +74,7 @@ public class RoboRIOStateParser {
             throw new RoboRIOStateException(stateData.errorMessage);
         }
 
-        return stateData.getModeDescription();
+        return stateData.getDescription();
     }
 
 
@@ -79,7 +85,7 @@ public class RoboRIOStateParser {
             throw new RoboRIOLockException(lockData.errorMessage);
         }
 
-        return lockData.getLockDescription();
+        return lockData.getDescription();
     }
 
 
@@ -90,7 +96,7 @@ public class RoboRIOStateParser {
             throw new RoboRIOModeException(modeData.errorMessage);
         }
 
-        return modeData.getModeDescription();
+        return modeData.getDescription();
     }
 
 
