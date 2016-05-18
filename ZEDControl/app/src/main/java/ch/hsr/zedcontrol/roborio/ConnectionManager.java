@@ -45,8 +45,7 @@ public class ConnectionManager {
     private static final String ACTION_USB_PERMISSION = ".ACTION_USB_PERMISSION";
 
     private static final String TAG = ConnectionManager.class.getSimpleName();
-
-    private static final int VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE = 1027;
+    private final int _defaultUsbVendorId;
 
     private LocalBroadcastManager _localBroadcastManager;
     private UsbManager _usbManager;
@@ -60,6 +59,7 @@ public class ConnectionManager {
         public void onReceivedData(byte[] arg0) {
             try {
                 final String rawData = new String(arg0, "UTF-8");
+                //TODO: remove log statement
                 Log.i(TAG, "_usbReadCallback.onReceivedData: " + rawData);
 
                 for (ParserData parserData : _parser.parse(rawData)) {
@@ -144,7 +144,7 @@ public class ConnectionManager {
                     break;
 
                 case UsbManager.ACTION_USB_DEVICE_ATTACHED:
-                    if (scanUsbDevicesForVendorId(context, VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE)) {
+                    if (scanUsbDevicesForVendorId(context, _defaultUsbVendorId)) {
                         Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED");
                     } else {
                         Log.w(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED -> unknown device");
@@ -212,8 +212,10 @@ public class ConnectionManager {
      * Constructor for ConnectionManager needs a Context to be able to use Android methods.
      *
      * @param context The Context object, usually an Activity.
+     * @param defaultUsbVendorId The vendorId this instance of ConnectionManager shall be compatible with.
      */
-    public ConnectionManager(@NonNull Context context) {
+    public ConnectionManager(@NonNull Context context, int defaultUsbVendorId) {
+        _defaultUsbVendorId = defaultUsbVendorId;
         _usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
         _localBroadcastManager = LocalBroadcastManager.getInstance(context);
 

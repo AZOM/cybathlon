@@ -24,13 +24,13 @@ import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final int VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE = 1027;
+
     // can be shared with Fragments - avoid a Singleton and still always have the same state.
     protected ConnectionManager connectionManager;
+
     private View _contentView;
-    /**
-     * Only if this is true the App can send commands to the usb-serial-port to roboRIO
-     */
-    private boolean _hasLock = true; // production = false
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK:
-                    invalidateUi(intent);
+                    boolean hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
+                    invalidateUi(hasLock);
                     break;
 
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_MODE:
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,10 +131,10 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         initConnectionReceiver();
-        connectionManager = new ConnectionManager(this);
-
-        //TODO: consider calling connectionManager.scanUsbDevicesForVendorId()
+        connectionManager = new ConnectionManager(this, VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE);
+        connectionManager.scanUsbDevicesForVendorId(this, VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE);
     }
+
 
     private void initConnectionReceiver() {
         IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_SERIAL_PORT_OPEN);
@@ -178,10 +180,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void invalidateUi(final Intent intent) {
-        _hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
-
-        if (_hasLock) {
+    private void invalidateUi(boolean hasLock) {
+        if (hasLock) {
             Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
             //TODO: Enable all buttons
         } else {
