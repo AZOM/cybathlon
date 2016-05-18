@@ -110,7 +110,8 @@ public class ConnectionManager {
 
         private void handleResultMode(ParserData parserData) {
             Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
-            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, parserData.getDescription());
+            RoboRIOModes mode = RoboRIOModes.getModeFromStringDescription(parserData.getDescription());
+            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, mode);
             _localBroadcastManager.sendBroadcast(modeIntent);
         }
 

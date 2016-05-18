@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
     // can be shared with Fragments - avoid a Singleton and still always have the same state.
     protected ConnectionManager connectionManager;
-
     protected boolean hasLock = false; //production = false;
 
     private View _contentView;
@@ -198,9 +197,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void handleActionSerialPortReadMode(Intent intent) {
-        String mode = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
-        //FIXME: show user-friendly text in toast
-        Toast.makeText(this, "ACK: " + mode, Toast.LENGTH_SHORT).show();
+        RoboRIOModes mode = (RoboRIOModes) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
+        Toast.makeText(this, "ACK: " + mode.name(), Toast.LENGTH_SHORT).show();
     }
 
 
