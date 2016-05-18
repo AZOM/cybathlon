@@ -217,6 +217,21 @@ public class RoboRIOParserTest {
     }
 
     @Test
+    public void parse_commandDelimiterSeparatedInSecondLine_returnsValidResultOnSecondCall() throws RoboRIOLockException, RoboRIOModeException, RoboRIOStateException {
+        // Arrange
+        String part1 = "State::0:false:";
+        String part2 = ";";
+
+        // Act
+        _parser.parse(part1);
+        ArrayList<ParserData> results = _parser.parse(part2);
+
+        // Assert
+        assertEquals(KeyWords.STATE, results.get(0).getKeyWord());
+        assertEquals("State::0;", results.get(0).getDescription());
+    }
+
+    @Test
     public void parse_commandSplitIntoThreeLinesWithNoise_returnsValidResultOnThirdCall() throws RoboRIOLockException, RoboRIOModeException, RoboRIOStateException {
         // Arrange
         String part1 = "Mode:";
