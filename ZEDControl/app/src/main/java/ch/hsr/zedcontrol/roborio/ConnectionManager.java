@@ -51,7 +51,6 @@ public class ConnectionManager {
     private UsbManager _usbManager;
     private UsbDevice _usbDevice;
     private UsbSerialDevice _serialPort;
-    private RoboRIOModes _lastRequestedMode = null;
     private RoboRIOParser _parser = new RoboRIOParser();
 
     private final UsbSerialInterface.UsbReadCallback _usbReadCallback = new UsbSerialInterface.UsbReadCallback() {
@@ -105,10 +104,6 @@ public class ConnectionManager {
         }
 
         private void handleResultLockUnlock(ParserData parserData) {
-            if (_lastRequestedMode.equalsCommand(parserData.getDescription())) {
-                _lastRequestedMode = null;
-            }
-
             final boolean hasLock = parserData.getKeyWord() == KeyWords.LOCK;
 
             Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
@@ -117,10 +112,6 @@ public class ConnectionManager {
         }
 
         private void handleResultMode(ParserData parserData) {
-            if (_lastRequestedMode.equalsCommand(parserData.getDescription())) {
-                _lastRequestedMode = null;
-            }
-
             Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
             modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, parserData.getDescription());
             _localBroadcastManager.sendBroadcast(modeIntent);
@@ -287,13 +278,6 @@ public class ConnectionManager {
             return;
         }
 
-        // Getting a LOCK should always pass
-        if (_lastRequestedMode != null && mode != RoboRIOModes.LOCK) {
-            Log.w(TAG, "requestMode() -> still waiting for answer of last request: " + _lastRequestedMode);
-            return;
-        }
-
-        _lastRequestedMode = mode;
         Log.i(TAG, "requestMode() -> writing to serial port: " + mode);
         _serialPort.write(mode.toString().getBytes());
     }
