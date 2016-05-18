@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import ch.hsr.zedcontrol.R;
+import ch.hsr.zedcontrol.roborio.parsing.KeyWords;
 import ch.hsr.zedcontrol.roborio.parsing.ParserData;
 import ch.hsr.zedcontrol.roborio.parsing.RoboRIOParser;
 
@@ -78,11 +79,15 @@ public class ConnectionManager {
         private void handleResult(ParserData parserData) {
             switch (parserData.getKeyWord()) {
                 case LOCK:
-                    broadcastLock(true);
+                    handleResultLockUnlock(parserData);
                     break;
 
                 case UNLOCK:
-                    broadcastLock(false);
+                    handleResultLockUnlock(parserData);
+                    break;
+
+                case MODE:
+                    handleResultMode(parserData);
                     break;
 
                 case BATTERY:
@@ -93,20 +98,22 @@ public class ConnectionManager {
                     Log.d(TAG, "_usbReadCallback.handleResult() -> keep-alive signal for state: " + parserData);
                     break;
 
-                case MODE:
-                    handleResultMode(parserData);
-                    break;
-
                 default:
                     Log.wtf(TAG, "_usbReadCallback.handleResult() -> Unhandled case: " + parserData.getKeyWord());
                     break;
             }
         }
 
-        private void handleResultBattery(ParserData parserData) {
-            Intent voltageIntent = new Intent(ACTION_SERIAL_PORT_READ_BATTERY);
-            voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, parserData.getDescription());
-            _localBroadcastManager.sendBroadcast(voltageIntent);
+        private void handleResultLockUnlock(ParserData parserData) {
+            if (_lastRequestedMode.equalsCommand(parserData.getDescription())) {
+                _lastRequestedMode = null;
+            }
+
+            final boolean hasLock = parserData.getKeyWord() == KeyWords.LOCK;
+
+            Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
+            intent.putExtra(EXTRA_SERIAL_PORT_READ_LOCK, hasLock);
+            _localBroadcastManager.sendBroadcast(intent);
         }
 
         private void handleResultMode(ParserData parserData) {
@@ -117,6 +124,12 @@ public class ConnectionManager {
             Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
             modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, parserData.getDescription());
             _localBroadcastManager.sendBroadcast(modeIntent);
+        }
+
+        private void handleResultBattery(ParserData parserData) {
+            Intent voltageIntent = new Intent(ACTION_SERIAL_PORT_READ_BATTERY);
+            voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, parserData.getDescription());
+            _localBroadcastManager.sendBroadcast(voltageIntent);
         }
     };
 
@@ -207,11 +220,6 @@ public class ConnectionManager {
         registerBroadcastReceiver(context);
     }
 
-    private void broadcastLock(boolean hasLock) {
-        Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
-        intent.putExtra(EXTRA_SERIAL_PORT_READ_LOCK, hasLock);
-        _localBroadcastManager.sendBroadcast(intent);
-    }
 
     private void registerBroadcastReceiver(@NonNull Context context) {
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
