@@ -30,7 +30,7 @@ public class RoboRIOParserTest {
     }
 
     @Test
-    public void parse_LockInfoNoError_returnsLockString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
+    public void parse_lockInfoNoError_returnsLockString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
         // Arrange
         String testData = "Lock:false;";
 
@@ -43,7 +43,7 @@ public class RoboRIOParserTest {
     }
 
     @Test
-    public void parse_LockInfoWithError_throwsRoboRIOLockException() throws RoboRIOStateException, RoboRIOModeException {
+    public void parse_lockInfoWithError_throwsRoboRIOLockException() throws RoboRIOStateException, RoboRIOModeException {
         // Arrange
         String testData = "Lock:true:Already locked by foo;";
 
@@ -58,7 +58,7 @@ public class RoboRIOParserTest {
     }
 
     @Test
-    public void parse_UnlockInfoNoError_returnsUnlockString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
+    public void parse_unlockInfoNoError_returnsUnlockString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
         // Arrange
         String testData = "Unlock:false;";
 
@@ -71,7 +71,7 @@ public class RoboRIOParserTest {
     }
 
     @Test
-    public void parse_UnlockInfoWithError_throwsRoboRIOLockException() throws RoboRIOStateException, RoboRIOModeException {
+    public void parse_unlockInfoWithError_throwsRoboRIOLockException() throws RoboRIOStateException, RoboRIOModeException {
         // Arrange
         String testData = "Unlock:true:Can this ever happen?!;";
 
@@ -82,6 +82,35 @@ public class RoboRIOParserTest {
         } catch (RoboRIOLockException e) {
             // Assert
             assertEquals(e.getMessage(), "Can this ever happen?!");
+        }
+    }
+
+    @Test
+    public void parse_modeNoneNoError_returnsNoneString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
+        // Arrange
+        String testData = "Mode::0:false:;";
+
+        // Act
+        ArrayList<ParserData> response = _parser.parse(testData);
+
+        // Assert
+        assertEquals(KeyWords.MODE, response.get(0).getKeyWord());
+        assertEquals(RoboRIOModes.NO_MODE.toString(), response.get(0).getDescription());
+    }
+
+    @Test
+    public void parse_modeNoneWithError_throwsRoboRIOModeException() throws RoboRIOStateException, RoboRIOLockException {
+        // Arrange
+        String testData = "Mode::0:true:some cool error;";
+
+        // Act
+        try {
+            _parser.parse(testData);
+            Assert.fail("Should have thrown RoboRIOModeException");
+        } catch (RoboRIOModeException e) {
+
+            // Assert
+            assertEquals("some cool error", e.getMessage());
         }
     }
 
@@ -115,7 +144,7 @@ public class RoboRIOParserTest {
     }
 
     @Test
-    public void parse_batteryStatusInfo_returnsVoltageString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
+    public void parse_batteryInfo_returnsVoltageString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
         // Arrange
         String testData = "Battery:12.34;";
 
