@@ -1,4 +1,4 @@
-package ch.hsr.zedcontrol;
+package ch.hsr.zedcontrol.roborio;
 
 import org.junit.Test;
 

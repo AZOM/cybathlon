@@ -17,10 +17,10 @@ import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import ch.hsr.zedcontrol.R;
+import ch.hsr.zedcontrol.roborio.parsing.ParserData;
 import ch.hsr.zedcontrol.roborio.parsing.RoboRIOParser;
 
 /**
@@ -61,12 +61,8 @@ public class ConnectionManager {
                 final String rawData = new String(arg0, "UTF-8");
                 Log.i(TAG, "_usbReadCallback.onReceivedData: " + rawData);
 
-                //TODO: let the RoboRIOParser return different objects for each case??
-                final ArrayList<String> results = _parser.parse(rawData);
-                final String keyWord = rawData.split(":")[0];
-
-                for (String result : results) {
-                    handleResult(result, keyWord);
+                for (ParserData parserData : _parser.parse(rawData)) {
+                    handleResult(parserData);
                 }
 
             } catch (UnsupportedEncodingException e) {
@@ -79,47 +75,47 @@ public class ConnectionManager {
             }
         }
 
-        private void handleResult(String result, String keyWord) {
-            switch (keyWord) {
-                case "Lock":
+        private void handleResult(ParserData parserData) {
+            switch (parserData.getKeyWord()) {
+                case LOCK:
                     broadcastLock(true);
                     break;
 
-                case "Unlock":
+                case UNLOCK:
                     broadcastLock(false);
                     break;
 
-                case "Battery":
-                    handleResultBattery(result);
+                case BATTERY:
+                    handleResultBattery(parserData);
                     break;
 
-                case "State":
-                    Log.d(TAG, "_usbReadCallback.handleResult() -> keep-alive signal for state: " + result);
+                case STATE:
+                    Log.d(TAG, "_usbReadCallback.handleResult() -> keep-alive signal for state: " + parserData);
                     break;
 
-                case "Mode":
-                    handleResultMode(result);
+                case MODE:
+                    handleResultMode(parserData);
                     break;
 
                 default:
-                    Log.wtf(TAG, "_usbReadCallback.handleResult() -> Unhandled case: " + keyWord);
+                    Log.wtf(TAG, "_usbReadCallback.handleResult() -> Unhandled case: " + parserData.getKeyWord());
                     break;
             }
         }
 
-        private void handleResultBattery(String result) {
+        private void handleResultBattery(ParserData parserData) {
             Intent voltageIntent = new Intent(ACTION_SERIAL_PORT_READ_BATTERY);
-            voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, result);
+            voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, parserData.getDescription());
             _localBroadcastManager.sendBroadcast(voltageIntent);
         }
 
-        private void handleResultMode(String result) {
-            if (_lastRequestedMode.equalsCommand(result)) {
+        private void handleResultMode(ParserData parserData) {
+            if (_lastRequestedMode.equalsCommand(parserData.getDescription())) {
                 _lastRequestedMode = null;
             }
 
             Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
-            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, result);
+            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, parserData.getDescription());
             _localBroadcastManager.sendBroadcast(modeIntent);
         }
     };

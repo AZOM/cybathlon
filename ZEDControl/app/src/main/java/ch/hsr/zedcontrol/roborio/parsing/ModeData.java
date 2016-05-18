@@ -1,10 +1,11 @@
 package ch.hsr.zedcontrol.roborio.parsing;
 
 /**
- * Represents data from the serial bus that is retrieved when a Mode is acknowledged or a State is posted.
+ * Represents data from the serial bus that is retrieved directly after a Mode
+ * (see: {@link ch.hsr.zedcontrol.roborio.RoboRIOModes}) is acknowledged.
  */
 public class ModeData implements ParserData {
-    protected final String keyWord;
+    private final String keyWord;
     protected final String modeName;
     protected final int subModeNr;
     protected final boolean hasError;
@@ -25,6 +26,12 @@ public class ModeData implements ParserData {
             }
             errorMessage = words[4].replace(";", "");
         }
+    }
+
+
+    @Override
+    public KeyWords getKeyWord() {
+        return KeyWords.MODE;
     }
 
 

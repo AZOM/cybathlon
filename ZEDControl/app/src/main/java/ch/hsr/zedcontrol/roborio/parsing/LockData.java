@@ -4,9 +4,10 @@ package ch.hsr.zedcontrol.roborio.parsing;
  * Represents data from the serial bus that is retrieved when a Lock/Unlock has happened.
  */
 public class LockData implements ParserData {
-    protected final String keyWord;
+    private final String keyWord;
     protected final boolean hasError;
     protected String errorMessage;
+
 
     public LockData(String[] words) {
         if (words.length < 2) {
@@ -25,7 +26,18 @@ public class LockData implements ParserData {
 
 
     @Override
+    public KeyWords getKeyWord() {
+        if (keyWord.equals(KeyWords.LOCK.toString())) {
+            return KeyWords.LOCK;
+        } else {
+            return KeyWords.UNLOCK;
+        }
+    }
+
+
+    @Override
     public String getDescription() {
         return keyWord + ";";
     }
+
 }

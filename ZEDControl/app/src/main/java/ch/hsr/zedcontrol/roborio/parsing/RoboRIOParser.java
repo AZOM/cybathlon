@@ -30,8 +30,8 @@ public class RoboRIOParser {
      * @throws RoboRIOStateException
      * @throws RoboRIOModeException
      */
-    public ArrayList<String> parse(@NonNull String data) throws RoboRIOLockException, RoboRIOStateException, RoboRIOModeException {
-        ArrayList<String> result = new ArrayList<>();
+    public ArrayList<ParserData> parse(@NonNull String data) throws RoboRIOLockException, RoboRIOStateException, RoboRIOModeException {
+        ArrayList<ParserData> result = new ArrayList<>();
 
         // Split input into separate lines and keep the separator!
         // data can contain multiple complete lines (ended by ';') like : Lock:false:;State::0:false:;
@@ -42,7 +42,7 @@ public class RoboRIOParser {
         for (String line : lines) {
 
             if (_lineBuffer.toString().contains(";")) {
-                final String parsed = handleLineComplete();
+                final ParserData parsed = handleLineComplete();
                 if (parsed != null) {
                     result.add(parsed);
                 }
@@ -52,7 +52,7 @@ public class RoboRIOParser {
 
                 // We have to check again, if the line is complete now to be able to process it.
                 if (_lineBuffer.toString().contains(";")) {
-                    final String parsed = handleLineComplete();
+                    final ParserData parsed = handleLineComplete();
                     if (parsed != null) {
                         result.add(parsed);
                     }
@@ -65,8 +65,8 @@ public class RoboRIOParser {
     }
 
 
-    private String handleLineComplete() throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
-        final String parsedLine = parseLine(_lineBuffer.toString());
+    private ParserData handleLineComplete() throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
+        final ParserData parsedLine = parseLine(_lineBuffer.toString());
 
         // reset the _lineBuffer, since a complete line has been written
         _lineBuffer.setLength(0);
@@ -76,12 +76,12 @@ public class RoboRIOParser {
 
 
     @Nullable
-    private static String parseLine(@NonNull String line) throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
+    private static ParserData parseLine(@NonNull String line) throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
         final String[] words = line.split(":");
 
         switch (words[0]) {
             case "Battery":
-                return parseBatteryData(words);
+                return new BatteryData(words);
 
             case "State":
                 return parseStateData(words);
@@ -101,45 +101,36 @@ public class RoboRIOParser {
     }
 
 
-    private static String parseBatteryData(String[] words) {
-        final BatteryData batteryData = new BatteryData(words);
-
-        return batteryData.getDescription();
-    }
-
-
-    // Used because we want a different Exception here - else it is the same as parseModeData
-    private static String parseStateData(String[] words) throws RoboRIOStateException {
-        final ModeData stateData = new ModeData(words);
+    private static StateData parseStateData(String[] words) throws RoboRIOStateException {
+        final StateData stateData = new StateData(words);
 
         if (stateData.hasError) {
             throw new RoboRIOStateException(stateData.errorMessage);
         }
 
-        return stateData.getDescription();
+        return stateData;
     }
 
 
-    private static String parseLockData(String[] words) throws RoboRIOLockException {
+    private static LockData parseLockData(String[] words) throws RoboRIOLockException {
         final LockData lockData = new LockData(words);
 
         if (lockData.hasError) {
             throw new RoboRIOLockException(lockData.errorMessage);
         }
 
-        return lockData.getDescription();
+        return lockData;
     }
 
 
-    private static String parseModeData(String[] words) throws RoboRIOModeException {
+    private static ModeData parseModeData(String[] words) throws RoboRIOModeException {
         final ModeData modeData = new ModeData(words);
 
         if (modeData.hasError) {
             throw new RoboRIOModeException(modeData.errorMessage);
         }
 
-        return modeData.getDescription();
+        return modeData;
     }
-
 
 }
