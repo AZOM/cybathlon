@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -54,14 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY:
                     updateUiVoltage(intent);
-                    break;
-
-                case UsbManager.ACTION_USB_DEVICE_ATTACHED:
-                    Toast.makeText(context, R.string.device_attached, Toast.LENGTH_SHORT).show();
-                    break;
-
-                case UsbManager.ACTION_USB_DEVICE_DETACHED:
-                    Toast.makeText(context, R.string.device_detached, Toast.LENGTH_LONG).show();
                     break;
 
                 default:
@@ -142,8 +133,6 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_MODE);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY);
-        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(_connectionReceiver, filter);
     }

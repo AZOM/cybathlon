@@ -149,13 +149,11 @@ public class ConnectionManager {
                     } else {
                         Log.w(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED -> unknown device");
                     }
-                    _localBroadcastManager.sendBroadcast(intent);
                     break;
 
                 case UsbManager.ACTION_USB_DEVICE_DETACHED:
                     Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_DETACHED");
                     tryCloseSerialPort();
-                    _localBroadcastManager.sendBroadcast(intent);
                     break;
             }
         }
@@ -211,7 +209,7 @@ public class ConnectionManager {
     /**
      * Constructor for ConnectionManager needs a Context to be able to use Android methods.
      *
-     * @param context The Context object, usually an Activity.
+     * @param context            The Context object, usually an Activity.
      * @param defaultUsbVendorId The vendorId this instance of ConnectionManager shall be compatible with.
      */
     public ConnectionManager(@NonNull Context context, int defaultUsbVendorId) {
@@ -242,6 +240,7 @@ public class ConnectionManager {
      * @return <c>true</c> if the vendorId could be matched to a connected UsbDevice - <c>false</c> otherwise.
      */
     public boolean scanUsbDevicesForVendorId(@NonNull Context context, int vendorId) {
+        Log.i(TAG, "scanUsbDevicesForVendorId() -> vendorId: " + vendorId);
         UsbDevice targetDevice = findConnectedUsbDeviceWithVendorId(vendorId);
 
         if (targetDevice == null) {
@@ -250,7 +249,7 @@ public class ConnectionManager {
             _usbDevice = targetDevice;
             PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), 0);
             _usbManager.requestPermission(targetDevice, pi);
-
+            Log.i(TAG, "scanUsbDevicesForVendorId() -> success, requesting permission now...");
             return true;
         }
     }

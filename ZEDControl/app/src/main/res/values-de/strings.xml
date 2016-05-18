@@ -12,8 +12,6 @@
     <string name="button_stairs_modes">Treppe</string>
     <string name="error">Fehler</string>
     <string name="connected">Verbunden</string>
-    <string name="device_attached">Ger\u00E4t  angeschlossen</string>
-    <string name="device_detached">Ger\u00E4te entfernt</string>
     <string name="back">zur\u00FCck</string>
     <string name="label_battery_voltage">Batteriespannung:</string>
     <string name="error_create_serialport">Fehler beim Erstellen von UsbSerialDevice.</string>
