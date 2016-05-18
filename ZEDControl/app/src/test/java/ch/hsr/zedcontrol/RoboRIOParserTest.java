@@ -13,6 +13,7 @@ import ch.hsr.zedcontrol.roborio.RoboRIOStateException;
 import ch.hsr.zedcontrol.roborio.parsing.RoboRIOParser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -175,5 +176,44 @@ public class RoboRIOParserTest {
         assertEquals(RoboRIOModes.LOCK.toString(), results.get(0));
     }
 
+    @Test
+    public void parse_commandSplitIntoThreeLinesWithNoise_returnsValidResultOnThirdCall() throws RoboRIOLockException, RoboRIOModeException, RoboRIOStateException {
+        // Arrange
+        String part1 = "Mode:";
+        String part2 = "M_P";
+        String part3 = "owerOff:0:false:;NOISEEE:yeah-)&";
+
+        // Act
+        _parser.parse(part1);
+        _parser.parse(part2);
+        ArrayList<String> results = _parser.parse(part3);
+
+        // Assert
+        assertEquals(RoboRIOModes.POWER_OFF.toString(), results.get(0));
+    }
+
+    @Test
+    public void parse_invalidCommand_returnsEmpty() throws RoboRIOLockException, RoboRIOModeException, RoboRIOStateException {
+        // Arrange
+        String testData = "invalid;";
+
+        // Act
+        ArrayList<String> results = _parser.parse(testData);
+
+        // Assert
+        assertTrue(results.isEmpty());
+    }
+
+    @Test
+    public void parse_lineWithInvalidAndValidCommand_returnsValidCommand() throws RoboRIOLockException, RoboRIOModeException, RoboRIOStateException {
+        // Arrange
+        String testData = "invalid;Battery:42.1337;";
+
+        // Act
+        ArrayList<String> results = _parser.parse(testData);
+
+        // Assert
+        assertEquals("42.1337 V", results.get(0));
+    }
 
 }

@@ -42,14 +42,20 @@ public class RoboRIOParser {
         for (String line : lines) {
 
             if (_lineBuffer.toString().contains(";")) {
-                result.add(handleLineComplete());
+                final String parsed = handleLineComplete();
+                if (parsed != null) {
+                    result.add(parsed);
+                }
             } else {
                 // line is incomplete -> add to _lineBuffer
                 _lineBuffer.append(line);
 
                 // We have to check again, if the line is complete now to be able to process it.
                 if (_lineBuffer.toString().contains(";")) {
-                    result.add(handleLineComplete());
+                    final String parsed = handleLineComplete();
+                    if (parsed != null) {
+                        result.add(parsed);
+                    }
                 }
             }
 
