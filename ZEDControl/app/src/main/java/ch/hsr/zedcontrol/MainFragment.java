@@ -17,7 +17,7 @@ import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 /**
  * Container for the main UI controls.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends ControlsFragment {
 
     public static String TAG = MainFragment.class.getSimpleName();
 
@@ -108,6 +108,14 @@ public class MainFragment extends Fragment {
         super.onResume();
         // obtain instance with current state from parent activity
         _connectionManager = ((MainActivity) getActivity()).connectionManager;
+
+        boolean shouldEnable = ((MainActivity) getActivity()).hasLock;
+        enableDisableView(shouldEnable);
     }
 
+
+    @Override
+    View getControlsView() {
+        return getView().findViewById(R.id.layout_buttons);
+    }
 }

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
     // can be shared with Fragments - avoid a Singleton and still always have the same state.
     protected ConnectionManager connectionManager;
 
+    protected boolean hasLock = false; //production = false;
+
     private View _contentView;
+
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -43,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK:
-                    boolean hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
-                    invalidateUi(hasLock);
+                    hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
+                    invalidateUi();
                     break;
 
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_MODE:
@@ -61,52 +65,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };
-
-
-    private void handleActionSerialPortError(Intent intent) {
-        String errorMessage = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_ERROR);
-        showErrorAlert(getString(R.string.error), errorMessage);
-
-        if (errorMessage == null) {
-            Log.wtf(TAG, "handleActionSerialPortError() -> Missing errorMessage.");
-        }
-    }
-
-
-    private void showErrorAlert(String title, String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                })
-                .setPositiveButton(getString(R.string.reinitialize), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        connectionManager.requestMode(RoboRIOModes.START_UP);
-                        dialog.cancel();
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
-
-
-    private void handleActionSerialPortReadMode(Intent intent) {
-        String mode = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
-        //FIXME: show user-friendly text in toast
-        Toast.makeText(this, "ACK: " + mode, Toast.LENGTH_SHORT).show();
-    }
-
-
-    private void updateUiVoltage(Intent intent) {
-        String voltageString = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_BATTERY);
-        TextView tv = (TextView) findViewById(R.id.battery_voltage);
-        if (tv != null) {
-            tv.setText(voltageString);
-        }
-    }
 
 
     @Override
@@ -175,13 +133,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void invalidateUi(boolean hasLock) {
+    private void invalidateUi() {
+        Fragment activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (activeFragment instanceof ControlsFragment) {
+            ((ControlsFragment) activeFragment).enableDisableView(hasLock);
+        }
+
         if (hasLock) {
             Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
-            //TODO: Enable all buttons
         } else {
             showLostLockAlert(getString(R.string.lost_lock), getString(R.string.message_lost_lock));
-            //TODO: Disable all buttons
         }
     }
 
@@ -204,4 +165,51 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+
+
+    private void handleActionSerialPortError(Intent intent) {
+        String errorMessage = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_ERROR);
+        showErrorAlert(getString(R.string.error), errorMessage);
+
+        if (errorMessage == null) {
+            Log.wtf(TAG, "handleActionSerialPortError() -> Missing errorMessage.");
+        }
+    }
+
+
+    private void showErrorAlert(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton(getString(R.string.reinitialize), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        connectionManager.requestMode(RoboRIOModes.START_UP);
+                        dialog.cancel();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+
+    private void handleActionSerialPortReadMode(Intent intent) {
+        String mode = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
+        //FIXME: show user-friendly text in toast
+        Toast.makeText(this, "ACK: " + mode, Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void updateUiVoltage(Intent intent) {
+        String voltageString = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_BATTERY);
+        TextView tv = (TextView) findViewById(R.id.battery_voltage);
+        if (tv != null) {
+            tv.setText(voltageString);
+        }
+    }
+
 }

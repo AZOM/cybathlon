@@ -105,10 +105,7 @@ public class ConnectionManager {
 
         private void handleResultLockUnlock(ParserData parserData) {
             final boolean hasLock = parserData.getKeyWord() == KeyWords.LOCK;
-
-            Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
-            intent.putExtra(EXTRA_SERIAL_PORT_READ_LOCK, hasLock);
-            _localBroadcastManager.sendBroadcast(intent);
+            broadcastLockIntent(hasLock);
         }
 
         private void handleResultMode(ParserData parserData) {
@@ -145,6 +142,7 @@ public class ConnectionManager {
                 case UsbManager.ACTION_USB_DEVICE_DETACHED:
                     Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_DETACHED");
                     tryCloseSerialPort();
+                    broadcastLockIntent(false);
                     break;
             }
         }
@@ -195,6 +193,13 @@ public class ConnectionManager {
             _serialPort.read(_usbReadCallback);
         }
     };
+
+
+    private void broadcastLockIntent(boolean hasLock) {
+        Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
+        intent.putExtra(EXTRA_SERIAL_PORT_READ_LOCK, hasLock);
+        _localBroadcastManager.sendBroadcast(intent);
+    }
 
 
     /**

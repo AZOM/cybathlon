@@ -2,7 +2,6 @@ package ch.hsr.zedcontrol;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 /**
  * Container for the UI controls to go up and down the stairs.
  */
-public class StairsControlsFragment extends Fragment {
+public class StairsControlsFragment extends ControlsFragment {
 
     public static String TAG = StairsControlsFragment.class.getSimpleName();
 
@@ -115,11 +114,21 @@ public class StairsControlsFragment extends Fragment {
         });
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
         // obtain instance with current state from parent activity
         _connectionManager = ((MainActivity) getActivity()).connectionManager;
+
+        boolean shouldEnable = ((MainActivity) getActivity()).hasLock;
+        enableDisableView(shouldEnable);
+    }
+
+
+    @Override
+    View getControlsView() {
+        return getView().findViewById(R.id.layout_buttons_stairs_modes);
     }
 
 }

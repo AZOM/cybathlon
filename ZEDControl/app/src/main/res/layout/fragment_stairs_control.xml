@@ -1,69 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/layout_controls"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context="ch.hsr.zedcontrol.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/layout_lift_wheels"
+    <!-- MainActivity requires this id "layout_controls" to be the same for all fragments
+    that support enabling/disabling depending on the lock-state -->
+    <RelativeLayout
+        android:id="@+id/layout_buttons_stairs_modes"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/layout_lift_wheels"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_lift_front_wheels"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/stairs_up"
+                android:text="@string/button_lift_front_wheels"/>
+
+            <Button
+                android:id="@+id/button_lift_rear_wheel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/stairs_up"
+                android:text="@string/button_lift_rear_wheels"/>
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/button_lift_front_wheels"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/stairs_up"
-            android:text="@string/button_lift_front_wheels"/>
+            android:id="@+id/button_mode_drive_fall_protection"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@id/layout_lift_wheels"
+            android:drawableEnd="@drawable/fall_protection"
+            android:drawableStart="@drawable/fall_protection"
+            android:text="@string/button_mode_drive_fall_protection"/>
 
-        <Button
-            android:id="@+id/button_lift_rear_wheel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/stairs_up"
-            android:text="@string/button_lift_rear_wheels"/>
+        <LinearLayout
+            android:id="@+id/layout_lower_wheels"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@id/button_mode_drive_fall_protection"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/button_lower_front_wheels"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/stairs_down"
+                android:text="@string/button_lower_front_wheels"/>
 
-    <Button
-        android:id="@+id/button_mode_drive_fall_protection"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@id/layout_lift_wheels"
-        android:drawableEnd="@drawable/fall_protection"
-        android:drawableStart="@drawable/fall_protection"
-        android:text="@string/button_mode_drive_fall_protection"/>
+            <Button
+                android:id="@+id/button_lower_rear_wheel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/stairs_down"
+                android:text="@string/button_lower_rear_wheels"/>
 
-    <LinearLayout
-        android:id="@+id/layout_lower_wheels"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_below="@id/button_mode_drive_fall_protection"
-        android:orientation="horizontal">
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/button_lower_front_wheels"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/stairs_down"
-            android:text="@string/button_lower_front_wheels"/>
-
-        <Button
-            android:id="@+id/button_lower_rear_wheel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/stairs_down"
-            android:text="@string/button_lower_rear_wheels"/>
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/layout_controls_parent_bottom"
