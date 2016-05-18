@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ToggleButton;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
 import ch.hsr.zedcontrol.roborio.RoboRIOModes;
@@ -19,8 +17,6 @@ import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 public class MainFragment extends ControlsFragment {
 
     public static String TAG = MainFragment.class.getSimpleName();
-
-    private boolean _isToggleButtonDriveModeChecked = false;
 
     private ConnectionManager _connectionManager;
 
@@ -38,7 +34,8 @@ public class MainFragment extends ControlsFragment {
     private void initButtons(View view) {
         initButtonPowerOff(view);
         initButtonStartUp(view);
-        initToggleButtonDriveMode(view);
+        initButtonModeFreeDriving(view);
+        initButtonModeNone(view);
         initButtonModeStairs(view);
     }
 
@@ -67,22 +64,25 @@ public class MainFragment extends ControlsFragment {
     }
 
 
-    private void initToggleButtonDriveMode(View view) {
-        ToggleButton toggleButtonOnOff = (ToggleButton) view.findViewById(R.id.togglebutton_drive_mode);
-        toggleButtonOnOff.setChecked(_isToggleButtonDriveModeChecked);
-
-        toggleButtonOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    private void initButtonModeFreeDriving(View view) {
+        Button button = (Button) view.findViewById(R.id.button_mode_free_driving);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                _isToggleButtonDriveModeChecked = isChecked;
+            public void onClick(View v) {
+                Log.i(TAG, "Requesting mode: DRIVE_FREE");
+                _connectionManager.requestMode(RoboRIOModes.DRIVE_FREE);
+            }
+        });
+    }
 
-                if (isChecked) {
-                    Log.i(TAG, "Requesting mode: DRIVE_FREE");
-                    _connectionManager.requestMode(RoboRIOModes.DRIVE_FREE);
-                } else {
-                    Log.i(TAG, "Requesting mode: NO_MODE");
-                    _connectionManager.requestMode(RoboRIOModes.NO_MODE);
-                }
+
+    private void initButtonModeNone(View view) {
+        Button button = (Button) view.findViewById(R.id.button_mode_none);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "Requesting mode: NO_MODE");
+                _connectionManager.requestMode(RoboRIOModes.NO_MODE);
             }
         });
     }
