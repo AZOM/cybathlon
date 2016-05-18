@@ -23,4 +23,5 @@
     <string name="reconnect">Erneut verbinden</string>
     <string name="empty_voltage">\u003CSpannung\u003E</string>
     <string name="button_mode_none">Kein Modus</string>
+    <string name="reinitialize">neu initialisieren</string>
 </resources>

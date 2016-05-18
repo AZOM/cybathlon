@@ -5,6 +5,7 @@
     <string name="empty_voltage">\u003Cvoltage\u003E</string>
     <string name="lost_lock">Lost control</string>
     <string name="message_lost_lock">This App just lost control of the wheel chair.\nIf reconnect fails, try to disconnect and re-plug the USB-cable again.</string>
+    <string name="reinitialize">reinitialize</string>
 
     <!-- MainFragment -->
     <string name="button_start_up">Initialize</string>

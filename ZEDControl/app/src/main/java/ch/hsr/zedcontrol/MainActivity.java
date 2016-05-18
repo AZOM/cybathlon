@@ -82,6 +82,12 @@ public class MainActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 })
+                .setPositiveButton(getString(R.string.reinitialize), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        connectionManager.requestMode(RoboRIOModes.START_UP);
+                        dialog.cancel();
+                    }
+                })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
@@ -192,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.reconnect), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         connectionManager.requestMode(RoboRIOModes.LOCK);
+                        dialog.cancel();
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
