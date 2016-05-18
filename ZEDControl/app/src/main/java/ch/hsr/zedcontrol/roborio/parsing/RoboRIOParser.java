@@ -66,7 +66,7 @@ public class RoboRIOParser {
 
 
     private ParserData handleLineComplete() throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
-        final ParserData parsedLine = parseLine(_lineBuffer.toString());
+        ParserData parsedLine = parseLine(_lineBuffer.toString());
 
         // reset the _lineBuffer, since a complete line has been written
         _lineBuffer.setLength(0);
@@ -76,8 +76,8 @@ public class RoboRIOParser {
 
 
     @Nullable
-    private static ParserData parseLine(@NonNull String line) throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
-        final String[] words = line.split(":");
+    private ParserData parseLine(@NonNull String line) throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
+        String[] words = line.split(":");
 
         switch (words[0]) {
             case "Battery":
@@ -87,6 +87,8 @@ public class RoboRIOParser {
                 return parseStateData(words);
 
             case "Lock":
+                return parseLockData(words);
+
             case "Unlock":
                 return parseLockData(words);
 
@@ -101,8 +103,8 @@ public class RoboRIOParser {
     }
 
 
-    private static StateData parseStateData(String[] words) throws RoboRIOStateException {
-        final StateData stateData = new StateData(words);
+    private StateData parseStateData(String[] words) throws RoboRIOStateException {
+        StateData stateData = new StateData(words);
 
         if (stateData.hasError) {
             throw new RoboRIOStateException(stateData.errorMessage);
@@ -112,8 +114,8 @@ public class RoboRIOParser {
     }
 
 
-    private static LockData parseLockData(String[] words) throws RoboRIOLockException {
-        final LockData lockData = new LockData(words);
+    private LockData parseLockData(String[] words) throws RoboRIOLockException {
+        LockData lockData = new LockData(words);
 
         if (lockData.hasError) {
             throw new RoboRIOLockException(lockData.errorMessage);
@@ -123,8 +125,8 @@ public class RoboRIOParser {
     }
 
 
-    private static ModeData parseModeData(String[] words) throws RoboRIOModeException {
-        final ModeData modeData = new ModeData(words);
+    private ModeData parseModeData(String[] words) throws RoboRIOModeException {
+        ModeData modeData = new ModeData(words);
 
         if (modeData.hasError) {
             throw new RoboRIOModeException(modeData.errorMessage);
