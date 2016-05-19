@@ -5,12 +5,21 @@
                 android:layout_height="match_parent"
                 tools:context="ch.hsr.zedcontrol.MainActivity">
 
-    <!-- MainActivity requires this id "layout_controls" to be the same for all fragments
-    that support enabling/disabling depending on the lock-state -->
+    <Button
+        android:id="@+id/button_back"
+        style="@style/AppTheme.Button"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/back"
+        android:textSize="19sp"/>
+
     <RelativeLayout
         android:id="@+id/layout_buttons_stairs_modes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@id/button_back">
 
         <LinearLayout
             android:id="@+id/layout_lift_wheels"
@@ -37,20 +46,11 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button_mode_drive_fall_protection"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_below="@id/layout_lift_wheels"
-            android:drawableEnd="@drawable/fall_protection"
-            android:drawableStart="@drawable/fall_protection"
-            android:text="@string/button_mode_drive_fall_protection"/>
-
         <LinearLayout
             android:id="@+id/layout_lower_wheels"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_below="@id/button_mode_drive_fall_protection"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
             <Button
@@ -71,26 +71,16 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_controls_parent_bottom"
-        style="?metaButtonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="16dp"
-        android:background="@color/black_overlay"
-        android:orientation="vertical">
-
         <Button
-            android:id="@+id/button_back"
-            style="?metaButtonBarButtonStyle"
+            android:id="@+id/button_mode_drive_fall_protection"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/back"
-            android:theme="@style/AppTheme.Button"/>
+            android:layout_above="@id/layout_lower_wheels"
+            android:layout_below="@id/layout_lift_wheels"
+            android:drawableEnd="@drawable/fall_protection"
+            android:drawableStart="@drawable/fall_protection"
+            android:text="@string/button_mode_drive_fall_protection"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

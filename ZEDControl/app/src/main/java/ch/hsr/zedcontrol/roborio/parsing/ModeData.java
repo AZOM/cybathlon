@@ -39,4 +39,10 @@ public class ModeData implements ParserData {
     public String getDescription() {
         return keyWord + ":" + modeName + ":" + subModeNr + ";";
     }
+
+
+    @Override
+    public String toString() {
+        return keyWord + ":" + modeName + ":" + subModeNr + ":" + hasError + ":" + errorMessage + ";";
+    }
 }

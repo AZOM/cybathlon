@@ -23,6 +23,7 @@
 
             <Button
                 android:id="@+id/button_power_off"
+                style="@style/AppTheme.Button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -30,6 +31,7 @@
 
             <Button
                 android:id="@+id/button_start_up"
+                style="@style/AppTheme.Button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
