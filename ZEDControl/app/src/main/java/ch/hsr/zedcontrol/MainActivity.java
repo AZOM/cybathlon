@@ -135,11 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void invalidateUi() {
-        Fragment activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if (activeFragment instanceof ControlsFragment) {
-            ((ControlsFragment) activeFragment).enableDisableView(hasLock);
-        }
-
         if (hasLock) {
             Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
         } else {

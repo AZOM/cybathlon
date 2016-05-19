@@ -2,6 +2,7 @@ package ch.hsr.zedcontrol;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,7 @@ import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 /**
  * Container for the main UI controls.
  */
-public class MainFragment extends ControlsFragment {
+public class MainFragment extends Fragment {
 
     public static String TAG = MainFragment.class.getSimpleName();
 
@@ -109,14 +110,6 @@ public class MainFragment extends ControlsFragment {
         super.onResume();
         // obtain instance with current state from parent activity
         _connectionManager = ((MainActivity) getActivity()).connectionManager;
-
-        boolean shouldEnable = ((MainActivity) getActivity()).hasLock;
-        enableDisableView(shouldEnable);
     }
 
-
-    @Override
-    View getControlsView() {
-        return getView().findViewById(R.id.layout_buttons);
-    }
 }
