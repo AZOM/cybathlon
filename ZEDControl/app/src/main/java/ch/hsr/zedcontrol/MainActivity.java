@@ -144,12 +144,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showLockedFragment() {
-        Fragment activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if (activeFragment instanceof LockedFragment) {
-            // nothing to do
-        } else {
-            //TODO: animate?
+        final Fragment activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (!(activeFragment instanceof LockedFragment)) {
             getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                     .replace(R.id.fragment_container, new LockedFragment())
                     .addToBackStack(TAG)
                     .commit();
