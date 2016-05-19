@@ -94,6 +94,8 @@ public class MainFragment extends ControlsFragment {
             @Override
             public void onClick(View v) {
                 getFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                                R.anim.enter_from_left, R.anim.exit_to_right)
                         .replace(R.id.fragment_container, new StairsControlsFragment())
                         .addToBackStack(TAG)
                         .commit();
