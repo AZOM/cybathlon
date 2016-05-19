@@ -11,6 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -210,6 +211,20 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // ignore the volume keys as long as the MainActivity is active
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_MUTE:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                return true;
+
+            default:
+                return super.onKeyDown(keyCode, event);
+        }
     }
 }
