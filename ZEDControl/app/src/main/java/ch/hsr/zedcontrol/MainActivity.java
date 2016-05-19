@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
                 default:
                     Log.w(TAG, "_connectionReceiver.onReceive() -> unhandled action: " + intent.getAction());
+                    break;
             }
         }
 
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         removeStatusAndNavigationBar();
+        invalidateUi();
     }
 
 
@@ -141,28 +143,22 @@ public class MainActivity extends AppCompatActivity {
         if (hasLock) {
             Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
         } else {
-            showLostLockAlert(getString(R.string.lost_lock), getString(R.string.message_lost_lock));
+            showLockedFragment();
         }
     }
 
 
-    private void showLostLockAlert(String title, String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
-                .setPositiveButton(getString(R.string.reconnect), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        connectionManager.requestMode(RoboRIOModes.LOCK);
-                        dialog.cancel();
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+    private void showLockedFragment() {
+        Fragment activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (activeFragment instanceof LockedFragment) {
+            // nothing to do
+        } else {
+            //TODO: animate?
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new LockedFragment())
+                    .addToBackStack(TAG)
+                    .commit();
+        }
     }
 
 

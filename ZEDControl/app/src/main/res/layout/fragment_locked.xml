@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_overlay"
+    tools:context="ch.hsr.zedcontrol.MainActivity">
+
+    <Button
+        android:id="@+id/button_try_get_lock"
+        style="@style/AppTheme.Button"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:drawablePadding="0dp"
+        android:drawableTop="@drawable/usb"
+        android:paddingTop="20dp"
+        android:text="@string/reconnect"/>
+
+</RelativeLayout>
