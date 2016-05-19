@@ -201,4 +201,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void onBackPressed() {
+        final Fragment activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        if (activeFragment instanceof LockedFragment) {
+            // ignore back press -> avoid a popBackStack here, since the User cannot use any controls in locked state
+            Log.i(TAG, "onBackPressed() -> suppressed because LockedFragment is active.");
+        } else {
+            super.onBackPressed();
+        }
+
+    }
 }
