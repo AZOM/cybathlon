@@ -19,9 +19,9 @@
     <string name="error_open_serialport">Die serielle Schnittstelle konnte nicht ge\u00F6ffnet werden.</string>
     <string name="error_no_usb_connection">Die Verbindung zu UsbDevice konnte nicht hergestellt werden.</string>
     <string name="lost_lock">Kontrolle verloren</string>
-    <string name="message_lost_lock">Diese App hat soeben die Kontrolle \u00FCber den Rollstuhl verloren.\nFalls erneutes verbinden fehlschl\u00E4gt, versuchen Sie das USB Kabel erneut aus- und ein zu stecken.</string>
     <string name="reconnect">Erneut verbinden</string>
     <string name="empty_voltage">\u003CSpannung\u003E</string>
     <string name="button_mode_none">Kein Modus</string>
     <string name="reinitialize">neu initialisieren</string>
+    <string name="text_locked_state">Verbindung verloren.\n Falls \'Erneut verbinden\' fehlschl\u00E4gt, versuchen Sie das USB Kabel erneut aus- und einzustecken.</string>
 </resources>

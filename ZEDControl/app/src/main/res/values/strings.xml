@@ -4,7 +4,6 @@
     <string name="label_battery_voltage">Battery voltage:</string>
     <string name="empty_voltage">\u003Cvoltage\u003E</string>
     <string name="lost_lock">Lost control</string>
-    <string name="message_lost_lock">This App just lost control of the wheel chair.\nIf reconnect fails, try to disconnect and re-plug the USB-cable again.</string>
     <string name="reinitialize">reinitialize</string>
 
     <!-- MainFragment -->
@@ -20,6 +19,9 @@
     <string name="button_mode_drive_fall_protection">Drive with fall protection</string>
     <string name="button_lower_front_wheels">Lower front wheels</string>
     <string name="button_lower_rear_wheels">Lower rear wheels</string>
+
+    <!-- LockedFragment -->
+    <string name="text_locked_state">Lost connection to the peripheral.\nIf \'Reconnect\' does not help, try to unplug and replug the USB cable again.</string>
 
     <!-- Error messages -->
     <string name="error_permission_not_granted">Permission for USB device not granted.</string>

@@ -18,4 +18,13 @@
         android:paddingTop="20dp"
         android:text="@string/reconnect"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_try_get_lock"
+        android:layout_margin="26dp"
+        android:text="@string/text_locked_state"
+        android:textColor="@color/colorPrimaryLight"
+        android:textSize="20sp"/>
+
 </RelativeLayout>
