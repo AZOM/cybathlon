@@ -66,12 +66,12 @@ public class RoboRIOParser {
 
 
     private ParserData handleLineComplete() throws RoboRIOStateException, RoboRIOLockException, RoboRIOModeException {
-        ParserData parsedLine = parseLine(_lineBuffer.toString());
+        final String completeLine = _lineBuffer.toString();
 
         // reset the _lineBuffer, since a complete line has been written
         _lineBuffer.setLength(0);
 
-        return parsedLine;
+        return parseLine(completeLine);
     }
 
 
