@@ -41,6 +41,7 @@ public class StairsControlsFragment extends ControlsFragment {
         initButtonLowerRearWheels(view);
 
         initButtonBack(view);
+        initButtonModeNone(view);
     }
 
 
@@ -110,6 +111,18 @@ public class StairsControlsFragment extends ControlsFragment {
             @Override
             public void onClick(View v) {
                 getFragmentManager().popBackStack(MainFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
+        });
+    }
+
+
+    private void initButtonModeNone(View view) {
+        Button button = (Button) view.findViewById(R.id.button_mode_none);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "Requesting mode: NO_MODE");
+                _connectionManager.requestMode(RoboRIOModes.NO_MODE);
             }
         });
     }

@@ -5,21 +5,38 @@
                 android:layout_height="match_parent"
                 tools:context="ch.hsr.zedcontrol.MainActivity">
 
-    <Button
-        android:id="@+id/button_back"
-        style="@style/AppTheme.Button"
+    <LinearLayout
+        android:id="@+id/layout_controls_bottom"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="16dp"
-        android:text="@string/back"
-        android:textSize="19sp"/>
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_back"
+            style="@style/AppTheme.Button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="@string/back"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/button_mode_none"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/button_mode_none"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/layout_buttons_stairs_modes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/button_back">
+        android:layout_above="@id/layout_controls_bottom">
 
         <LinearLayout
             android:id="@+id/layout_lift_wheels"
