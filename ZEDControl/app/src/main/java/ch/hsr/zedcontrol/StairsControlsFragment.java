@@ -22,6 +22,9 @@ public class StairsControlsFragment extends Fragment {
 
     private ConnectionManager _connectionManager;
 
+    private Button _buttonDisabled;
+    private Button _buttonDriveModeNone;
+
 
     @Nullable
     @Override
@@ -43,6 +46,7 @@ public class StairsControlsFragment extends Fragment {
 
         initButtonBack(view);
         initButtonModeNone(view);
+        _buttonDriveModeNone = (Button) view.findViewById(R.id.button_mode_none);
     }
 
 
@@ -53,6 +57,7 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LIFT_FRONT_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LIFT_FRONT_WHEELS);
+                toggleButton(v);
             }
         });
     }
@@ -65,6 +70,7 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LIFT_REAR_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LIFT_REAR_WHEELS);
+                toggleButton(v);
             }
         });
     }
@@ -77,6 +83,7 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: DRIVE_FALL_PROTECTION");
                 _connectionManager.requestMode(RoboRIOModes.DRIVE_FALL_PROTECTION);
+                toggleButton(v);
             }
         });
     }
@@ -89,6 +96,7 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LOWER_FRONT_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LOWER_FRONT_WHEELS);
+                toggleButton(v);
             }
         });
     }
@@ -101,6 +109,7 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LOWER_REAR_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LOWER_REAR_WHEELS);
+                toggleButton(v);
             }
         });
     }
@@ -124,8 +133,18 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: NO_MODE");
                 _connectionManager.requestMode(RoboRIOModes.NO_MODE);
+                toggleButton(v);
             }
         });
+    }
+
+
+    private void toggleButton(View v) {
+        if (_buttonDisabled != null) {
+            _buttonDisabled.setEnabled(true);
+        }
+        v.setEnabled(false);
+        _buttonDisabled = (Button) v;
     }
 
 
@@ -134,6 +153,8 @@ public class StairsControlsFragment extends Fragment {
         super.onResume();
         // obtain instance with current state from parent activity
         _connectionManager = ((MainActivity) getActivity()).connectionManager;
+
+        _buttonDriveModeNone.performClick();
     }
 
 }
