@@ -234,7 +234,7 @@ public class RoboRIOParserTest {
     @Test
     public void parse_commandSplitIntoThreeLinesWithNoise_returnsValidResultOnThirdCall() throws RoboRIOLockException, RoboRIOModeException, RoboRIOStateException {
         // Arrange
-        String part1 = "Mode:";
+        String part1 = "Maschendrahtzaun;Mode:";
         String part2 = "M_P";
         String part3 = "owerOff:0:false:;NOISEEE:yeah-)&";
 
