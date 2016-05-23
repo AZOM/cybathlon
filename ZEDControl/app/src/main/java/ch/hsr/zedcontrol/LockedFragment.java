@@ -23,9 +23,6 @@ import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 public class LockedFragment extends Fragment {
 
     public static String TAG = LockedFragment.class.getSimpleName();
-
-    private ConnectionManager _connectionManager;
-
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -42,6 +39,7 @@ public class LockedFragment extends Fragment {
         }
 
     };
+    private ConnectionManager _connectionManager;
 
     @Nullable
     @Override

@@ -51,77 +51,6 @@ public class ConnectionManager {
     private UsbManager _usbManager;
     private UsbDevice _usbDevice;
     private UsbSerialDevice _serialPort;
-    private RoboRIOParser _parser = new RoboRIOParser();
-
-    private final UsbSerialInterface.UsbReadCallback _usbReadCallback = new UsbSerialInterface.UsbReadCallback() {
-        @Override
-        public void onReceivedData(byte[] arg0) {
-            try {
-                final String rawData = new String(arg0, "UTF-8");
-                //TODO: remove log statement
-                Log.i(TAG, "_usbReadCallback.onReceivedData: " + rawData);
-
-                for (ParserData parserData : _parser.parse(rawData)) {
-                    handleResult(parserData);
-                }
-
-            } catch (UnsupportedEncodingException e) {
-                Log.e(TAG, e.toString());
-            } catch (RoboRIOLockException | RoboRIOStateException | RoboRIOModeException e) {
-                Log.e(TAG, e.toString());
-                Intent intent = new Intent(ACTION_SERIAL_PORT_ERROR);
-                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, e.getMessage());
-                _localBroadcastManager.sendBroadcast(intent);
-            }
-        }
-
-        private void handleResult(ParserData parserData) {
-            switch (parserData.getKeyWord()) {
-                case LOCK:
-                    handleResultLockUnlock(parserData);
-                    break;
-
-                case UNLOCK:
-                    handleResultLockUnlock(parserData);
-                    break;
-
-                case MODE:
-                    handleResultMode(parserData);
-                    break;
-
-                case BATTERY:
-                    handleResultBattery(parserData);
-                    break;
-
-                case STATE:
-                    Log.d(TAG, "_usbReadCallback.handleResult() -> keep-alive signal for state: " + parserData);
-                    break;
-
-                default:
-                    Log.wtf(TAG, "_usbReadCallback.handleResult() -> Unhandled case: " + parserData.getKeyWord());
-                    break;
-            }
-        }
-
-        private void handleResultLockUnlock(ParserData parserData) {
-            final boolean hasLock = parserData.getKeyWord() == KeyWords.LOCK;
-            broadcastLockIntent(hasLock);
-        }
-
-        private void handleResultMode(ParserData parserData) {
-            Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
-            RoboRIOModes mode = RoboRIOModes.getModeFromStringDescription(parserData.getDescription());
-            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, mode);
-            _localBroadcastManager.sendBroadcast(modeIntent);
-        }
-
-        private void handleResultBattery(ParserData parserData) {
-            Intent voltageIntent = new Intent(ACTION_SERIAL_PORT_READ_BATTERY);
-            voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, parserData.getDescription());
-            _localBroadcastManager.sendBroadcast(voltageIntent);
-        }
-    };
-
     private final BroadcastReceiver _usbActionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -194,13 +123,75 @@ public class ConnectionManager {
             _serialPort.read(_usbReadCallback);
         }
     };
+    private RoboRIOParser _parser = new RoboRIOParser();
+    private final UsbSerialInterface.UsbReadCallback _usbReadCallback = new UsbSerialInterface.UsbReadCallback() {
+        @Override
+        public void onReceivedData(byte[] arg0) {
+            try {
+                final String rawData = new String(arg0, "UTF-8");
+                //TODO: remove log statement
+                Log.i(TAG, "_usbReadCallback.onReceivedData: " + rawData);
 
+                for (ParserData parserData : _parser.parse(rawData)) {
+                    handleResult(parserData);
+                }
 
-    private void broadcastLockIntent(boolean hasLock) {
-        Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
-        intent.putExtra(EXTRA_SERIAL_PORT_READ_LOCK, hasLock);
-        _localBroadcastManager.sendBroadcast(intent);
-    }
+            } catch (UnsupportedEncodingException e) {
+                Log.e(TAG, e.toString());
+            } catch (RoboRIOLockException | RoboRIOStateException | RoboRIOModeException e) {
+                Log.e(TAG, e.toString());
+                Intent intent = new Intent(ACTION_SERIAL_PORT_ERROR);
+                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, e.getMessage());
+                _localBroadcastManager.sendBroadcast(intent);
+            }
+        }
+
+        private void handleResult(ParserData parserData) {
+            switch (parserData.getKeyWord()) {
+                case LOCK:
+                    handleResultLockUnlock(parserData);
+                    break;
+
+                case UNLOCK:
+                    handleResultLockUnlock(parserData);
+                    break;
+
+                case MODE:
+                    handleResultMode(parserData);
+                    break;
+
+                case BATTERY:
+                    handleResultBattery(parserData);
+                    break;
+
+                case STATE:
+                    Log.d(TAG, "_usbReadCallback.handleResult() -> keep-alive signal for state: " + parserData);
+                    break;
+
+                default:
+                    Log.wtf(TAG, "_usbReadCallback.handleResult() -> Unhandled case: " + parserData.getKeyWord());
+                    break;
+            }
+        }
+
+        private void handleResultLockUnlock(ParserData parserData) {
+            final boolean hasLock = parserData.getKeyWord() == KeyWords.LOCK;
+            broadcastLockIntent(hasLock);
+        }
+
+        private void handleResultMode(ParserData parserData) {
+            Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
+            RoboRIOModes mode = RoboRIOModes.getModeFromStringDescription(parserData.getDescription());
+            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, mode);
+            _localBroadcastManager.sendBroadcast(modeIntent);
+        }
+
+        private void handleResultBattery(ParserData parserData) {
+            Intent voltageIntent = new Intent(ACTION_SERIAL_PORT_READ_BATTERY);
+            voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, parserData.getDescription());
+            _localBroadcastManager.sendBroadcast(voltageIntent);
+        }
+    };
 
 
     /**
@@ -217,6 +208,11 @@ public class ConnectionManager {
         registerBroadcastReceiver(context);
     }
 
+    private void broadcastLockIntent(boolean hasLock) {
+        Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
+        intent.putExtra(EXTRA_SERIAL_PORT_READ_LOCK, hasLock);
+        _localBroadcastManager.sendBroadcast(intent);
+    }
 
     private void registerBroadcastReceiver(@NonNull Context context) {
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);

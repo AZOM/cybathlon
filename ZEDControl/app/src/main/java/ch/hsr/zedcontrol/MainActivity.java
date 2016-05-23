@@ -30,9 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     // can be shared with Fragments - avoid a Singleton and still always have the same state.
     protected ConnectionManager connectionManager;
-    protected boolean hasLock = false; //production = false;
-
-    private View _contentView;
+    protected boolean hasLock = true; //production = false;
 
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
@@ -66,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };
+
+    private View _contentView;
 
 
     @Override

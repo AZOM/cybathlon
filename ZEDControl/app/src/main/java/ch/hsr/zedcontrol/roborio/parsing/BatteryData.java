@@ -4,8 +4,8 @@ package ch.hsr.zedcontrol.roborio.parsing;
  * Represents data from the serial bus that is retrieved when a battery status update is sent.
  */
 public class BatteryData implements ParserData {
-    private final String keyWord;
     protected final double voltage;
+    private final String keyWord;
 
 
     public BatteryData(String[] words) {

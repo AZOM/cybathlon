@@ -2,8 +2,6 @@ package ch.hsr.zedcontrol.roborio;
 
 import org.junit.Test;
 
-import ch.hsr.zedcontrol.roborio.RoboRIOModes;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

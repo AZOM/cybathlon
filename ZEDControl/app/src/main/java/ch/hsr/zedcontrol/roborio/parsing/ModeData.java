@@ -5,10 +5,10 @@ package ch.hsr.zedcontrol.roborio.parsing;
  * (see: {@link ch.hsr.zedcontrol.roborio.RoboRIOModes}) is acknowledged.
  */
 public class ModeData implements ParserData {
-    private final String keyWord;
     protected final String modeName;
     protected final int subModeNr;
     protected final boolean hasError;
+    private final String keyWord;
     protected String errorMessage;
 
     public ModeData(String[] words) {

@@ -48,8 +48,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:textOn="@string/button_mode_free_driving"
                 android:textOff="@string/button_mode_free_driving"
+                android:textOn="@string/button_mode_free_driving"
                 android:textSize="18sp"/>
 
             <ToggleButton
@@ -57,8 +57,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textOn="@string/button_mode_none"
                 android:textOff="@string/button_mode_none"
+                android:textOn="@string/button_mode_none"
                 android:textSize="18sp"/>
 
         </RadioGroup>

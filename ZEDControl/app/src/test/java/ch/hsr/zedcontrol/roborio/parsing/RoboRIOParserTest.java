@@ -10,10 +10,6 @@ import ch.hsr.zedcontrol.roborio.RoboRIOLockException;
 import ch.hsr.zedcontrol.roborio.RoboRIOModeException;
 import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 import ch.hsr.zedcontrol.roborio.RoboRIOStateException;
-import ch.hsr.zedcontrol.roborio.parsing.KeyWords;
-import ch.hsr.zedcontrol.roborio.parsing.LockData;
-import ch.hsr.zedcontrol.roborio.parsing.ParserData;
-import ch.hsr.zedcontrol.roborio.parsing.RoboRIOParser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
