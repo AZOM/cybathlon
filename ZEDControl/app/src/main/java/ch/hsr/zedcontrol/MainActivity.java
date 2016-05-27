@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final int VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE = 1027;
+    private static final double THRESHOLD_VOLTAGE = 24.4d;
 
     // can be shared with Fragments - avoid a Singleton and still always have the same state.
     protected ConnectionManager connectionManager;
@@ -193,10 +195,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void updateUiVoltage(Intent intent) {
-        String voltageString = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_BATTERY);
+        double voltage = intent.getDoubleExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_BATTERY, -1d);
         TextView tv = (TextView) findViewById(R.id.battery_voltage);
         if (tv != null) {
-            tv.setText(voltageString);
+            tv.setText(String.format(getString(R.string.string_voltage), voltage));
+
+            if (voltage <= THRESHOLD_VOLTAGE) {
+                tv.setTextColor(Color.RED);
+            } else {
+                tv.setTextColor(getResources().getColor(android.R.color.primary_text_light));
+            }
         }
     }
 

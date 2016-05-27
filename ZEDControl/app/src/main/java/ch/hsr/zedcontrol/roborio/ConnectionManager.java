@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import ch.hsr.zedcontrol.R;
+import ch.hsr.zedcontrol.roborio.parsing.BatteryData;
 import ch.hsr.zedcontrol.roborio.parsing.KeyWords;
 import ch.hsr.zedcontrol.roborio.parsing.ParserData;
 import ch.hsr.zedcontrol.roborio.parsing.RoboRIOParser;
@@ -161,7 +162,7 @@ public class ConnectionManager {
                     break;
 
                 case BATTERY:
-                    handleResultBattery(parserData);
+                    handleResultBattery((BatteryData) parserData);
                     break;
 
                 case STATE:
@@ -186,9 +187,9 @@ public class ConnectionManager {
             _localBroadcastManager.sendBroadcast(modeIntent);
         }
 
-        private void handleResultBattery(ParserData parserData) {
+        private void handleResultBattery(BatteryData batteryData) {
             Intent voltageIntent = new Intent(ACTION_SERIAL_PORT_READ_BATTERY);
-            voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, parserData.getDescription());
+            voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, batteryData.voltage);
             _localBroadcastManager.sendBroadcast(voltageIntent);
         }
     };
