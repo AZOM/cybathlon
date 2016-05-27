@@ -22,7 +22,7 @@ public class StairsControlsFragment extends Fragment {
 
     private ConnectionManager _connectionManager;
 
-    private Button _buttonDisabled;
+    private Button _buttonEnabled;
     private Button _buttonDriveModeNone;
 
 
@@ -50,66 +50,76 @@ public class StairsControlsFragment extends Fragment {
     }
 
 
-    private void initButtonLiftFrontWheels(View view) {
+    private void initButtonLiftFrontWheels(final View view) {
         Button button = (Button) view.findViewById(R.id.button_lift_front_wheels);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LIFT_FRONT_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LIFT_FRONT_WHEELS);
-                toggleButton(v);
+                v.setEnabled(false);
+                // enable next state
+                view.findViewById(R.id.button_lift_rear_wheel).setEnabled(true);
             }
         });
     }
 
 
-    private void initButtonLiftRearWheels(View view) {
+    private void initButtonLiftRearWheels(final View view) {
         Button button = (Button) view.findViewById(R.id.button_lift_rear_wheel);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LIFT_REAR_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LIFT_REAR_WHEELS);
-                toggleButton(v);
+                v.setEnabled(false);
+                // enable next state
+                view.findViewById(R.id.button_mode_drive_fall_protection).setEnabled(true);
             }
         });
     }
 
 
-    private void initButtonFallProtection(View view) {
+    private void initButtonFallProtection(final View view) {
         Button button = (Button) view.findViewById(R.id.button_mode_drive_fall_protection);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: DRIVE_FALL_PROTECTION");
                 _connectionManager.requestMode(RoboRIOModes.DRIVE_FALL_PROTECTION);
-                toggleButton(v);
+                v.setEnabled(false);
+                // enable next state
+                view.findViewById(R.id.button_lower_front_wheels).setEnabled(true);
             }
         });
     }
 
 
-    private void initButtonLowerFrontWheels(View view) {
+    private void initButtonLowerFrontWheels(final View view) {
         Button button = (Button) view.findViewById(R.id.button_lower_front_wheels);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LOWER_FRONT_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LOWER_FRONT_WHEELS);
-                toggleButton(v);
+                v.setEnabled(false);
+                // enable next state
+                view.findViewById(R.id.button_lower_rear_wheel).setEnabled(true);
             }
         });
     }
 
 
-    private void initButtonLowerRearWheels(View view) {
+    private void initButtonLowerRearWheels(final View view) {
         Button button = (Button) view.findViewById(R.id.button_lower_rear_wheel);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LOWER_REAR_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LOWER_REAR_WHEELS);
-                toggleButton(v);
+                v.setEnabled(false);
+                // enable first state again
+                view.findViewById(R.id.button_lift_front_wheels).setEnabled(true);
             }
         });
     }
@@ -133,18 +143,8 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: NO_MODE");
                 _connectionManager.requestMode(RoboRIOModes.NO_MODE);
-                toggleButton(v);
             }
         });
-    }
-
-
-    private void toggleButton(View v) {
-        if (_buttonDisabled != null) {
-            _buttonDisabled.setEnabled(true);
-        }
-        v.setEnabled(false);
-        _buttonDisabled = (Button) v;
     }
 
 
