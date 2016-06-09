@@ -2,7 +2,7 @@
     <!-- MainActivity -->
     <string name="app_name">ZEDControl</string>
     <string name="label_battery_voltage">Battery voltage:</string>
-    <string name="string_voltage" translatable="false">"%1$d V"</string>
+    <string name="string_voltage" translatable="false">"%1$s V"</string>
     <string name="empty_voltage">\u003Cvoltage\u003E</string>
     <string name="lost_lock">Lost control</string>
     <string name="reinitialize">reinitialize</string>

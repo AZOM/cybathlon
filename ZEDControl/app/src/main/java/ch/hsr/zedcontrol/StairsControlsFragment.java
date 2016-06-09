@@ -22,7 +22,6 @@ public class StairsControlsFragment extends Fragment {
 
     private ConnectionManager _connectionManager;
 
-    private Button _buttonEnabled;
     private Button _buttonDriveModeNone;
 
 

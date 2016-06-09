@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         double voltage = intent.getDoubleExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_BATTERY, -1d);
         TextView tv = (TextView) findViewById(R.id.battery_voltage);
         if (tv != null) {
-            tv.setText(String.format(getString(R.string.string_voltage), voltage));
+            tv.setText(getString(R.string.string_voltage, voltage));
 
             if (voltage <= THRESHOLD_VOLTAGE) {
                 tv.setTextColor(Color.RED);
