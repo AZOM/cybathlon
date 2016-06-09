@@ -84,7 +84,7 @@ public class RoboRIOParserTest {
     @Test
     public void parse_modeNoneNoError_returnsNoneString() throws RoboRIOStateException, RoboRIOModeException, RoboRIOLockException {
         // Arrange
-        String testData = "Mode::0:false:;";
+        String testData = "Mode:NoMode:0:false:;";
 
         // Act
         ArrayList<ParserData> response = _parser.parse(testData);

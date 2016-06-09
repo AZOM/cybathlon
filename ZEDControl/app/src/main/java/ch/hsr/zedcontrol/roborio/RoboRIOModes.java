@@ -9,7 +9,7 @@ public enum RoboRIOModes {
     LOCK("Lock;"),
     UNLOCK("Unlock;"),
 
-    NO_MODE("Mode::0;"),
+    NO_MODE("Mode:NoMode:0;"),
 
     POWER_OFF("Mode:M_PowerOff:0;"),
 
