@@ -43,6 +43,9 @@ public class ConnectionManager {
     public static final String ACTION_SERIAL_PORT_READ_BATTERY = ".ACTION_SERIAL_PORT_READ_BATTERY";
     public static final String EXTRA_SERIAL_PORT_READ_BATTERY = "/EXTRA_SERIAL_PORT_READ_BATTERY";
 
+    public static final String ACTION_SERIAL_PORT_READ_STATE = ".ACTION_SERIAL_PORT_READ_STATE";
+    public static final String EXTRA_SERIAL_PORT_READ_STATE = "/EXTRA_SERIAL_PORT_READ_STATE";
+
     private static final String ACTION_USB_PERMISSION = ".ACTION_USB_PERMISSION";
 
     private static final String TAG = ConnectionManager.class.getSimpleName();
@@ -130,8 +133,6 @@ public class ConnectionManager {
         public void onReceivedData(byte[] arg0) {
             try {
                 final String rawData = new String(arg0, "UTF-8");
-                //TODO: remove log statement
-                Log.i(TAG, "_usbReadCallback.onReceivedData: " + rawData);
 
                 for (ParserData parserData : _parser.parse(rawData)) {
                     handleResult(parserData);
@@ -166,7 +167,7 @@ public class ConnectionManager {
                     break;
 
                 case STATE:
-                    Log.d(TAG, "_usbReadCallback.handleResult() -> keep-alive signal for state: " + parserData);
+                    handleResultState(parserData);
                     break;
 
                 default:
@@ -191,6 +192,13 @@ public class ConnectionManager {
             Intent voltageIntent = new Intent(ACTION_SERIAL_PORT_READ_BATTERY);
             voltageIntent.putExtra(EXTRA_SERIAL_PORT_READ_BATTERY, batteryData.voltage);
             _localBroadcastManager.sendBroadcast(voltageIntent);
+        }
+
+        private void handleResultState(ParserData parserData) {
+            Intent stateIntent = new Intent(ACTION_SERIAL_PORT_READ_STATE);
+            RoboRIOModes mode = RoboRIOModes.getModeFromStringDescription(parserData.getDescription());
+            stateIntent.putExtra(EXTRA_SERIAL_PORT_READ_STATE, mode);
+            _localBroadcastManager.sendBroadcast(stateIntent);
         }
     };
 

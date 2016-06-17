@@ -13,7 +13,8 @@ public class ModeData implements ParserData {
 
     public ModeData(String[] words) {
         if (words.length < 4) {
-            throw new IllegalArgumentException("ModeData: expected at least length of 4 but was: " + words.length);
+            throw new IllegalArgumentException(
+                    getClass().getSimpleName() + ": expected at least length of 4 but was: " + words.length);
         }
 
         keyWord = words[0];
@@ -22,7 +23,8 @@ public class ModeData implements ParserData {
         hasError = Boolean.parseBoolean(words[3]);
         if (hasError) {
             if (words.length < 5) {
-                throw new IllegalArgumentException("ModeData: expected length of 5 but was: " + words.length);
+                throw new IllegalArgumentException(
+                        getClass().getSimpleName() + ": expected length of 5 but was: " + words.length);
             }
             errorMessage = words[4].replace(";", "");
         }

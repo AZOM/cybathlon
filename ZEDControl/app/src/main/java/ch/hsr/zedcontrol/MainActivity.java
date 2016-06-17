@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -29,10 +30,19 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE = 1027;
     private static final double THRESHOLD_VOLTAGE = 24.4d;
+    private static final int CONNECTION_TIMEOUT_MS = 20000;
 
     // can be shared with Fragments - avoid a Singleton and still always have the same state.
     protected ConnectionManager connectionManager;
     protected boolean hasLock = false; //production = false;
+
+    private final Handler handler = new Handler();
+    private Runnable timeoutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            showLockedFragment();
+        }
+    };
 
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
@@ -47,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK:
-                    hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
-                    invalidateUi();
+                    handleActionSerialPortReadLock(intent);
                     break;
 
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_MODE:
@@ -57,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY:
                     updateUiVoltage(intent);
+                    break;
+
+                case ConnectionManager.ACTION_SERIAL_PORT_READ_STATE:
+                    handleActionSerialPortReadState(intent);
                     break;
 
                 default:
@@ -110,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         removeStatusAndNavigationBar();
-        invalidateUi();
     }
 
 
@@ -137,9 +149,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void invalidateUi() {
+    private void handleActionSerialPortReadLock(Intent intent) {
+        handler.removeCallbacks(timeoutRunnable);
+
+        hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
         if (hasLock) {
             Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
+            handler.postDelayed(timeoutRunnable, CONNECTION_TIMEOUT_MS);
         } else {
             showLockedFragment();
         }
@@ -206,6 +222,14 @@ public class MainActivity extends AppCompatActivity {
                 tv.setTextColor(getResources().getColor(android.R.color.primary_text_light));
             }
         }
+    }
+
+
+    private void handleActionSerialPortReadState(Intent intent) {
+        RoboRIOModes mode = (RoboRIOModes) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_STATE);
+        Log.d(TAG, "handleActionSerialPortReadState -> keep-alive signal for state: " + mode);
+        handler.removeCallbacks(timeoutRunnable);
+        handler.postDelayed(timeoutRunnable, CONNECTION_TIMEOUT_MS);
     }
 
 
