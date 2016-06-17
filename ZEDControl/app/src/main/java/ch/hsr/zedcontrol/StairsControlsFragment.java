@@ -1,5 +1,6 @@
 package ch.hsr.zedcontrol;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -45,7 +46,6 @@ public class StairsControlsFragment extends Fragment {
 
         initButtonBack(view);
         initButtonModeNone(view);
-        _buttonDriveModeNone = (Button) view.findViewById(R.id.button_mode_none);
     }
 
 
@@ -57,6 +57,12 @@ public class StairsControlsFragment extends Fragment {
                 Log.i(TAG, "Requesting mode: LIFT_FRONT_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LIFT_FRONT_WHEELS);
                 v.setEnabled(false);
+                v.getBackground().setColorFilter(
+                        getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+
+                // change color last state
+                view.findViewById(R.id.button_lower_rear_wheel).getBackground().setColorFilter(
+                        getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
                 // enable next state
                 view.findViewById(R.id.button_lift_rear_wheel).setEnabled(true);
             }
@@ -72,6 +78,12 @@ public class StairsControlsFragment extends Fragment {
                 Log.i(TAG, "Requesting mode: LIFT_REAR_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LIFT_REAR_WHEELS);
                 v.setEnabled(false);
+                v.getBackground().setColorFilter(
+                        getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+
+                // change color last state
+                view.findViewById(R.id.button_lift_front_wheels).getBackground().setColorFilter(
+                        getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
                 // enable next state
                 view.findViewById(R.id.button_mode_drive_fall_protection).setEnabled(true);
             }
@@ -87,6 +99,12 @@ public class StairsControlsFragment extends Fragment {
                 Log.i(TAG, "Requesting mode: DRIVE_FALL_PROTECTION");
                 _connectionManager.requestMode(RoboRIOModes.DRIVE_FALL_PROTECTION);
                 v.setEnabled(false);
+                v.getBackground().setColorFilter(
+                        getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+
+                // change color last state
+                view.findViewById(R.id.button_lift_rear_wheel).getBackground().setColorFilter(
+                        getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
                 // enable next state
                 view.findViewById(R.id.button_lower_front_wheels).setEnabled(true);
             }
@@ -102,6 +120,12 @@ public class StairsControlsFragment extends Fragment {
                 Log.i(TAG, "Requesting mode: LOWER_FRONT_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LOWER_FRONT_WHEELS);
                 v.setEnabled(false);
+                v.getBackground().setColorFilter(
+                        getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+
+                // change color last state
+                view.findViewById(R.id.button_mode_drive_fall_protection).getBackground().setColorFilter(
+                        getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
                 // enable next state
                 view.findViewById(R.id.button_lower_rear_wheel).setEnabled(true);
             }
@@ -117,6 +141,12 @@ public class StairsControlsFragment extends Fragment {
                 Log.i(TAG, "Requesting mode: LOWER_REAR_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LOWER_REAR_WHEELS);
                 v.setEnabled(false);
+                v.getBackground().setColorFilter(
+                        getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+
+                // change color last state
+                view.findViewById(R.id.button_lower_front_wheels).getBackground().setColorFilter(
+                        getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
                 // enable first state again
                 view.findViewById(R.id.button_lift_front_wheels).setEnabled(true);
             }
@@ -144,6 +174,8 @@ public class StairsControlsFragment extends Fragment {
                 _connectionManager.requestMode(RoboRIOModes.NO_MODE);
             }
         });
+
+        _buttonDriveModeNone = button;
     }
 
 

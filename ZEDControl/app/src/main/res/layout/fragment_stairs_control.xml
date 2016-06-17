@@ -28,8 +28,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/button_mode_none"
-            android:textSize="18sp"
-            android:theme="@style/ButtonPrimaryDarkOverlay"/>
+            android:textSize="18sp"/>
 
     </LinearLayout>
 
@@ -48,25 +47,23 @@
 
             <Button
                 android:id="@+id/button_lift_front_wheels"
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableStart="@drawable/stairs_up"
                 android:enabled="true"
                 android:text="@string/button_lift_front_wheels"
-                android:theme="@style/ButtonPrimaryDarkOverlay"/>
+                android:theme="@style/ColorButton"/>
 
             <Button
                 android:id="@+id/button_lift_rear_wheel"
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableStart="@drawable/stairs_up"
                 android:enabled="false"
                 android:text="@string/button_lift_rear_wheels"
-                android:theme="@style/ButtonPrimaryDarkOverlay"/>
+                android:theme="@style/ColorButton"/>
 
         </LinearLayout>
 
@@ -79,31 +76,28 @@
 
             <Button
                 android:id="@+id/button_lower_front_wheels"
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableStart="@drawable/stairs_down"
                 android:enabled="false"
                 android:text="@string/button_lower_front_wheels"
-                android:theme="@style/ButtonPrimaryDarkOverlay"/>
+                android:theme="@style/ColorButton"/>
 
             <Button
                 android:id="@+id/button_lower_rear_wheel"
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableStart="@drawable/stairs_down"
                 android:enabled="false"
                 android:text="@string/button_lower_rear_wheels"
-                android:theme="@style/ButtonPrimaryDarkOverlay"/>
+                android:theme="@style/ColorButton"/>
 
         </LinearLayout>
 
         <Button
             android:id="@+id/button_mode_drive_fall_protection"
-            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/layout_lower_wheels"
@@ -112,7 +106,7 @@
             android:drawableStart="@drawable/fall_protection"
             android:enabled="false"
             android:text="@string/button_mode_drive_fall_protection"
-            android:theme="@style/ButtonPrimaryDarkOverlay"/>
+            android:theme="@style/ColorButton"/>
 
     </RelativeLayout>
 
