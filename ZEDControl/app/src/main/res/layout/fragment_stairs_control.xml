@@ -19,7 +19,8 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:text="@string/back"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:theme="@style/ColorButton"/>
 
         <ToggleButton
             android:id="@+id/button_mode_none"

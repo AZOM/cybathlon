@@ -21,19 +21,19 @@
 
             <Button
                 android:id="@+id/button_power_off"
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/button_power_off"/>
+                android:text="@string/button_power_off"
+                android:theme="@style/ColorButton"/>
 
             <Button
                 android:id="@+id/button_start_up"
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:text="@string/button_start_up"/>
+                android:text="@string/button_start_up"
+                android:theme="@style/ColorButton"/>
         </LinearLayout>
 
         <RadioGroup
@@ -74,7 +74,8 @@
             android:drawableEnd="@drawable/stairs"
             android:drawableStart="@drawable/stairs"
             android:text="@string/button_stairs_modes"
-            android:textSize="42sp"/>
+            android:textSize="42sp"
+            android:theme="@style/ColorButton"/>
 
     </RelativeLayout>
 
