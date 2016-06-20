@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
 import ch.hsr.zedcontrol.roborio.RoboRIOModes;
@@ -23,7 +25,8 @@ public class StairsControlsFragment extends Fragment {
 
     private ConnectionManager _connectionManager;
 
-    private Button _buttonDriveModeNone;
+    private ToggleButton _buttonDriveModeNone;
+    private Button _activeStairsModeButton;
 
 
     @Nullable
@@ -56,13 +59,9 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LIFT_FRONT_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LIFT_FRONT_WHEELS);
-                v.setEnabled(false);
-                v.getBackground().setColorFilter(
-                        getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
 
-                // change color last state
-                view.findViewById(R.id.button_lower_rear_wheel).getBackground().setColorFilter(
-                        getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
+                updateDriveModeButtons((Button) v);
+
                 // enable next state
                 view.findViewById(R.id.button_lift_rear_wheel).setEnabled(true);
             }
@@ -77,13 +76,9 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LIFT_REAR_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LIFT_REAR_WHEELS);
-                v.setEnabled(false);
-                v.getBackground().setColorFilter(
-                        getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
 
-                // change color last state
-                view.findViewById(R.id.button_lift_front_wheels).getBackground().setColorFilter(
-                        getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
+                updateDriveModeButtons((Button) v);
+
                 // enable next state
                 view.findViewById(R.id.button_mode_drive_fall_protection).setEnabled(true);
             }
@@ -98,13 +93,9 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: DRIVE_FALL_PROTECTION");
                 _connectionManager.requestMode(RoboRIOModes.DRIVE_FALL_PROTECTION);
-                v.setEnabled(false);
-                v.getBackground().setColorFilter(
-                        getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
 
-                // change color last state
-                view.findViewById(R.id.button_lift_rear_wheel).getBackground().setColorFilter(
-                        getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
+                updateDriveModeButtons((Button) v);
+
                 // enable next state
                 view.findViewById(R.id.button_lower_front_wheels).setEnabled(true);
             }
@@ -119,13 +110,9 @@ public class StairsControlsFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LOWER_FRONT_WHEELS");
                 _connectionManager.requestMode(RoboRIOModes.LOWER_FRONT_WHEELS);
-                v.setEnabled(false);
-                v.getBackground().setColorFilter(
-                        getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
 
-                // change color last state
-                view.findViewById(R.id.button_mode_drive_fall_protection).getBackground().setColorFilter(
-                        getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
+                updateDriveModeButtons((Button) v);
+
                 // enable next state
                 view.findViewById(R.id.button_lower_rear_wheel).setEnabled(true);
             }
@@ -139,18 +126,32 @@ public class StairsControlsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LOWER_REAR_WHEELS");
-                _connectionManager.requestMode(RoboRIOModes.LOWER_REAR_WHEELS);
-                v.setEnabled(false);
-                v.getBackground().setColorFilter(
-                        getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
 
-                // change color last state
-                view.findViewById(R.id.button_lower_front_wheels).getBackground().setColorFilter(
-                        getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
+                updateDriveModeButtons((Button) v);
+
                 // enable first state again
                 view.findViewById(R.id.button_lift_front_wheels).setEnabled(true);
             }
         });
+    }
+
+
+    private void updateDriveModeButtons(Button clickedButton) {
+        if (_buttonDriveModeNone != null) {
+            _buttonDriveModeNone.setChecked(false);
+        }
+
+        clickedButton.setEnabled(false);
+        clickedButton.getBackground().setColorFilter(
+                getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+
+        if (_activeStairsModeButton != null) {
+            // change color last state
+            _activeStairsModeButton.getBackground().setColorFilter(
+                    getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
+        }
+
+        _activeStairsModeButton = clickedButton;
     }
 
 
@@ -166,12 +167,25 @@ public class StairsControlsFragment extends Fragment {
 
 
     private void initButtonModeNone(View view) {
-        Button button = (Button) view.findViewById(R.id.button_mode_none);
-        button.setOnClickListener(new View.OnClickListener() {
+        ToggleButton button = (ToggleButton) view.findViewById(R.id.button_mode_none);
+        button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: NO_MODE");
-                _connectionManager.requestMode(RoboRIOModes.NO_MODE);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (_activeStairsModeButton != null) {
+                        _activeStairsModeButton.getBackground().setColorFilter(
+                                getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
+                    }
+
+                    Log.i(TAG, "Requesting mode: NO_MODE");
+                    _connectionManager.requestMode(RoboRIOModes.NO_MODE);
+
+                } else {
+                    if (_activeStairsModeButton != null) {
+                        _activeStairsModeButton.getBackground().setColorFilter(
+                                getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+                    }
+                }
             }
         });
 
@@ -185,7 +199,7 @@ public class StairsControlsFragment extends Fragment {
         // obtain instance with current state from parent activity
         _connectionManager = ((MainActivity) getActivity()).connectionManager;
 
-        _buttonDriveModeNone.performClick();
+        _buttonDriveModeNone.setChecked(true);
     }
 
 }

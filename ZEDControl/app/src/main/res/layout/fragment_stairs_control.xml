@@ -21,13 +21,13 @@
             android:text="@string/back"
             android:textSize="20sp"/>
 
-        <Button
+        <ToggleButton
             android:id="@+id/button_mode_none"
-            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/button_mode_none"
+            android:textOff="@string/button_mode_none"
+            android:textOn="@string/button_mode_none"
             android:textSize="18sp"/>
 
     </LinearLayout>
