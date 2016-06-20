@@ -48,10 +48,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
-                case ConnectionManager.ACTION_SERIAL_PORT_OPEN:
-                    connectionManager.requestMode(RoboRIOModes.LOCK);
-                    break;
-
                 case ConnectionManager.ACTION_SERIAL_PORT_ERROR:
                     handleActionSerialPortError(intent);
                     break;
@@ -108,8 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initConnectionReceiver() {
-        IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_SERIAL_PORT_OPEN);
-        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_ERROR);
+        IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_SERIAL_PORT_ERROR);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_MODE);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY);

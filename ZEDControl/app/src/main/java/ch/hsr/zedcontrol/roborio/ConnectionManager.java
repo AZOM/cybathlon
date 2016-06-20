@@ -29,8 +29,6 @@ import ch.hsr.zedcontrol.roborio.parsing.RoboRIOParser;
  * Handles the connection to the peripheral (roboRIO)
  */
 public class ConnectionManager {
-    public static final String ACTION_SERIAL_PORT_OPEN = ".ACTION_SERIAL_PORT_OPEN";
-
     public static final String ACTION_SERIAL_PORT_ERROR = ".ACTION_SERIAL_PORT_ERROR";
     public static final String EXTRA_SERIAL_PORT_ERROR = "/EXTRA_SERIAL_PORT_ERROR";
 
@@ -109,8 +107,8 @@ public class ConnectionManager {
 
             if (_serialPort.open()) {
                 initSerialPort();
-                Log.i(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort open!");
-                _localBroadcastManager.sendBroadcast(new Intent(ACTION_SERIAL_PORT_OPEN));
+                Log.i(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort open - requesting Lock");
+                requestMode(RoboRIOModes.LOCK);
             } else {
                 Log.e(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort could not be opened.");
                 intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_open_serialport));
