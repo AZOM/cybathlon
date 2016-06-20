@@ -27,6 +27,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/toggle_selector"
+            android:textColor="@color/toggle_text_color"
             android:textOff="@string/button_mode_none"
             android:textOn="@string/button_mode_none"
             android:textSize="18sp"/>
