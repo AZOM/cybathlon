@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_MODE);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY);
+        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_STATE);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(_connectionReceiver, filter);
     }
