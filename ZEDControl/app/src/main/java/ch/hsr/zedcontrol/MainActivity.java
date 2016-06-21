@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private boolean _hasLock = false; //production = false;
-
+    private boolean _isShowingAlertDialog = false;
 
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
@@ -165,8 +165,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void handleActionSerialPortError(Intent intent) {
+        if (_isShowingAlertDialog) {
+            // Avoid multiple AlertDialogs
+            return;
+        }
+
         String errorMessage = intent.getStringExtra(ConnectionManager.EXTRA_SERIAL_PORT_ERROR);
-        showErrorAlert(getString(R.string.error), errorMessage);
+        showAlertDialog(getString(R.string.error), errorMessage);
+        _isShowingAlertDialog = true;
 
         if (errorMessage == null) {
             Log.wtf(TAG, "handleActionSerialPortError() -> Missing errorMessage.");
@@ -174,19 +180,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void showErrorAlert(String title, String message) {
+    private void showAlertDialog(String title, String message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                        _isShowingAlertDialog = false;
                     }
                 })
                 .setPositiveButton(getString(R.string.reinitialize), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         connectionManager.requestMode(RoboRIOModes.START_UP);
                         dialog.cancel();
+                        _isShowingAlertDialog = false;
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
