@@ -1,6 +1,5 @@
 package ch.hsr.zedcontrol.roborio;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -44,10 +43,8 @@ public class ConnectionManager {
     public static final String ACTION_SERIAL_PORT_READ_STATE = ".ACTION_SERIAL_PORT_READ_STATE";
     public static final String EXTRA_SERIAL_PORT_READ_STATE = "/EXTRA_SERIAL_PORT_READ_STATE";
 
-    private static final String ACTION_USB_PERMISSION = ".ACTION_USB_PERMISSION";
-
     private static final String TAG = ConnectionManager.class.getSimpleName();
-    private final int _defaultUsbVendorId;
+    private static final int VENDOR_ID_FTDI = 1027;
 
     private LocalBroadcastManager _localBroadcastManager;
     private UsbManager _usbManager;
@@ -57,18 +54,12 @@ public class ConnectionManager {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
-                case ACTION_USB_PERMISSION:
-                    Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_PERMISSION");
-                    boolean granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false);
-                    handleActionUsbPermission(context, granted);
-                    break;
-
                 case UsbManager.ACTION_USB_DEVICE_ATTACHED:
-                    if (scanUsbDevicesForVendorId(context, _defaultUsbVendorId)) {
-                        Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED");
-                    } else {
-                        Log.w(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED -> unknown device");
-                    }
+                    Log.i(TAG, "_usbActionReceiver.onReceive() -> ACTION_USB_DEVICE_ATTACHED");
+                    // since we use a device filter (Manifest) it will always be an expected UsbDevice here
+                    _usbDevice = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+
+                    openSerialPort(context);
                     break;
 
                 case UsbManager.ACTION_USB_DEVICE_DETACHED:
@@ -78,54 +69,10 @@ public class ConnectionManager {
                     break;
             }
         }
-
-        private void handleActionUsbPermission(Context context, boolean usbPermissionGranted) {
-            Intent intent = new Intent(ACTION_SERIAL_PORT_ERROR);
-
-            if (!usbPermissionGranted) {
-                Log.w(TAG, "_usbActionReceiver.handleActionUsbPermission() -> Permission not granted.");
-                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_permission_not_granted));
-                _localBroadcastManager.sendBroadcast(intent);
-                return;
-            }
-
-            UsbDeviceConnection connection = _usbManager.openDevice(_usbDevice);
-            if (connection == null) {
-                Log.e(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _usbManager.openDevice() FAILED.");
-                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_no_usb_connection));
-                _localBroadcastManager.sendBroadcast(intent);
-                return;
-            }
-
-            _serialPort = UsbSerialDevice.createUsbSerialDevice(_usbDevice, connection);
-            if (_serialPort == null) {
-                Log.e(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort is null.");
-                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_create_serialport));
-                _localBroadcastManager.sendBroadcast(intent);
-                return;
-            }
-
-            if (_serialPort.open()) {
-                initSerialPort();
-                Log.i(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort open - requesting Lock");
-                requestMode(RoboRIOModes.LOCK);
-            } else {
-                Log.e(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort could not be opened.");
-                intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_open_serialport));
-                _localBroadcastManager.sendBroadcast(intent);
-            }
-        }
-
-        private void initSerialPort() {
-            _serialPort.setBaudRate(38400);
-            _serialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
-            _serialPort.setParity(UsbSerialInterface.PARITY_NONE);
-            _serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
-            _serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
-            _serialPort.read(_usbReadCallback);
-        }
     };
+
     private RoboRIOParser _parser = new RoboRIOParser();
+
     private final UsbSerialInterface.UsbReadCallback _usbReadCallback = new UsbSerialInterface.UsbReadCallback() {
         @Override
         public void onReceivedData(byte[] arg0) {
@@ -204,25 +151,20 @@ public class ConnectionManager {
     /**
      * Constructor for ConnectionManager needs a Context to be able to use Android methods.
      *
-     * @param context            The Context object, usually an Activity.
-     * @param defaultUsbVendorId The vendorId this instance of ConnectionManager shall be compatible with.
+     * @param context The Context object, usually an Activity.
      */
-    public ConnectionManager(@NonNull Context context, int defaultUsbVendorId) {
-        _defaultUsbVendorId = defaultUsbVendorId;
+    public ConnectionManager(@NonNull Context context) {
         _usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
         _localBroadcastManager = LocalBroadcastManager.getInstance(context);
 
         registerBroadcastReceiver(context);
+
+        tryConnectedUsbDevice(context);
     }
 
-    private void broadcastLockIntent(boolean hasLock) {
-        Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
-        intent.putExtra(EXTRA_SERIAL_PORT_READ_LOCK, hasLock);
-        _localBroadcastManager.sendBroadcast(intent);
-    }
 
     private void registerBroadcastReceiver(@NonNull Context context) {
-        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+        IntentFilter filter = new IntentFilter();
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
 
@@ -230,30 +172,16 @@ public class ConnectionManager {
     }
 
 
-    /**
-     * Scans all connected USB devices.
-     * The first UsbDevice that matches the given vendorId will be requested for ACTION_USB_PERMISSION with a pending
-     * intent.
-     *
-     * @param context  The Context object that requests the scan.
-     * @param vendorId The vendorId that shall be looked for.
-     * @return <c>true</c> if the vendorId could be matched to a connected UsbDevice - <c>false</c> otherwise.
-     */
-    public boolean scanUsbDevicesForVendorId(@NonNull Context context, int vendorId) {
-        Log.i(TAG, "scanUsbDevicesForVendorId() -> vendorId: " + vendorId);
-        UsbDevice targetDevice = findConnectedUsbDeviceWithVendorId(vendorId);
+    private void tryConnectedUsbDevice(@NonNull Context context) {
+        _usbDevice = findConnectedUsbDeviceWithVendorId(VENDOR_ID_FTDI);
 
-        if (targetDevice == null) {
-            return false;
+        if (_usbDevice == null) {
+            Log.i(TAG, "tryConnectedUsbDevice() -> Expected UsbDevice not attached to mobile phone - or power off...");
         } else {
-            _usbDevice = targetDevice;
-            PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), 0);
-            _usbManager.requestPermission(targetDevice, pi);
-            Log.i(TAG, "scanUsbDevicesForVendorId() -> success, requesting permission now...");
-            return true;
+            Log.i(TAG, "tryConnectedUsbDevice() -> found expected UsbDevice - going to open serial port...");
+            openSerialPort(context);
         }
     }
-
 
     @Nullable
     private UsbDevice findConnectedUsbDeviceWithVendorId(int vendorId) {
@@ -263,11 +191,10 @@ public class ConnectionManager {
             if (device.getVendorId() == vendorId) {
                 return device;
             }
-
-            Log.i(TAG, "Unknown vendorID: " + device.getVendorId());
-            Log.i(TAG, "Unknown ManufacturerName: " + device.getManufacturerName());
-            Log.i(TAG, "Unknown DeviceName: " + device.getDeviceName());
-            Log.i(TAG, "Unknown ProductName: " + device.getProductName());
+            Log.w(TAG, "Unknown vendorID: " + device.getVendorId());
+            Log.w(TAG, "Unknown ManufacturerName: " + device.getManufacturerName());
+            Log.w(TAG, "Unknown DeviceName: " + device.getDeviceName());
+            Log.w(TAG, "Unknown ProductName: " + device.getProductName());
         }
 
         return null;
@@ -283,7 +210,8 @@ public class ConnectionManager {
      */
     public void requestMode(RoboRIOModes mode) {
         if (_serialPort == null) {
-            Log.w(TAG, "requestMode() -> _serialPort is null - ignore this call.");
+            Log.w(TAG, "requestMode() -> _serialPort is null - assuming lock is lost.");
+            broadcastLockIntent(false);
             return;
         }
 
@@ -300,6 +228,54 @@ public class ConnectionManager {
     public void dispose(@NonNull Context context) {
         context.unregisterReceiver(_usbActionReceiver);
         tryCloseSerialPort();
+    }
+
+
+    private void openSerialPort(Context context) {
+        Intent intent = new Intent(ACTION_SERIAL_PORT_ERROR);
+
+        UsbDeviceConnection connection = _usbManager.openDevice(_usbDevice);
+        if (connection == null) {
+            Log.e(TAG, "_usbActionReceiver.openSerialPort() -> _usbManager.openDevice() FAILED.");
+            intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_no_usb_connection));
+            _localBroadcastManager.sendBroadcast(intent);
+            return;
+        }
+
+        _serialPort = UsbSerialDevice.createUsbSerialDevice(_usbDevice, connection);
+        if (_serialPort == null) {
+            Log.e(TAG, "_usbActionReceiver.openSerialPort() -> _serialPort is null.");
+            intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_create_serialport));
+            _localBroadcastManager.sendBroadcast(intent);
+            return;
+        }
+
+        if (_serialPort.open()) {
+            initSerialPort();
+            Log.i(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort open - requesting Lock");
+            requestMode(RoboRIOModes.LOCK);
+        } else {
+            Log.e(TAG, "_usbActionReceiver.openSerialPort() -> _serialPort could not be opened.");
+            intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_open_serialport));
+            _localBroadcastManager.sendBroadcast(intent);
+        }
+    }
+
+
+    private void initSerialPort() {
+        _serialPort.setBaudRate(38400);
+        _serialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
+        _serialPort.setParity(UsbSerialInterface.PARITY_NONE);
+        _serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
+        _serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
+        _serialPort.read(_usbReadCallback);
+    }
+
+
+    private void broadcastLockIntent(boolean hasLock) {
+        Intent intent = new Intent(ACTION_SERIAL_PORT_READ_LOCK);
+        intent.putExtra(EXTRA_SERIAL_PORT_READ_LOCK, hasLock);
+        _localBroadcastManager.sendBroadcast(intent);
     }
 
 

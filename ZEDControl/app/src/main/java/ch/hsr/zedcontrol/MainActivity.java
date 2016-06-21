@@ -28,13 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private static final int VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE = 1027;
     private static final double THRESHOLD_VOLTAGE = 24.4d;
     private static final int CONNECTION_TIMEOUT_MS = 20000;
 
     // can be shared with Fragments - avoid a Singleton and still always have the same state.
     protected ConnectionManager connectionManager;
-    protected boolean hasLock = false; //production = false;
 
     private final Handler handler = new Handler();
     private Runnable timeoutRunnable = new Runnable() {
@@ -43,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
             showLockedFragment();
         }
     };
+
+    private boolean _hasLock = false; //production = false;
+
 
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
@@ -53,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK:
-                    handleActionSerialPortReadLock(intent);
+                    _hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
+                    updateUiLockChanged();
                     break;
 
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_MODE:
@@ -90,16 +92,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, new MainFragment())
                 .commit();
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
 
         initConnectionReceiver();
-        connectionManager = new ConnectionManager(this, VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE);
-        connectionManager.scanUsbDevicesForVendorId(this, VENDOR_ID_FTDI_USB_TO_SERIAL_CABLE);
+        connectionManager = new ConnectionManager(this);
     }
 
 
@@ -136,20 +131,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        //FIXME: onStop() is not called when swiping app away
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
+        //FIXME: onDestroy() is not called when swiping app away
         connectionManager.requestMode(RoboRIOModes.UNLOCK);
         connectionManager.dispose(this);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
     }
 
 
-    private void handleActionSerialPortReadLock(Intent intent) {
         handler.removeCallbacks(timeoutRunnable);
+    private void updateUiLockChanged() {
 
-        hasLock = intent.getBooleanExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_LOCK, false);
-        if (hasLock) {
+        if (_hasLock) {
             Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
             handler.postDelayed(timeoutRunnable, CONNECTION_TIMEOUT_MS);
         } else {
@@ -202,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleActionSerialPortReadMode(Intent intent) {
         RoboRIOModes mode = (RoboRIOModes) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
+        Log.i(TAG, "handleActionSerialPortReadMode() -> Got ACK for requested mode: " + mode);
         Toast.makeText(this, "ACK: " + mode.name(), Toast.LENGTH_SHORT).show();
     }
 
@@ -223,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleActionSerialPortReadState(Intent intent) {
         RoboRIOModes mode = (RoboRIOModes) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_STATE);
-        Log.d(TAG, "handleActionSerialPortReadState -> keep-alive signal for state: " + mode);
+        Log.i(TAG, "handleActionSerialPortReadState -> keep-alive signal for state: " + mode);
         handler.removeCallbacks(timeoutRunnable);
         handler.postDelayed(timeoutRunnable, CONNECTION_TIMEOUT_MS);
     }
