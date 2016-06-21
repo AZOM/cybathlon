@@ -95,8 +95,11 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.fragment_container, new MainFragment())
                 .commit();
 
-        initConnectionReceiver();
-        connectionManager = new ConnectionManager(this);
+        if (savedInstanceState == null) {
+            // everything else that doesn't update UI
+            initConnectionReceiver();
+            connectionManager = new ConnectionManager(this);
+        }
     }
 
 
