@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     // can be shared with Fragments - avoid a Singleton and still always have the same state.
     protected ConnectionManager connectionManager;
 
+    private View _contentView;
     private final Handler handler = new Handler();
     private Runnable timeoutRunnable = new Runnable() {
         @Override
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private boolean _hasLock = false; //production = false;
+    private boolean _hasLock = false;
     private boolean _isShowingAlertDialog = false;
 
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
@@ -75,10 +76,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-
     };
-
-    private View _contentView;
 
 
     @Override

@@ -8,7 +8,7 @@
     tools:context="ch.hsr.zedcontrol.MainActivity">
 
     <Button
-        android:id="@+id/button_try_get_lock"
+        android:id="@+id/button_reconnect"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="150dp"
         android:layout_height="150dp"
@@ -21,7 +21,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/button_try_get_lock"
+        android:layout_above="@id/button_reconnect"
         android:layout_margin="26dp"
         android:text="@string/text_locked_state"
         android:textColor="@color/colorPrimaryLight"

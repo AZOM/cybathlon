@@ -159,7 +159,7 @@ public class ConnectionManager {
 
         registerBroadcastReceiver(context);
 
-        tryConnectedUsbDevice(context);
+        initUsbSerialPort(context);
     }
 
 
@@ -171,14 +171,17 @@ public class ConnectionManager {
         context.registerReceiver(_usbActionReceiver, filter);
     }
 
-
-    private void tryConnectedUsbDevice(@NonNull Context context) {
+    /**
+     * Establish a serial connection to the UsbDevice that is physically connected to the Android device if possible.
+     * @param context The Context object of the caller.
+     */
+    public void initUsbSerialPort(@NonNull Context context) {
         _usbDevice = findConnectedUsbDeviceWithVendorId(VENDOR_ID_FTDI);
 
         if (_usbDevice == null) {
-            Log.i(TAG, "tryConnectedUsbDevice() -> Expected UsbDevice not attached to mobile phone - or power off...");
+            Log.i(TAG, "initUsbSerialPort() -> Expected UsbDevice not attached to mobile phone - or powered off?");
         } else {
-            Log.i(TAG, "tryConnectedUsbDevice() -> found expected UsbDevice - going to open serial port...");
+            Log.i(TAG, "initUsbSerialPort() -> Found expected UsbDevice - going to open serial port...");
             openSerialPort(context);
         }
     }

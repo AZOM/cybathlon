@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
-import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 
 /**
  * Shows when the App is locked out from the RoboRIO -> App has no right to send commands.
@@ -23,6 +22,7 @@ import ch.hsr.zedcontrol.roborio.RoboRIOModes;
 public class LockedFragment extends Fragment {
 
     public static String TAG = LockedFragment.class.getSimpleName();
+
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -39,6 +39,7 @@ public class LockedFragment extends Fragment {
         }
 
     };
+
     private ConnectionManager _connectionManager;
 
     @Nullable
@@ -46,19 +47,19 @@ public class LockedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_locked, container, false);
 
-        initButtonTryUnlock(view);
+        initButtonReconnect(view);
 
         return view;
     }
 
 
-    private void initButtonTryUnlock(View view) {
-        Button button = (Button) view.findViewById(R.id.button_try_get_lock);
+    private void initButtonReconnect(View view) {
+        Button button = (Button) view.findViewById(R.id.button_reconnect);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting: LOCK");
-                _connectionManager.requestMode(RoboRIOModes.LOCK);
+                Log.i(TAG, "Button pressed -> _connectionManager.initUsbSerialPort()");
+                _connectionManager.initUsbSerialPort(getActivity());
             }
         });
     }

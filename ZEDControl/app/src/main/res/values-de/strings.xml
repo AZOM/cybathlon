@@ -23,5 +23,5 @@
     <string name="empty_voltage">\u003CSpannung\u003E</string>
     <string name="button_mode_none">Kein Modus</string>
     <string name="reinitialize">neu initialisieren</string>
-    <string name="text_locked_state">Verbindung verloren.\n Falls \'Erneut verbinden\' fehlschl\u00E4gt, versuchen Sie das USB Kabel erneut aus- und einzustecken.</string>
+    <string name="text_locked_state">Verbindung verloren.\n Falls \'Erneut verbinden\' fehlschl\u00E4gt, stellen Sie sicher, dass die Stromversorgung an ist und stecken Sie das USB-Kabel erneut aus und wieder ein.</string>
 </resources>
