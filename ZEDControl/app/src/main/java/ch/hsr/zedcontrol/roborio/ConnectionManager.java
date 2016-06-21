@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -44,12 +45,26 @@ public class ConnectionManager {
     public static final String EXTRA_SERIAL_PORT_READ_STATE = "/EXTRA_SERIAL_PORT_READ_STATE";
 
     private static final String TAG = ConnectionManager.class.getSimpleName();
+    private static final int CONNECTION_TIMEOUT_MS = 20000;
     private static final int VENDOR_ID_FTDI = 1027;
 
     private LocalBroadcastManager _localBroadcastManager;
+    private RoboRIOParser _parser = new RoboRIOParser();
+
     private UsbManager _usbManager;
     private UsbDevice _usbDevice;
     private UsbSerialDevice _serialPort;
+
+    private final Handler _handler = new Handler();
+    private final Runnable _timeoutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Log.w(TAG, "_timeoutRunnable.run() -> timeout (" +
+                    CONNECTION_TIMEOUT_MS + "ms) - sending broadcastLockIntent(false).");
+            broadcastLockIntent(false);
+        }
+    };
+
     private final BroadcastReceiver _usbActionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -71,13 +86,12 @@ public class ConnectionManager {
         }
     };
 
-    private RoboRIOParser _parser = new RoboRIOParser();
-
     private final UsbSerialInterface.UsbReadCallback _usbReadCallback = new UsbSerialInterface.UsbReadCallback() {
         @Override
         public void onReceivedData(byte[] arg0) {
             try {
                 final String rawData = new String(arg0, "UTF-8");
+                Log.d(TAG, "onReceivedData():   " + rawData);
 
                 for (ParserData parserData : _parser.parse(rawData)) {
                     handleResult(parserData);
@@ -140,12 +154,20 @@ public class ConnectionManager {
         }
 
         private void handleResultState(ParserData parserData) {
+            restartTimeoutHandler();
+
             Intent stateIntent = new Intent(ACTION_SERIAL_PORT_READ_STATE);
             RoboRIOModes mode = RoboRIOModes.getModeFromStringDescription(parserData.getDescription());
             stateIntent.putExtra(EXTRA_SERIAL_PORT_READ_STATE, mode);
             _localBroadcastManager.sendBroadcast(stateIntent);
         }
     };
+
+
+    private void restartTimeoutHandler() {
+        _handler.removeCallbacks(_timeoutRunnable);
+        _handler.postDelayed(_timeoutRunnable, CONNECTION_TIMEOUT_MS);
+    }
 
 
     /**
@@ -173,16 +195,19 @@ public class ConnectionManager {
 
     /**
      * Establish a serial connection to the UsbDevice that is physically connected to the Android device if possible.
+     *
      * @param context The Context object of the caller.
      */
     public void initUsbSerialPort(@NonNull Context context) {
         _usbDevice = findConnectedUsbDeviceWithVendorId(VENDOR_ID_FTDI);
 
         if (_usbDevice == null) {
-            Log.i(TAG, "initUsbSerialPort() -> Expected UsbDevice not attached to mobile phone - or powered off?");
+            Log.w(TAG, "initUsbSerialPort() -> Expected UsbDevice not attached to mobile phone - or powered off?");
+            broadcastLockIntent(false);
         } else {
             Log.i(TAG, "initUsbSerialPort() -> Found expected UsbDevice - going to open serial port...");
             openSerialPort(context);
+            restartTimeoutHandler();
         }
     }
 

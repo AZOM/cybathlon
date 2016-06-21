@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -29,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final double THRESHOLD_VOLTAGE = 24.4d;
-    private static final int CONNECTION_TIMEOUT_MS = 20000;
 
     // can be shared with Fragments - avoid a Singleton and still always have the same state.
     protected ConnectionManager connectionManager;
@@ -38,17 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean _hasLock = false;
     private boolean _isShowingAlertDialog = false;
-
-    private final Handler _handler = new Handler();
-
-    private Runnable _timeoutRunnable = new Runnable() {
-        @Override
-        public void run() {
-            Log.w(TAG, "_timeoutRunnable.run() -> timeout (" +
-                    CONNECTION_TIMEOUT_MS + "ms) - showing connection lost screen.");
-            showLockedFragment();
-        }
-    };
 
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
@@ -145,11 +132,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void updateUiLockChanged() {
-        _handler.removeCallbacks(_timeoutRunnable);
-
         if (_hasLock) {
             Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
-            _handler.postDelayed(_timeoutRunnable, CONNECTION_TIMEOUT_MS);
         } else {
             showLockedFragment();
         }
@@ -232,9 +216,7 @@ public class MainActivity extends AppCompatActivity {
         RoboRIOModes mode = (RoboRIOModes) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_STATE);
         Log.i(TAG, "handleActionSerialPortReadState -> keep-alive signal for state: " + mode);
 
-        // reset the timeout handler
-        _handler.removeCallbacks(_timeoutRunnable);
-        _handler.postDelayed(_timeoutRunnable, CONNECTION_TIMEOUT_MS);
+        //TODO: check if it is EmergencyOff
     }
 
 
