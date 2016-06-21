@@ -35,16 +35,20 @@ public class MainActivity extends AppCompatActivity {
     protected ConnectionManager connectionManager;
 
     private View _contentView;
-    private final Handler handler = new Handler();
-    private Runnable timeoutRunnable = new Runnable() {
-        @Override
-        public void run() {
-            showLockedFragment();
-        }
-    };
 
     private boolean _hasLock = false;
     private boolean _isShowingAlertDialog = false;
+
+    private final Handler _handler = new Handler();
+
+    private Runnable _timeoutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Log.w(TAG, "_timeoutRunnable.run() -> timeout (" +
+                    CONNECTION_TIMEOUT_MS + "ms) - showing connection lost screen.");
+            showLockedFragment();
+        }
+    };
 
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
@@ -110,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         removeStatusAndNavigationBar();
     }
 
@@ -138,12 +141,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-        handler.removeCallbacks(timeoutRunnable);
     private void updateUiLockChanged() {
+        _handler.removeCallbacks(_timeoutRunnable);
 
         if (_hasLock) {
             Toast.makeText(this, R.string.connected, Toast.LENGTH_LONG).show();
-            handler.postDelayed(timeoutRunnable, CONNECTION_TIMEOUT_MS);
+            _handler.postDelayed(_timeoutRunnable, CONNECTION_TIMEOUT_MS);
         } else {
             showLockedFragment();
         }
@@ -225,8 +228,10 @@ public class MainActivity extends AppCompatActivity {
     private void handleActionSerialPortReadState(Intent intent) {
         RoboRIOModes mode = (RoboRIOModes) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_STATE);
         Log.i(TAG, "handleActionSerialPortReadState -> keep-alive signal for state: " + mode);
-        handler.removeCallbacks(timeoutRunnable);
-        handler.postDelayed(timeoutRunnable, CONNECTION_TIMEOUT_MS);
+
+        // reset the timeout handler
+        _handler.removeCallbacks(_timeoutRunnable);
+        _handler.postDelayed(_timeoutRunnable, CONNECTION_TIMEOUT_MS);
     }
 
 
