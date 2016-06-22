@@ -126,6 +126,7 @@ public class StairsControlsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LOWER_REAR_WHEELS");
+                _connectionManager.requestMode(RoboRIOCommand.LOWER_REAR_WHEELS);
 
                 updateDriveModeButtons((Button) v);
 
