@@ -25,9 +25,16 @@ public enum RoboRIOCommand {
 
     private final String command;
 
+
+    /**
+     * Constructor
+     *
+     * @param s The string that describes this RoboRIOCommand's command.
+     */
     RoboRIOCommand(String s) {
         command = s;
     }
+
 
     /**
      * Get an enum value from string.
@@ -45,15 +52,18 @@ public enum RoboRIOCommand {
         return null;
     }
 
+
     /**
-     * Returns true if a given string describes this commands.
+     * Compares a given string with the current RoboRIOCommand object.
      *
-     * @param otherCommand The string that describes the command you want to check if it is equal.
+     * @param otherCommand the string that may describe the current RoboRIOCommand object
+     * @return True if the given string describes the current RoboRIOCommand object
      */
     @Contract("null -> false")
     public boolean equalsCommand(String otherCommand) {
         return otherCommand != null && command.equals(otherCommand);
     }
+
 
     @Contract(pure = true)
     public String toString() {

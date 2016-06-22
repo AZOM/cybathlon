@@ -3,7 +3,7 @@ package ch.hsr.zedcontrol.roborio;
 import org.jetbrains.annotations.Contract;
 
 /**
- * Contains all valid states (String) a RoboRIO can have.
+ * Defines all valid states a RoboRIO can have.
  */
 public enum RoboRIOState {
     NO_MODE("State:NoMode:0;"),
@@ -24,6 +24,11 @@ public enum RoboRIOState {
 
     private final String state;
 
+    /**
+     * Constructor
+     *
+     * @param s The string that describes this RoboRIOState's state.
+     */
     RoboRIOState(String s) {
         state = s;
     }
@@ -46,6 +51,12 @@ public enum RoboRIOState {
     }
 
 
+    /**
+     * Compares a given string with the current RoboRIOState object.
+     *
+     * @param otherStateString the string that may describe the current RoboRIOState object
+     * @return True if the given string describes the current RoboRIOState object
+     */
     @Contract("null -> false")
     public boolean equalsState(String otherStateString) {
         return otherStateString != null && state.equals(otherStateString);
