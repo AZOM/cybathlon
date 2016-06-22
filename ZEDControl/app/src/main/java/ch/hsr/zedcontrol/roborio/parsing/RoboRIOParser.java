@@ -17,7 +17,7 @@ public class RoboRIOParser {
 
     private static final String TAG = RoboRIOParser.class.getSimpleName();
 
-    private StringBuilder _lineBuffer = new StringBuilder();
+    private final StringBuilder _lineBuffer = new StringBuilder();
 
 
     /**

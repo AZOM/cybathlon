@@ -21,7 +21,7 @@ import ch.hsr.zedcontrol.roborio.ConnectionManager;
  */
 public class LockedFragment extends Fragment {
 
-    public static String TAG = LockedFragment.class.getSimpleName();
+    private static final String TAG = LockedFragment.class.getSimpleName();
 
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override

@@ -7,10 +7,10 @@ import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
  * (see: {@link RoboRIOCommand}) is acknowledged.
  */
 public class ModeData implements ParserData {
+    private final String keyWord;
     protected final String modeName;
     protected final int subModeNr;
     protected final boolean hasError;
-    private final String keyWord;
     protected String errorMessage;
 
     public ModeData(String[] words) {

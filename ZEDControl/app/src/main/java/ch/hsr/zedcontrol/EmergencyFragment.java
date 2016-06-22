@@ -21,7 +21,7 @@ import ch.hsr.zedcontrol.roborio.RoboRIOState;
  */
 public class EmergencyFragment extends Fragment {
 
-    public static String TAG = EmergencyFragment.class.getSimpleName();
+    private static final String TAG = EmergencyFragment.class.getSimpleName();
 
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override

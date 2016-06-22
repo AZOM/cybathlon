@@ -51,10 +51,10 @@ public class ConnectionManager {
     private static final int CONNECTION_TIMEOUT_MS = 20000;
     private static final int VENDOR_ID_FTDI = 1027;
 
-    private LocalBroadcastManager _localBroadcastManager;
-    private RoboRIOParser _parser = new RoboRIOParser();
+    private final LocalBroadcastManager _localBroadcastManager;
+    private final RoboRIOParser _parser = new RoboRIOParser();
 
-    private UsbManager _usbManager;
+    private final UsbManager _usbManager;
     private UsbDevice _usbDevice;
     private UsbSerialDevice _serialPort;
 

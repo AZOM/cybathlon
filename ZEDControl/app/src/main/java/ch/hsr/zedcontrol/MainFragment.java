@@ -19,7 +19,7 @@ import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
  */
 public class MainFragment extends Fragment {
 
-    public static String TAG = MainFragment.class.getSimpleName();
+    protected static final String TAG = MainFragment.class.getSimpleName();
 
     private ConnectionManager _connectionManager;
 

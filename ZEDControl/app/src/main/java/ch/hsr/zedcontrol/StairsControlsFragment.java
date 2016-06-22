@@ -21,7 +21,7 @@ import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
  */
 public class StairsControlsFragment extends Fragment {
 
-    public static String TAG = StairsControlsFragment.class.getSimpleName();
+    private static final String TAG = StairsControlsFragment.class.getSimpleName();
 
     private ConnectionManager _connectionManager;
 

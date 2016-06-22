@@ -192,7 +192,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void handleActionSerialPortReadMode(Intent intent) {
-        RoboRIOCommand command = (RoboRIOCommand) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
+        RoboRIOCommand command = (RoboRIOCommand) intent.getSerializableExtra(
+                ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
         Log.i(TAG, "handleActionSerialPortReadMode() -> Got ACK for requested command: " + command);
         Toast.makeText(this, "ACK: " + command.name(), Toast.LENGTH_SHORT).show();
     }

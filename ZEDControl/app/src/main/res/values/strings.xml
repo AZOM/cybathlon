@@ -4,7 +4,6 @@
     <string name="label_battery_voltage">Battery voltage:</string>
     <string name="string_voltage" translatable="false">"%1$s V"</string>
     <string name="empty_voltage">\u003Cvoltage\u003E</string>
-    <string name="lost_lock">Lost control</string>
     <string name="reinitialize">reinitialize</string>
 
     <!-- MainFragment -->
@@ -28,7 +27,6 @@
     <string name="text_emergency_off">Please release the emergency-off button to re-establish control.</string>
 
     <!-- Error messages -->
-    <string name="error_permission_not_granted">Permission for USB device not granted.</string>
     <string name="error_no_usb_connection">Could not establish connection to UsbDevice.</string>
     <string name="error_create_serialport">Could not create UsbSerialDevice.</string>
     <string name="error_open_serialport">Serial port could not be opened.</string>
