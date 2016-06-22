@@ -24,6 +24,9 @@
     <!-- LockedFragment -->
     <string name="text_locked_state">Lost connection to the peripheral.\nIf \'Reconnect\' does not help, make sure the peripheral is powered and try to unplug/replug the USB cable.</string>
 
+    <!-- EmergencyFragment -->
+    <string name="text_emergency_off">Please release the emergency-off button to re-establish control.</string>
+
     <!-- Error messages -->
     <string name="error_permission_not_granted">Permission for USB device not granted.</string>
     <string name="error_no_usb_connection">Could not establish connection to UsbDevice.</string>

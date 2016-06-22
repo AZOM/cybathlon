@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_overlay"
+    tools:context="ch.hsr.zedcontrol.MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_emergency_off_robot"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="26dp"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_emergency_stop_button"
+        android:gravity="center"
+        android:text="@string/text_emergency_off"
+        android:textColor="@color/colorPrimaryLight"
+        android:textSize="20sp"/>
+
+</RelativeLayout>
