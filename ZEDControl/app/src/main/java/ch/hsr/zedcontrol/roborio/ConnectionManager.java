@@ -144,9 +144,12 @@ public class ConnectionManager {
         }
 
         private void handleResultMode(ModeData modeData) {
-            RoboRIOCommand mode = RoboRIOCommand.getCommandFromStringDescription(modeData.getDescription());
+            RoboRIOCommand command = RoboRIOCommand.getCommandFromStringDescription(modeData.getDescription());
+            Log.i(TAG, "handleResultMode() -> Got ACK for requested command: " + command);
+
+            //TODO: consider removing this, since this information is rather unimportant for the user-interaction
             Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
-            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, mode);
+            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, command);
             _localBroadcastManager.sendBroadcast(modeIntent);
         }
 
@@ -163,6 +166,7 @@ public class ConnectionManager {
             if (state == null) {
                 Log.w(TAG, "handleResultState() -> State is changing, ignoring: " + stateData);
             } else {
+                Log.i(TAG, "handleResultState() -> keep-alive signal for state: " + state);
                 Intent stateIntent = new Intent(ACTION_SERIAL_PORT_READ_STATE);
                 stateIntent.putExtra(EXTRA_SERIAL_PORT_READ_STATE, state);
                 _localBroadcastManager.sendBroadcast(stateIntent);
@@ -237,21 +241,22 @@ public class ConnectionManager {
 
 
     /**
-     * Sends the command for the given mode to the open serial port. Only one mode-request can be sent at a time. The
-     * ConnectionManager will ignore any further requests until the ACK has been received from
-     * UsbSerialInterface.UsbReadCallback
+     * Sends the command for the given command to the open serial port. This is an async call, if you want to be sure
+     * that the command has been accepted by the RoboRIO, you have to check the answers from
+     * UsbSerialInterface.UsbReadCallback.
+     * {@see handleResultMode}: Handles ACKs for sent commands, this does not mean it has been executed yet.
+     * {@see handleResultState}: Only here you will know, if the command has really been executed.
      *
-     * @param mode The requested mode
+     * @param command The requested command
      */
-    public void requestMode(RoboRIOCommand mode) {
+    public void sendCommand(RoboRIOCommand command) {
         if (_serialPort == null) {
-            Log.w(TAG, "requestMode() -> _serialPort is null - assuming lock is lost.");
+            Log.w(TAG, "sendCommand() -> _serialPort is null - act as if lock is lost.");
             broadcastLockIntent(false);
-            return;
+        } else {
+            Log.i(TAG, "sendCommand() -> " + command.name() + "(" + command + ")");
+            _serialPort.write(command.toString().getBytes());
         }
-
-        Log.i(TAG, "requestMode() -> writing to serial port: " + mode);
-        _serialPort.write(mode.toString().getBytes());
     }
 
 
@@ -288,7 +293,7 @@ public class ConnectionManager {
         if (_serialPort.open()) {
             initSerialPort();
             Log.i(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort open - requesting Lock");
-            requestMode(RoboRIOCommand.LOCK);
+            sendCommand(RoboRIOCommand.LOCK);
         } else {
             Log.e(TAG, "_usbActionReceiver.openSerialPort() -> _serialPort could not be opened.");
             intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_open_serialport));

@@ -53,8 +53,7 @@ public class MainFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: POWER_OFF");
-                _connectionManager.requestMode(RoboRIOCommand.POWER_OFF);
+                _connectionManager.sendCommand(RoboRIOCommand.POWER_OFF);
             }
         });
     }
@@ -65,8 +64,7 @@ public class MainFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: START_UP");
-                _connectionManager.requestMode(RoboRIOCommand.START_UP);
+                _connectionManager.sendCommand(RoboRIOCommand.START_UP);
             }
         });
     }
@@ -100,8 +98,7 @@ public class MainFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: DRIVE_FREE");
-                _connectionManager.requestMode(RoboRIOCommand.DRIVE_FREE);
+                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_FREE);
 
                 markAsCheckedWithinRadioGroup(v);
             }
@@ -121,8 +118,7 @@ public class MainFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: NO_MODE");
-                _connectionManager.requestMode(RoboRIOCommand.NO_MODE);
+                _connectionManager.sendCommand(RoboRIOCommand.NO_MODE);
 
                 markAsCheckedWithinRadioGroup(v);
             }

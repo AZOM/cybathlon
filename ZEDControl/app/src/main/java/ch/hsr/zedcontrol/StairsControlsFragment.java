@@ -57,8 +57,7 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: LIFT_FRONT_WHEELS");
-                _connectionManager.requestMode(RoboRIOCommand.LIFT_FRONT_WHEELS);
+                _connectionManager.sendCommand(RoboRIOCommand.LIFT_FRONT_WHEELS);
 
                 updateDriveModeButtons((Button) v);
 
@@ -74,8 +73,7 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: LIFT_REAR_WHEELS");
-                _connectionManager.requestMode(RoboRIOCommand.LIFT_REAR_WHEELS);
+                _connectionManager.sendCommand(RoboRIOCommand.LIFT_REAR_WHEELS);
 
                 updateDriveModeButtons((Button) v);
 
@@ -91,8 +89,7 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: DRIVE_FALL_PROTECTION");
-                _connectionManager.requestMode(RoboRIOCommand.DRIVE_FALL_PROTECTION);
+                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_FALL_PROTECTION);
 
                 updateDriveModeButtons((Button) v);
 
@@ -108,8 +105,7 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: LOWER_FRONT_WHEELS");
-                _connectionManager.requestMode(RoboRIOCommand.LOWER_FRONT_WHEELS);
+                _connectionManager.sendCommand(RoboRIOCommand.LOWER_FRONT_WHEELS);
 
                 updateDriveModeButtons((Button) v);
 
@@ -125,8 +121,7 @@ public class StairsControlsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Requesting mode: LOWER_REAR_WHEELS");
-                _connectionManager.requestMode(RoboRIOCommand.LOWER_REAR_WHEELS);
+                _connectionManager.sendCommand(RoboRIOCommand.LOWER_REAR_WHEELS);
 
                 updateDriveModeButtons((Button) v);
 
@@ -178,8 +173,7 @@ public class StairsControlsFragment extends Fragment {
                                 getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
                     }
 
-                    Log.i(TAG, "Requesting mode: NO_MODE");
-                    _connectionManager.requestMode(RoboRIOCommand.NO_MODE);
+                    _connectionManager.sendCommand(RoboRIOCommand.NO_MODE);
 
                 } else {
                     if (_activeStairsModeButton != null) {

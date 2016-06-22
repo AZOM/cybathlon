@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
         //FIXME: onDestroy() is not called when swiping app away
-        connectionManager.requestMode(RoboRIOCommand.UNLOCK);
+        connectionManager.sendCommand(RoboRIOCommand.UNLOCK);
         connectionManager.dispose(this);
     }
 
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setPositiveButton(getString(R.string.reinitialize), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        connectionManager.requestMode(RoboRIOCommand.START_UP);
+                        connectionManager.sendCommand(RoboRIOCommand.START_UP);
                         dialog.cancel();
                         _isShowingAlertDialog = false;
                     }
@@ -216,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleActionSerialPortReadState(Intent intent) {
         RoboRIOState state = (RoboRIOState) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_STATE);
-        Log.i(TAG, "handleActionSerialPortReadState -> keep-alive signal for state: " + state);
 
         if (state.equals(RoboRIOState.EMERGENCY_STOP)) {
             showEmergencyFragment();
