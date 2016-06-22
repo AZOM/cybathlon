@@ -3,9 +3,9 @@ package ch.hsr.zedcontrol.roborio;
 import org.jetbrains.annotations.Contract;
 
 /**
- * Contains all commands (String) that can be sent to the roboRIO peripheral.
+ * Contains all commands (String) that can be sent to the RoboRIO peripheral.
  */
-public enum RoboRIOModes {
+public enum RoboRIOCommand {
     LOCK("Lock;"),
     UNLOCK("Unlock;"),
 
@@ -25,7 +25,7 @@ public enum RoboRIOModes {
 
     private final String command;
 
-    RoboRIOModes(String s) {
+    RoboRIOCommand(String s) {
         command = s;
     }
 
@@ -33,18 +33,23 @@ public enum RoboRIOModes {
      * Get an enum value from string.
      *
      * @param modeString The string that shall be converted to enum value.
-     * @return RoboRioModes enum value or null, if string did not match any enum value.
+     * @return RoboRioCommands enum value or null, if string did not match any enum value.
      */
-    public static RoboRIOModes getModeFromStringDescription(String modeString) {
-        for (RoboRIOModes mode : RoboRIOModes.values()) {
-            if (mode.equalsCommand(modeString)) {
-                return mode;
+    public static RoboRIOCommand getCommandFromStringDescription(String modeString) {
+        for (RoboRIOCommand command : RoboRIOCommand.values()) {
+            if (command.equalsCommand(modeString)) {
+                return command;
             }
         }
 
         return null;
     }
 
+    /**
+     * Returns true if a given string describes this commands.
+     *
+     * @param otherCommand The string that describes the command you want to check if it is equal.
+     */
     @Contract("null -> false")
     public boolean equalsCommand(String otherCommand) {
         return otherCommand != null && command.equals(otherCommand);

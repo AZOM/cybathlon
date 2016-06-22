@@ -14,7 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
-import ch.hsr.zedcontrol.roborio.RoboRIOModes;
+import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
 
 /**
  * Container for the UI controls to go up and down the stairs.
@@ -58,7 +58,7 @@ public class StairsControlsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LIFT_FRONT_WHEELS");
-                _connectionManager.requestMode(RoboRIOModes.LIFT_FRONT_WHEELS);
+                _connectionManager.requestMode(RoboRIOCommand.LIFT_FRONT_WHEELS);
 
                 updateDriveModeButtons((Button) v);
 
@@ -75,7 +75,7 @@ public class StairsControlsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LIFT_REAR_WHEELS");
-                _connectionManager.requestMode(RoboRIOModes.LIFT_REAR_WHEELS);
+                _connectionManager.requestMode(RoboRIOCommand.LIFT_REAR_WHEELS);
 
                 updateDriveModeButtons((Button) v);
 
@@ -92,7 +92,7 @@ public class StairsControlsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: DRIVE_FALL_PROTECTION");
-                _connectionManager.requestMode(RoboRIOModes.DRIVE_FALL_PROTECTION);
+                _connectionManager.requestMode(RoboRIOCommand.DRIVE_FALL_PROTECTION);
 
                 updateDriveModeButtons((Button) v);
 
@@ -109,7 +109,7 @@ public class StairsControlsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: LOWER_FRONT_WHEELS");
-                _connectionManager.requestMode(RoboRIOModes.LOWER_FRONT_WHEELS);
+                _connectionManager.requestMode(RoboRIOCommand.LOWER_FRONT_WHEELS);
 
                 updateDriveModeButtons((Button) v);
 
@@ -178,7 +178,7 @@ public class StairsControlsFragment extends Fragment {
                     }
 
                     Log.i(TAG, "Requesting mode: NO_MODE");
-                    _connectionManager.requestMode(RoboRIOModes.NO_MODE);
+                    _connectionManager.requestMode(RoboRIOCommand.NO_MODE);
 
                 } else {
                     if (_activeStairsModeButton != null) {

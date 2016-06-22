@@ -1,8 +1,10 @@
 package ch.hsr.zedcontrol.roborio.parsing;
 
+import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
+
 /**
  * Represents data from the serial bus that is retrieved directly after a Mode
- * (see: {@link ch.hsr.zedcontrol.roborio.RoboRIOModes}) is acknowledged.
+ * (see: {@link RoboRIOCommand}) is acknowledged.
  */
 public class ModeData implements ParserData {
     protected final String modeName;

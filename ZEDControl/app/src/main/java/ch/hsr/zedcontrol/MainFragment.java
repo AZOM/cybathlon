@@ -12,7 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.ToggleButton;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
-import ch.hsr.zedcontrol.roborio.RoboRIOModes;
+import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
 
 /**
  * Container for the main UI controls.
@@ -54,7 +54,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: POWER_OFF");
-                _connectionManager.requestMode(RoboRIOModes.POWER_OFF);
+                _connectionManager.requestMode(RoboRIOCommand.POWER_OFF);
             }
         });
     }
@@ -66,7 +66,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: START_UP");
-                _connectionManager.requestMode(RoboRIOModes.START_UP);
+                _connectionManager.requestMode(RoboRIOCommand.START_UP);
             }
         });
     }
@@ -101,7 +101,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: DRIVE_FREE");
-                _connectionManager.requestMode(RoboRIOModes.DRIVE_FREE);
+                _connectionManager.requestMode(RoboRIOCommand.DRIVE_FREE);
 
                 markAsCheckedWithinRadioGroup(v);
             }
@@ -122,7 +122,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Requesting mode: NO_MODE");
-                _connectionManager.requestMode(RoboRIOModes.NO_MODE);
+                _connectionManager.requestMode(RoboRIOCommand.NO_MODE);
 
                 markAsCheckedWithinRadioGroup(v);
             }

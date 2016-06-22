@@ -18,7 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
-import ch.hsr.zedcontrol.roborio.RoboRIOModes;
+import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
+import ch.hsr.zedcontrol.roborio.RoboRIOState;
 
 /**
  * The main full-screen activity that shows all the available controls for user interaction.
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
         //FIXME: onDestroy() is not called when swiping app away
-        connectionManager.requestMode(RoboRIOModes.UNLOCK);
+        connectionManager.requestMode(RoboRIOCommand.UNLOCK);
         connectionManager.dispose(this);
     }
 
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setPositiveButton(getString(R.string.reinitialize), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        connectionManager.requestMode(RoboRIOModes.START_UP);
+                        connectionManager.requestMode(RoboRIOCommand.START_UP);
                         dialog.cancel();
                         _isShowingAlertDialog = false;
                     }
@@ -191,9 +192,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void handleActionSerialPortReadMode(Intent intent) {
-        RoboRIOModes mode = (RoboRIOModes) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
-        Log.i(TAG, "handleActionSerialPortReadMode() -> Got ACK for requested mode: " + mode);
-        Toast.makeText(this, "ACK: " + mode.name(), Toast.LENGTH_SHORT).show();
+        RoboRIOCommand command = (RoboRIOCommand) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
+        Log.i(TAG, "handleActionSerialPortReadMode() -> Got ACK for requested command: " + command);
+        Toast.makeText(this, "ACK: " + command.name(), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -213,10 +214,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void handleActionSerialPortReadState(Intent intent) {
-        RoboRIOModes mode = (RoboRIOModes) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_STATE);
-        Log.i(TAG, "handleActionSerialPortReadState -> keep-alive signal for state: " + mode);
+        RoboRIOState state = (RoboRIOState) intent.getSerializableExtra(ConnectionManager.EXTRA_SERIAL_PORT_READ_STATE);
+        Log.i(TAG, "handleActionSerialPortReadState -> keep-alive signal for state: " + state);
 
-        //TODO: check if it is EmergencyOff
+        if (state.equals(RoboRIOState.EMERGENCY_STOP)) {
+            showEmergencyFragment();
+        }
+    }
+
+
+    private void showEmergencyFragment() {
+        final Fragment activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (!(activeFragment instanceof EmergencyFragment)) {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                    .replace(R.id.fragment_container, new EmergencyFragment())
+                    .addToBackStack(TAG)
+                    .commit();
+        }
     }
 
 
@@ -224,9 +239,9 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         final Fragment activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
-        if (activeFragment instanceof LockedFragment) {
-            // ignore back press -> avoid a popBackStack here, since the User cannot use any controls in locked state
-            Log.i(TAG, "onBackPressed() -> suppressed because LockedFragment is active.");
+        if (activeFragment instanceof LockedFragment || activeFragment instanceof EmergencyFragment) {
+            // ignore back press -> avoid a popBackStack here, since the user shall not use any controls in locked state
+            Log.i(TAG, "onBackPressed() -> suppressed because LockedFragment/EmergencyFragment is active.");
         } else {
             super.onBackPressed();
         }

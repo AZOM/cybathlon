@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import ch.hsr.zedcontrol.roborio.RoboRIOLockException;
 import ch.hsr.zedcontrol.roborio.RoboRIOModeException;
-import ch.hsr.zedcontrol.roborio.RoboRIOModes;
+import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
 import ch.hsr.zedcontrol.roborio.RoboRIOStateException;
 
 import static org.junit.Assert.assertEquals;
@@ -35,7 +35,7 @@ public class RoboRIOParserTest {
 
         // Assert
         assertEquals(KeyWords.LOCK, response.get(0).getKeyWord());
-        assertEquals(RoboRIOModes.LOCK.toString(), response.get(0).getDescription());
+        assertEquals(RoboRIOCommand.LOCK.toString(), response.get(0).getDescription());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class RoboRIOParserTest {
 
         // Assert
         assertEquals(KeyWords.UNLOCK, response.get(0).getKeyWord());
-        assertEquals(RoboRIOModes.UNLOCK.toString(), response.get(0).getDescription());
+        assertEquals(RoboRIOCommand.UNLOCK.toString(), response.get(0).getDescription());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class RoboRIOParserTest {
 
         // Assert
         assertEquals(KeyWords.MODE, response.get(0).getKeyWord());
-        assertEquals(RoboRIOModes.NO_MODE.toString(), response.get(0).getDescription());
+        assertEquals(RoboRIOCommand.NO_MODE.toString(), response.get(0).getDescription());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class RoboRIOParserTest {
 
         // Assert
         assertEquals(KeyWords.MODE, response.get(0).getKeyWord());
-        assertEquals(RoboRIOModes.START_UP.toString(), response.get(0).getDescription());
+        assertEquals(RoboRIOCommand.START_UP.toString(), response.get(0).getDescription());
     }
 
     @Test
@@ -192,7 +192,7 @@ public class RoboRIOParserTest {
         // Assert
         assertEquals(2, results.size());
         assertEquals(KeyWords.UNLOCK, results.get(0).getKeyWord());
-        assertEquals(RoboRIOModes.UNLOCK.toString(), results.get(0).getDescription());
+        assertEquals(RoboRIOCommand.UNLOCK.toString(), results.get(0).getDescription());
         assertEquals(KeyWords.STATE, results.get(1).getKeyWord());
         assertEquals("State::0;", results.get(1).getDescription());
     }
@@ -209,7 +209,7 @@ public class RoboRIOParserTest {
 
         // Assert
         assertEquals(KeyWords.LOCK, results.get(0).getKeyWord());
-        assertEquals(RoboRIOModes.LOCK.toString(), results.get(0).getDescription());
+        assertEquals(RoboRIOCommand.LOCK.toString(), results.get(0).getDescription());
     }
 
     @Test
@@ -241,7 +241,7 @@ public class RoboRIOParserTest {
 
         // Assert
         assertEquals(KeyWords.MODE, results.get(0).getKeyWord());
-        assertEquals(RoboRIOModes.POWER_OFF.toString(), results.get(0).getDescription());
+        assertEquals(RoboRIOCommand.POWER_OFF.toString(), results.get(0).getDescription());
     }
 
     @Test

@@ -22,8 +22,11 @@ import java.util.HashMap;
 import ch.hsr.zedcontrol.R;
 import ch.hsr.zedcontrol.roborio.parsing.BatteryData;
 import ch.hsr.zedcontrol.roborio.parsing.KeyWords;
+import ch.hsr.zedcontrol.roborio.parsing.LockData;
+import ch.hsr.zedcontrol.roborio.parsing.ModeData;
 import ch.hsr.zedcontrol.roborio.parsing.ParserData;
 import ch.hsr.zedcontrol.roborio.parsing.RoboRIOParser;
+import ch.hsr.zedcontrol.roborio.parsing.StateData;
 
 /**
  * Handles the connection to the peripheral (roboRIO)
@@ -110,15 +113,15 @@ public class ConnectionManager {
         private void handleResult(ParserData parserData) {
             switch (parserData.getKeyWord()) {
                 case LOCK:
-                    handleResultLockUnlock(parserData);
+                    handleResultLockUnlock((LockData) parserData);
                     break;
 
                 case UNLOCK:
-                    handleResultLockUnlock(parserData);
+                    handleResultLockUnlock((LockData) parserData);
                     break;
 
                 case MODE:
-                    handleResultMode(parserData);
+                    handleResultMode((ModeData) parserData);
                     break;
 
                 case BATTERY:
@@ -126,7 +129,7 @@ public class ConnectionManager {
                     break;
 
                 case STATE:
-                    handleResultState(parserData);
+                    handleResultState((StateData) parserData);
                     break;
 
                 default:
@@ -135,14 +138,14 @@ public class ConnectionManager {
             }
         }
 
-        private void handleResultLockUnlock(ParserData parserData) {
-            final boolean hasLock = parserData.getKeyWord() == KeyWords.LOCK;
+        private void handleResultLockUnlock(LockData lockData) {
+            final boolean hasLock = lockData.getKeyWord() == KeyWords.LOCK;
             broadcastLockIntent(hasLock);
         }
 
-        private void handleResultMode(ParserData parserData) {
+        private void handleResultMode(ModeData modeData) {
+            RoboRIOCommand mode = RoboRIOCommand.getCommandFromStringDescription(modeData.getDescription());
             Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
-            RoboRIOModes mode = RoboRIOModes.getModeFromStringDescription(parserData.getDescription());
             modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, mode);
             _localBroadcastManager.sendBroadcast(modeIntent);
         }
@@ -153,13 +156,17 @@ public class ConnectionManager {
             _localBroadcastManager.sendBroadcast(voltageIntent);
         }
 
-        private void handleResultState(ParserData parserData) {
+        private void handleResultState(StateData stateData) {
             restartTimeoutHandler();
 
-            Intent stateIntent = new Intent(ACTION_SERIAL_PORT_READ_STATE);
-            RoboRIOModes mode = RoboRIOModes.getModeFromStringDescription(parserData.getDescription());
-            stateIntent.putExtra(EXTRA_SERIAL_PORT_READ_STATE, mode);
-            _localBroadcastManager.sendBroadcast(stateIntent);
+            RoboRIOState state = RoboRIOState.getStateFromStringDescription(stateData.getDescription());
+            if (state == null) {
+                Log.w(TAG, "handleResultState() -> State is changing, ignoring: " + stateData);
+            } else {
+                Intent stateIntent = new Intent(ACTION_SERIAL_PORT_READ_STATE);
+                stateIntent.putExtra(EXTRA_SERIAL_PORT_READ_STATE, state);
+                _localBroadcastManager.sendBroadcast(stateIntent);
+            }
         }
     };
 
@@ -236,7 +243,7 @@ public class ConnectionManager {
      *
      * @param mode The requested mode
      */
-    public void requestMode(RoboRIOModes mode) {
+    public void requestMode(RoboRIOCommand mode) {
         if (_serialPort == null) {
             Log.w(TAG, "requestMode() -> _serialPort is null - assuming lock is lost.");
             broadcastLockIntent(false);
@@ -281,7 +288,7 @@ public class ConnectionManager {
         if (_serialPort.open()) {
             initSerialPort();
             Log.i(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort open - requesting Lock");
-            requestMode(RoboRIOModes.LOCK);
+            requestMode(RoboRIOCommand.LOCK);
         } else {
             Log.e(TAG, "_usbActionReceiver.openSerialPort() -> _serialPort could not be opened.");
             intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_open_serialport));
