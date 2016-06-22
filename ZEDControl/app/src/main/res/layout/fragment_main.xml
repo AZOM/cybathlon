@@ -75,8 +75,8 @@
             android:layout_below="@id/layout_motor_controls"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
-            android:drawableEnd="@drawable/stairs"
-            android:drawableStart="@drawable/stairs"
+            android:drawableEnd="@drawable/ic_stairs"
+            android:drawableStart="@drawable/ic_stairs"
             android:text="@string/button_stairs_modes"
             android:textSize="42sp"
             android:theme="@style/ColorButton"/>

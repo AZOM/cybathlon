@@ -14,8 +14,8 @@
         android:layout_height="150dp"
         android:layout_centerInParent="true"
         android:drawablePadding="0dp"
-        android:drawableTop="@drawable/usb"
         android:paddingTop="20dp"
+        android:drawableTop="@drawable/ic_usb"
         android:text="@string/reconnect"/>
 
     <TextView
