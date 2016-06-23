@@ -81,19 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             // everything else that doesn't update UI
-            initConnectionReceiver();
             connectionManager = new ConnectionManager(this);
         }
-    }
-
-
-    private void initConnectionReceiver() {
-        IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_SERIAL_PORT_ERROR);
-        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK);
-        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY);
-        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_STATE);
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(_connectionReceiver, filter);
     }
 
 
@@ -101,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         removeStatusAndNavigationBar();
+        initConnectionReceiver();
+        connectionManager.sendCommand(RoboRIOCommand.LOCK);
+        updateUiLockChanged();
     }
 
 
@@ -117,12 +109,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void initConnectionReceiver() {
+        IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_SERIAL_PORT_ERROR);
+        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK);
+        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY);
+        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_STATE);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(_connectionReceiver, filter);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        connectionManager.sendCommand(RoboRIOCommand.UNLOCK);
+        // avoid getting events when activity is not in foreground (avoid crash when LockedFragment should appear)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
         //FIXME: onDestroy() is not called when swiping app away
-        connectionManager.sendCommand(RoboRIOCommand.UNLOCK);
         connectionManager.dispose(this);
     }
 

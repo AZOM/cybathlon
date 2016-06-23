@@ -196,6 +196,7 @@ public class ConnectionManager {
         context.registerReceiver(_usbActionReceiver, filter);
     }
 
+
     /**
      * Establish a serial connection to the UsbDevice that is physically connected to the Android device if possible.
      *
@@ -213,6 +214,7 @@ public class ConnectionManager {
             restartTimeoutHandler();
         }
     }
+
 
     @Nullable
     private UsbDevice findConnectedUsbDeviceWithVendorId(int vendorId) {
@@ -268,7 +270,7 @@ public class ConnectionManager {
 
         UsbDeviceConnection connection = _usbManager.openDevice(_usbDevice);
         if (connection == null) {
-            Log.e(TAG, "_usbActionReceiver.openSerialPort() -> _usbManager.openDevice() FAILED.");
+            Log.e(TAG, "openSerialPort() -> _usbManager.openDevice() FAILED.");
             intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_no_usb_connection));
             _localBroadcastManager.sendBroadcast(intent);
             return;
@@ -276,7 +278,7 @@ public class ConnectionManager {
 
         _serialPort = UsbSerialDevice.createUsbSerialDevice(_usbDevice, connection);
         if (_serialPort == null) {
-            Log.e(TAG, "_usbActionReceiver.openSerialPort() -> _serialPort is null.");
+            Log.e(TAG, "openSerialPort() -> _serialPort is null.");
             intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_create_serialport));
             _localBroadcastManager.sendBroadcast(intent);
             return;
@@ -284,10 +286,10 @@ public class ConnectionManager {
 
         if (_serialPort.open()) {
             initSerialPort();
-            Log.i(TAG, "_usbActionReceiver.handleActionUsbPermission() -> _serialPort open - requesting Lock");
+            Log.i(TAG, "openSerialPort() -> _serialPort open - requesting Lock");
             sendCommand(RoboRIOCommand.LOCK);
         } else {
-            Log.e(TAG, "_usbActionReceiver.openSerialPort() -> _serialPort could not be opened.");
+            Log.e(TAG, "openSerialPort() -> _serialPort could not be opened.");
             intent.putExtra(EXTRA_SERIAL_PORT_ERROR, context.getString(R.string.error_open_serialport));
             _localBroadcastManager.sendBroadcast(intent);
         }
