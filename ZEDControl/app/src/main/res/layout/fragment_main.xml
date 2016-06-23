@@ -14,7 +14,6 @@
 
         <LinearLayout
             android:id="@+id/layout_motor_controls"
-            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
@@ -22,7 +21,6 @@
 
             <Button
                 android:id="@+id/button_power_off"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -31,7 +29,6 @@
 
             <Button
                 android:id="@+id/button_start_up"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
