@@ -1,10 +1,11 @@
 package ch.hsr.zedcontrol.roborio.parsing;
 
 /**
- * Represents data from the serial bus that is retrieved when a State is posted (keep alive signal).
- * It looks the same as {@link ModeData} but we want to keep things clear and separated.
+ * Represents data from the serial bus that is retrieved when a state is reached - means a command (as defined in
+ * {@link ch.hsr.zedcontrol.roborio.RoboRIOCommand}) has been successfully executed. The last state will continuously
+ * be sent as keep alive signal.
  */
-public class StateData extends ModeData {
+public class StateData extends CommandData {
 
     public StateData(String[] words) {
         super(words);
