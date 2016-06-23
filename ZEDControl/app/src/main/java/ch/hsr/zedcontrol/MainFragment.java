@@ -1,18 +1,22 @@
 package ch.hsr.zedcontrol;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioGroup;
-import android.widget.ToggleButton;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
 import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
+import ch.hsr.zedcontrol.roborio.RoboRIOState;
 
 /**
  * Container for the main UI controls.
@@ -21,9 +25,29 @@ public class MainFragment extends Fragment {
 
     protected static final String TAG = MainFragment.class.getSimpleName();
 
+    private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case ConnectionManager.ACTION_SERIAL_PORT_READ_STATE:
+                    RoboRIOState state = (RoboRIOState) intent.getSerializableExtra(
+                            ConnectionManager.EXTRA_SERIAL_PORT_READ_STATE);
+                    handleStateChanged(state);
+                    break;
+
+                default:
+                    Log.w(TAG, "_connectionReceiver.onReceive() -> unhandled action: " + intent.getAction());
+                    break;
+            }
+        }
+    };
+
     private ConnectionManager _connectionManager;
 
-    private ToggleButton _buttonDefaultDriveMode;
+    private Button _buttonPowerOff;
+    private Button _buttonStartUp;
+    private Button _buttonFreeDrive;
+    private Button _buttonNoMode;
 
 
     @Nullable
@@ -33,8 +57,6 @@ public class MainFragment extends Fragment {
 
         initButtons(view);
 
-        _buttonDefaultDriveMode = (ToggleButton) view.findViewById(R.id.button_mode_none);
-
         return view;
     }
 
@@ -42,17 +64,20 @@ public class MainFragment extends Fragment {
     private void initButtons(View view) {
         initButtonPowerOff(view);
         initButtonStartUp(view);
-        initButtonModeStairs(view);
-
-        initButtonsDriveModes(view);
+        initButtonStairs(view);
+        initButtonFreeDriving(view);
+        initButtonNoMode(view);
     }
 
 
     private void initButtonPowerOff(View view) {
-        Button button = (Button) view.findViewById(R.id.button_power_off);
-        button.setOnClickListener(new View.OnClickListener() {
+        _buttonPowerOff = (Button) view.findViewById(R.id.button_power_off);
+        _buttonPowerOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
                 _connectionManager.sendCommand(RoboRIOCommand.POWER_OFF);
             }
         });
@@ -60,17 +85,20 @@ public class MainFragment extends Fragment {
 
 
     private void initButtonStartUp(View view) {
-        Button button = (Button) view.findViewById(R.id.button_start_up);
-        button.setOnClickListener(new View.OnClickListener() {
+        _buttonStartUp = (Button) view.findViewById(R.id.button_start_up);
+        _buttonStartUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
                 _connectionManager.sendCommand(RoboRIOCommand.START_UP);
             }
         });
     }
 
 
-    private void initButtonModeStairs(View view) {
+    private void initButtonStairs(View view) {
         Button button = (Button) view.findViewById(R.id.button_driving_stairs);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,54 +114,29 @@ public class MainFragment extends Fragment {
     }
 
 
-    private void initButtonsDriveModes(View view) {
-        initToggleButtonModeFreeDriving(view);
-        initToggleButtonModeNone(view);
-        initRadioGroup(view);
-    }
-
-
-    private void initToggleButtonModeFreeDriving(View view) {
-        final ToggleButton button = (ToggleButton) view.findViewById(R.id.button_mode_free_driving);
-        button.setOnClickListener(new View.OnClickListener() {
+    private void initButtonFreeDriving(View view) {
+        _buttonFreeDrive = (Button) view.findViewById(R.id.button_free_driving);
+        _buttonFreeDrive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_FREE);
-
-                markAsCheckedWithinRadioGroup(v);
-            }
-        });
-    }
-
-
-    private void markAsCheckedWithinRadioGroup(View v) {
-        // let the ToggleButton behave like a RadioButton -> only one can be active at a time
-        ((RadioGroup) v.getParent()).check(0);
-        ((RadioGroup) v.getParent()).check(v.getId());
-    }
-
-
-    private void initToggleButtonModeNone(View view) {
-        final ToggleButton button = (ToggleButton) view.findViewById(R.id.button_mode_none);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _connectionManager.sendCommand(RoboRIOCommand.NO_MODE);
-
-                markAsCheckedWithinRadioGroup(v);
-            }
-        });
-    }
-
-
-    private void initRadioGroup(View view) {
-        ((RadioGroup) view.findViewById(R.id.group_drive_mode)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                for (int index = 0; index < group.getChildCount(); index++) {
-                    final ToggleButton b = (ToggleButton) group.getChildAt(index);
-                    b.setChecked(b.getId() == checkedId);
+                if (v.isSelected()) {
+                    return;
                 }
+                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_FREE);
+            }
+        });
+    }
+
+
+    private void initButtonNoMode(View view) {
+        _buttonNoMode = (Button) view.findViewById(R.id.button_no_mode);
+        _buttonNoMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
+                _connectionManager.sendCommand(RoboRIOCommand.NO_MODE);
             }
         });
     }
@@ -144,9 +147,54 @@ public class MainFragment extends Fragment {
         super.onResume();
         // obtain instance with current state from parent activity
         _connectionManager = ((MainActivity) getActivity()).connectionManager;
+        initConnectionReceiver();
 
-        _buttonDefaultDriveMode.performClick();
+        _buttonNoMode.performClick();
     }
 
 
+    private void initConnectionReceiver() {
+        IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_SERIAL_PORT_READ_STATE);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(_connectionReceiver, filter);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(_connectionReceiver);
+    }
+
+
+    private void handleStateChanged(RoboRIOState newState) {
+        switch (newState) {
+            case POWER_OFF:
+                selectButtonDistinct(_buttonPowerOff);
+                break;
+            case START_UP:
+                selectButtonDistinct(_buttonStartUp);
+                break;
+            case DRIVE_FREE:
+                selectButtonDistinct(_buttonFreeDrive);
+                break;
+            case NO_MODE:
+                selectButtonDistinct(_buttonNoMode);
+                break;
+            default:
+                Log.w(TAG, "handleStateChanged() -> ignored state: " + newState.name() + " (not relevant for this UI)");
+        }
+    }
+
+
+    private void selectButtonDistinct(Button shallBeSelectedButton) {
+        if (shallBeSelectedButton.isSelected()) {
+            Log.d(TAG, "selectButtonDistinct() -> IGNORE already selected button: " + shallBeSelectedButton.getText());
+        }
+
+        Log.i(TAG, "selectButtonDistinct() -> going to select button: " + shallBeSelectedButton.getText());
+        _buttonPowerOff.setSelected(_buttonPowerOff == shallBeSelectedButton);
+        _buttonStartUp.setSelected(_buttonStartUp == shallBeSelectedButton);
+        _buttonFreeDrive.setSelected(_buttonFreeDrive == shallBeSelectedButton);
+        _buttonNoMode.setSelected(_buttonNoMode == shallBeSelectedButton);
+    }
 }

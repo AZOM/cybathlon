@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
         if (savedInstanceState == null) {
-            // everything else that doesn't update UI
+            // everything else that doesn't update UI (avoid re-creation of connectionManager after the first time)
             connectionManager = new ConnectionManager(this);
         }
     }

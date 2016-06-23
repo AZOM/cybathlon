@@ -1,20 +1,23 @@
 package ch.hsr.zedcontrol;
 
-import android.graphics.PorterDuff;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ToggleButton;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
 import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
+import ch.hsr.zedcontrol.roborio.RoboRIOState;
 
 /**
  * Container for the UI controls to go up and down the stairs.
@@ -25,8 +28,29 @@ public class StairsControlsFragment extends Fragment {
 
     private ConnectionManager _connectionManager;
 
-    private ToggleButton _buttonDriveModeNone;
-    private Button _activeStairsModeButton;
+    private Button _buttonLiftFrontWheels;
+    private Button _buttonLiftRearWheels;
+    private Button _buttonDriveWithFallProtection;
+    private Button _buttonLowerFrontWheels;
+    private Button _buttonLowerRearWheels;
+    private Button _buttonNoMode;
+
+    private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case ConnectionManager.ACTION_SERIAL_PORT_READ_STATE:
+                    RoboRIOState state = (RoboRIOState) intent.getSerializableExtra(
+                            ConnectionManager.EXTRA_SERIAL_PORT_READ_STATE);
+                    handleStateChanged(state);
+                    break;
+
+                default:
+                    Log.w(TAG, "_connectionReceiver.onReceive() -> unhandled action: " + intent.getAction());
+                    break;
+            }
+        }
+    };
 
 
     @Nullable
@@ -48,106 +72,77 @@ public class StairsControlsFragment extends Fragment {
         initButtonLowerRearWheels(view);
 
         initButtonBack(view);
-        initButtonModeNone(view);
+        initButtonNoMode(view);
     }
 
 
     private void initButtonLiftFrontWheels(final View view) {
-        Button button = (Button) view.findViewById(R.id.button_lift_front_wheels);
-        button.setOnClickListener(new View.OnClickListener() {
+        _buttonLiftFrontWheels = (Button) view.findViewById(R.id.button_lift_front_wheels);
+        _buttonLiftFrontWheels.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
                 _connectionManager.sendCommand(RoboRIOCommand.LIFT_FRONT_WHEELS);
-
-                updateDriveModeButtons((Button) v);
-
-                // enable next state
-                view.findViewById(R.id.button_lift_rear_wheel).setEnabled(true);
             }
         });
     }
 
 
     private void initButtonLiftRearWheels(final View view) {
-        Button button = (Button) view.findViewById(R.id.button_lift_rear_wheel);
-        button.setOnClickListener(new View.OnClickListener() {
+        _buttonLiftRearWheels = (Button) view.findViewById(R.id.button_lift_rear_wheel);
+        _buttonLiftRearWheels.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
                 _connectionManager.sendCommand(RoboRIOCommand.LIFT_REAR_WHEELS);
-
-                updateDriveModeButtons((Button) v);
-
-                // enable next state
-                view.findViewById(R.id.button_mode_drive_fall_protection).setEnabled(true);
             }
         });
     }
 
 
     private void initButtonFallProtection(final View view) {
-        Button button = (Button) view.findViewById(R.id.button_mode_drive_fall_protection);
-        button.setOnClickListener(new View.OnClickListener() {
+        _buttonDriveWithFallProtection = (Button) view.findViewById(R.id.button_mode_drive_fall_protection);
+        _buttonDriveWithFallProtection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
                 _connectionManager.sendCommand(RoboRIOCommand.DRIVE_FALL_PROTECTION);
-
-                updateDriveModeButtons((Button) v);
-
-                // enable next state
-                view.findViewById(R.id.button_lower_front_wheels).setEnabled(true);
             }
         });
     }
 
 
     private void initButtonLowerFrontWheels(final View view) {
-        Button button = (Button) view.findViewById(R.id.button_lower_front_wheels);
-        button.setOnClickListener(new View.OnClickListener() {
+        _buttonLowerFrontWheels = (Button) view.findViewById(R.id.button_lower_front_wheels);
+        _buttonLowerFrontWheels.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
                 _connectionManager.sendCommand(RoboRIOCommand.LOWER_FRONT_WHEELS);
-
-                updateDriveModeButtons((Button) v);
-
-                // enable next state
-                view.findViewById(R.id.button_lower_rear_wheel).setEnabled(true);
             }
         });
     }
 
 
     private void initButtonLowerRearWheels(final View view) {
-        Button button = (Button) view.findViewById(R.id.button_lower_rear_wheel);
-        button.setOnClickListener(new View.OnClickListener() {
+        _buttonLowerRearWheels = (Button) view.findViewById(R.id.button_lower_rear_wheel);
+        _buttonLowerRearWheels.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
                 _connectionManager.sendCommand(RoboRIOCommand.LOWER_REAR_WHEELS);
-
-                updateDriveModeButtons((Button) v);
-
-                // enable first state again
-                view.findViewById(R.id.button_lift_front_wheels).setEnabled(true);
             }
         });
-    }
-
-
-    private void updateDriveModeButtons(Button clickedButton) {
-        if (_buttonDriveModeNone != null) {
-            _buttonDriveModeNone.setChecked(false);
-        }
-
-        clickedButton.setEnabled(false);
-        clickedButton.getBackground().setColorFilter(
-                getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
-
-        if (_activeStairsModeButton != null) {
-            // change color last state
-            _activeStairsModeButton.getBackground().setColorFilter(
-                    getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
-        }
-
-        _activeStairsModeButton = clickedButton;
     }
 
 
@@ -162,29 +157,17 @@ public class StairsControlsFragment extends Fragment {
     }
 
 
-    private void initButtonModeNone(View view) {
-        ToggleButton button = (ToggleButton) view.findViewById(R.id.button_mode_none);
-        button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    private void initButtonNoMode(View view) {
+        _buttonNoMode = (Button) view.findViewById(R.id.button_no_mode);
+        _buttonNoMode.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if (_activeStairsModeButton != null) {
-                        _activeStairsModeButton.getBackground().setColorFilter(
-                                getResources().getColor(android.R.color.background_light), PorterDuff.Mode.MULTIPLY);
-                    }
-
-                    _connectionManager.sendCommand(RoboRIOCommand.NO_MODE);
-
-                } else {
-                    if (_activeStairsModeButton != null) {
-                        _activeStairsModeButton.getBackground().setColorFilter(
-                                getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
-                    }
+            public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
                 }
+                _connectionManager.sendCommand(RoboRIOCommand.NO_MODE);
             }
         });
-
-        _buttonDriveModeNone = button;
     }
 
 
@@ -193,8 +176,58 @@ public class StairsControlsFragment extends Fragment {
         super.onResume();
         // obtain instance with current state from parent activity
         _connectionManager = ((MainActivity) getActivity()).connectionManager;
+        initConnectionReceiver();
 
-        _buttonDriveModeNone.setChecked(true);
+        _buttonNoMode.performClick();
+    }
+
+
+    private void initConnectionReceiver() {
+        IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_SERIAL_PORT_READ_STATE);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(_connectionReceiver, filter);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(_connectionReceiver);
+    }
+
+
+    private void handleStateChanged(RoboRIOState newState) {
+        switch (newState) {
+            case LIFT_FRONT_WHEELS:
+                selectButtonDistinct(_buttonLiftFrontWheels);
+                break;
+            case LIFT_REAR_WHEELS:
+                selectButtonDistinct(_buttonLiftRearWheels);
+                break;
+            case DRIVE_FALL_PROTECTION:
+                selectButtonDistinct(_buttonDriveWithFallProtection);
+                break;
+            case LOWER_FRONT_WHEELS:
+                selectButtonDistinct(_buttonLowerFrontWheels);
+                break;
+            case LOWER_REAR_WHEELS:
+                selectButtonDistinct(_buttonLowerRearWheels);
+                break;
+            case NO_MODE:
+                selectButtonDistinct(_buttonNoMode);
+                break;
+            default:
+                Log.w(TAG, "handleStateChanged() -> ignored state: " + newState.name() + " (not relevant for this UI)");
+        }
+    }
+
+
+    private void selectButtonDistinct(Button shallBeSelectedButton) {
+        if (shallBeSelectedButton.isSelected()) {
+            Log.d(TAG, "selectButtonDistinct() -> IGNORE already selected button: " + shallBeSelectedButton.getText());
+        }
+
+        Log.i(TAG, "selectButtonDistinct() -> going to select button: " + shallBeSelectedButton.getText());
+        _buttonNoMode.setSelected(_buttonNoMode == shallBeSelectedButton);
     }
 
 }

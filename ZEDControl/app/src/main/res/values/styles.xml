@@ -18,9 +18,10 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
-    <style name="ColorButton" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">@color/colorAccent</item>
-        <item name="colorButtonNormal">@android:color/background_light</item>
+    <style name="ButtonWithDrawable" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/button_state_selector</item>
+        <item name="android:textColor">@color/button_state_selected_textcolor</item>
+        <item name="android:padding">20dp</item>
     </style>
 
 </resources>
