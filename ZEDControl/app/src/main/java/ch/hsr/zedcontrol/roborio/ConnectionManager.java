@@ -38,9 +38,6 @@ public class ConnectionManager {
     public static final String ACTION_SERIAL_PORT_READ_LOCK = ".ACTION_SERIAL_PORT_READ_LOCK";
     public static final String EXTRA_SERIAL_PORT_READ_LOCK = "/EXTRA_SERIAL_PORT_READ_LOCK";
 
-    public static final String ACTION_SERIAL_PORT_READ_MODE = ".ACTION_SERIAL_PORT_READ_MODE";
-    public static final String EXTRA_SERIAL_PORT_READ_MODE = "/EXTRA_SERIAL_PORT_READ_MODE";
-
     public static final String ACTION_SERIAL_PORT_READ_BATTERY = ".ACTION_SERIAL_PORT_READ_BATTERY";
     public static final String EXTRA_SERIAL_PORT_READ_BATTERY = "/EXTRA_SERIAL_PORT_READ_BATTERY";
 
@@ -146,11 +143,6 @@ public class ConnectionManager {
         private void handleResultMode(ModeData modeData) {
             RoboRIOCommand command = RoboRIOCommand.getCommandFromStringDescription(modeData.getDescription());
             Log.i(TAG, "handleResultMode() -> Got ACK for requested command: " + command);
-
-            //TODO: consider removing this, since this information is rather unimportant for the user-interaction
-            Intent modeIntent = new Intent(ACTION_SERIAL_PORT_READ_MODE);
-            modeIntent.putExtra(EXTRA_SERIAL_PORT_READ_MODE, command);
-            _localBroadcastManager.sendBroadcast(modeIntent);
         }
 
         private void handleResultBattery(BatteryData batteryData) {

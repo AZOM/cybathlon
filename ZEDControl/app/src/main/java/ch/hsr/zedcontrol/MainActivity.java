@@ -51,10 +51,6 @@ public class MainActivity extends AppCompatActivity {
                     updateUiLockChanged();
                     break;
 
-                case ConnectionManager.ACTION_SERIAL_PORT_READ_MODE:
-                    handleActionSerialPortReadMode(intent);
-                    break;
-
                 case ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY:
                     updateUiVoltage(intent);
                     break;
@@ -94,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
     private void initConnectionReceiver() {
         IntentFilter filter = new IntentFilter(ConnectionManager.ACTION_SERIAL_PORT_ERROR);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_LOCK);
-        filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_MODE);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_BATTERY);
         filter.addAction(ConnectionManager.ACTION_SERIAL_PORT_READ_STATE);
 
@@ -188,14 +183,6 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-    }
-
-
-    private void handleActionSerialPortReadMode(Intent intent) {
-        RoboRIOCommand command = (RoboRIOCommand) intent.getSerializableExtra(
-                ConnectionManager.EXTRA_SERIAL_PORT_READ_MODE);
-        Log.i(TAG, "handleActionSerialPortReadMode() -> Got ACK for requested command: " + command);
-        Toast.makeText(this, "ACK: " + command.name(), Toast.LENGTH_SHORT).show();
     }
 
 
