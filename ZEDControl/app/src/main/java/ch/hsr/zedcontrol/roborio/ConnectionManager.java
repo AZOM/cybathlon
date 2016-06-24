@@ -137,6 +137,7 @@ public class ConnectionManager {
 
         private void handleResultLockUnlock(LockData lockData) {
             final boolean hasLock = lockData.getKeyWord() == KeyWords.LOCK;
+            Log.i(TAG, "handleResultLockUnlock() -> hasLock: " + hasLock);
             broadcastLockIntent(hasLock);
         }
 
@@ -156,7 +157,7 @@ public class ConnectionManager {
 
             RoboRIOState state = RoboRIOState.getStateFromStringDescription(stateData.getDescription());
             if (state == null) {
-                Log.w(TAG, "handleResultState() -> State is changing, ignoring: " + stateData);
+                Log.w(TAG, "handleResultState() -> IGNORING unhandled (intermediate) state: " + stateData);
             } else {
                 Log.i(TAG, "handleResultState() -> keep-alive signal for state: " + state);
                 Intent stateIntent = new Intent(ACTION_SERIAL_PORT_READ_STATE);

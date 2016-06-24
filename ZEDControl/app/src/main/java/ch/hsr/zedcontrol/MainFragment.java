@@ -188,7 +188,8 @@ public class MainFragment extends Fragment {
 
     private void selectButtonDistinct(Button shallBeSelectedButton) {
         if (shallBeSelectedButton.isSelected()) {
-            Log.d(TAG, "selectButtonDistinct() -> IGNORE already selected button: " + shallBeSelectedButton.getText());
+            Log.d(TAG, "selectButtonDistinct() -> IGNORE, already selected: " + shallBeSelectedButton.getText());
+            return;
         }
 
         Log.i(TAG, "selectButtonDistinct() -> going to select button: " + shallBeSelectedButton.getText());

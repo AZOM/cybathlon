@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -91,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         removeStatusAndNavigationBar();
         initConnectionReceiver();
+        //TODO: Make sure with API that this command always returns current Lock/Unlock state regarding this App
         connectionManager.sendCommand(RoboRIOCommand.LOCK);
-        updateUiLockChanged();
     }
 
 
@@ -123,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         connectionManager.sendCommand(RoboRIOCommand.UNLOCK);
-        // avoid getting events when activity is not in foreground (avoid crash when LockedFragment should appear)
+        // We might miss the state update from ConnectionManager (RoboRIO) -> set _hasLock manually
+        _hasLock = false;
+        // Avoid state-dependent UI updates when activity is paused (avoid crash caused by IllegalState)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(_connectionReceiver);
     }
 
