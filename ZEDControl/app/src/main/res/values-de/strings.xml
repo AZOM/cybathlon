@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ZEDControl</string>
-    <string name="button_mode_free_driving">Freies fahren</string>
+    <string name="button_mode_drive_slow">Langsam fahren</string>
+    <string name="button_mode_drive_fast">Schnell fahren</string>
     <string name="button_start_up">Initialisieren</string>
     <string name="button_power_off">Antriebe AUS</string>
     <string name="button_lift_front_wheels">Vorderr\u00E4der anheben</string>

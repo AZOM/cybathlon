@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
 import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
@@ -46,7 +47,8 @@ public class MainFragment extends Fragment {
 
     private Button _buttonPowerOff;
     private Button _buttonStartUp;
-    private Button _buttonFreeDrive;
+    private Button _buttonDriveSlow;
+    private Button _buttonDriveFast;
     private Button _buttonNoMode;
 
 
@@ -64,8 +66,9 @@ public class MainFragment extends Fragment {
     private void initButtons(View view) {
         initButtonPowerOff(view);
         initButtonStartUp(view);
+        initButtonDriveSlow(view);
+        initButtonDriveFast(view);
         initButtonStairs(view);
-        initButtonFreeDriving(view);
         initButtonNoMode(view);
     }
 
@@ -98,6 +101,35 @@ public class MainFragment extends Fragment {
     }
 
 
+    private void initButtonDriveSlow(View view) {
+        _buttonDriveSlow = (Button) view.findViewById(R.id.button_drive_slow);
+        _buttonDriveSlow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
+                //TODO: implement sending correct command
+                Toast.makeText(getActivity(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void initButtonDriveFast(View view) {
+        _buttonDriveFast = (Button) view.findViewById(R.id.button_drive_fast);
+        _buttonDriveFast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
+                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_FREE);
+            }
+        });
+    }
+
+
     private void initButtonStairs(View view) {
         Button button = (Button) view.findViewById(R.id.button_driving_stairs);
         button.setOnClickListener(new View.OnClickListener() {
@@ -109,20 +141,6 @@ public class MainFragment extends Fragment {
                         .replace(R.id.fragment_container, new StairsControlsFragment())
                         .addToBackStack(TAG)
                         .commit();
-            }
-        });
-    }
-
-
-    private void initButtonFreeDriving(View view) {
-        _buttonFreeDrive = (Button) view.findViewById(R.id.button_free_driving);
-        _buttonFreeDrive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.isSelected()) {
-                    return;
-                }
-                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_FREE);
             }
         });
     }
@@ -175,7 +193,7 @@ public class MainFragment extends Fragment {
                 selectButtonDistinct(_buttonStartUp);
                 break;
             case DRIVE_FREE:
-                selectButtonDistinct(_buttonFreeDrive);
+                selectButtonDistinct(_buttonDriveFast);
                 break;
             case NO_MODE:
                 selectButtonDistinct(_buttonNoMode);
@@ -195,7 +213,7 @@ public class MainFragment extends Fragment {
         Log.i(TAG, "selectButtonDistinct() -> going to select button: " + shallBeSelectedButton.getText());
         _buttonPowerOff.setSelected(_buttonPowerOff == shallBeSelectedButton);
         _buttonStartUp.setSelected(_buttonStartUp == shallBeSelectedButton);
-        _buttonFreeDrive.setSelected(_buttonFreeDrive == shallBeSelectedButton);
+        _buttonDriveFast.setSelected(_buttonDriveFast == shallBeSelectedButton);
         _buttonNoMode.setSelected(_buttonNoMode == shallBeSelectedButton);
     }
 }

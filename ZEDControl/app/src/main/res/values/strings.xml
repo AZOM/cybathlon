@@ -10,7 +10,8 @@
     <string name="button_start_up">Initialize</string>
     <string name="button_power_off">Power OFF</string>
     <string name="button_stairs_modes">Stairs</string>
-    <string name="button_mode_free_driving">Free driving</string>
+    <string name="button_mode_drive_slow">Drive slow</string>
+    <string name="button_mode_drive_fast">Drive fast</string>
     <string name="button_mode_none">No mode</string>
 
     <!-- StairsControlsFragment -->

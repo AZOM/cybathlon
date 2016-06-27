@@ -7,7 +7,7 @@
     tools:context="ch.hsr.zedcontrol.MainActivity">
 
     <LinearLayout
-        android:id="@+id/layout_motor_controls"
+        android:id="@+id/layout_buttons_top"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
@@ -33,20 +33,21 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_drive_modes"
+        android:id="@+id/layout_bottom_buttons"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button_free_driving"
+            android:id="@+id/button_driving_stairs"
+            style="@style/ButtonWithDrawable"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:background="@drawable/button_state_selector"
-            android:text="@string/button_mode_free_driving"
-            android:textColor="@color/button_state_selected_textcolor"
+            android:drawableEnd="@drawable/ic_stairs"
+            android:drawableStart="@drawable/ic_stairs"
+            android:text="@string/button_stairs_modes"
             android:textSize="18sp"/>
 
         <Button
@@ -61,18 +62,40 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_driving_stairs"
-        style="@style/ButtonWithDrawable"
+    <LinearLayout
+        android:id="@+id/layout_center_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/layout_drive_modes"
-        android:layout_below="@id/layout_motor_controls"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:drawableEnd="@drawable/ic_stairs"
-        android:drawableStart="@drawable/ic_stairs"
-        android:text="@string/button_stairs_modes"
-        android:textSize="42sp"/>
+        android:layout_above="@id/layout_bottom_buttons"
+        android:layout_below="@id/layout_buttons_top"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_drive_slow"
+            style="@style/ButtonWithDrawable"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/ic_elephant"
+            android:drawableStart="@drawable/ic_elephant"
+            android:background="@drawable/button_state_selector"
+            android:text="@string/button_mode_drive_slow"
+            android:textColor="@color/button_state_selected_textcolor"
+            android:textSize="18sp"/>
+
+        <Button
+            android:id="@+id/button_drive_fast"
+            style="@style/ButtonWithDrawable"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/ic_cheetah"
+            android:drawableStart="@drawable/ic_cheetah"
+            android:background="@drawable/button_state_selector"
+            android:text="@string/button_mode_drive_fast"
+            android:textColor="@color/button_state_selected_textcolor"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
