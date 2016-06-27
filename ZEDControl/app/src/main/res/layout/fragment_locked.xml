@@ -23,7 +23,7 @@
         android:layout_above="@id/button_reconnect"
         android:layout_margin="26dp"
         android:text="@string/text_locked_state"
-        android:textColor="@color/colorPrimaryLight"
+        android:textColor="@color/primary_light"
         android:textSize="20sp"/>
 
 </RelativeLayout>

@@ -4,7 +4,7 @@
                 android:id="@+id/layout_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
+                android:background="@color/primary"
                 android:fitsSystemWindows="true"
                 android:keepScreenOn="true"
                 tools:context="ch.hsr.zedcontrol.MainActivity">
@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/label_battery_voltage"
+            android:textColor="@color/primary_text"
             android:textSize="21sp"/>
 
         <TextView

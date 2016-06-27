@@ -14,7 +14,7 @@
     </item>
 
     <item>
-        <ripple android:color="@color/colorAccent"/>
+        <ripple android:color="@color/accent"/>
     </item>
 
 </layer-list>
