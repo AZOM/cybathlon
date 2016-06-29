@@ -47,7 +47,7 @@ public class MainFragment extends Fragment {
 
     private Button _buttonPowerOff;
     private Button _buttonStartUp;
-    private Button _buttonDriveSlow;
+    private Button _buttonDriveThrottled;
     private Button _buttonDriveFast;
     private Button _buttonNoMode;
 
@@ -102,15 +102,14 @@ public class MainFragment extends Fragment {
 
 
     private void initButtonDriveSlow(View view) {
-        _buttonDriveSlow = (Button) view.findViewById(R.id.button_drive_slow);
-        _buttonDriveSlow.setOnClickListener(new View.OnClickListener() {
+        _buttonDriveThrottled = (Button) view.findViewById(R.id.button_drive_slow);
+        _buttonDriveThrottled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.isSelected()) {
                     return;
                 }
-                //TODO: implement sending correct command
-                Toast.makeText(getActivity(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_THROTTLED);
             }
         });
     }
@@ -194,6 +193,9 @@ public class MainFragment extends Fragment {
                 break;
             case DRIVE_FREE:
                 selectButtonDistinct(_buttonDriveFast);
+                break;
+            case DRIVE_THROTTLED:
+                selectButtonDistinct(_buttonDriveThrottled);
                 break;
             case NO_MODE:
                 selectButtonDistinct(_buttonNoMode);

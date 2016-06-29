@@ -16,6 +16,7 @@ public enum RoboRIOCommand {
     START_UP("Mode:M_StartUp:0;"),
 
     DRIVE_FREE("Mode:M_Drive:0;"),
+    DRIVE_THROTTLED("Mode:M_Drive:1;"),
 
     LIFT_FRONT_WHEELS("Mode:M_Stairs:0;"),
     LIFT_REAR_WHEELS("Mode:M_Stairs:1;"),
