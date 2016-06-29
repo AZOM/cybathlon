@@ -8,8 +8,8 @@ android {
         applicationId "ch.hsr.zedcontrol"
         minSdkVersion 22
         targetSdkVersion 23
-        versionCode 2
-        versionName "1.0.1beta"
+        versionCode 3
+        versionName "1.0.0beta2"
     }
 
     buildTypes {
