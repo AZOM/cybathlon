@@ -215,6 +215,7 @@ public class MainFragment extends Fragment {
         Log.i(TAG, "selectButtonDistinct() -> going to select button: " + shallBeSelectedButton.getText());
         _buttonPowerOff.setSelected(_buttonPowerOff == shallBeSelectedButton);
         _buttonStartUp.setSelected(_buttonStartUp == shallBeSelectedButton);
+        _buttonDriveThrottled.setSelected(_buttonDriveThrottled == shallBeSelectedButton);
         _buttonDriveFast.setSelected(_buttonDriveFast == shallBeSelectedButton);
         _buttonNoMode.setSelected(_buttonNoMode == shallBeSelectedButton);
     }

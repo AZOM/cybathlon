@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         removeStatusAndNavigationBar();
         initConnectionReceiver();
-        //TODO: Make sure with API that this command always returns current Lock/Unlock state regarding this App
         connectionManager.sendCommand(RoboRIOCommand.LOCK);
     }
 
