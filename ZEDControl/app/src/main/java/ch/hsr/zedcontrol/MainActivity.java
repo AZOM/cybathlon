@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                         _isShowingAlertDialog = false;
+                        removeStatusAndNavigationBar();
                     }
                 })
                 .setPositiveButton(getString(R.string.reinitialize), new DialogInterface.OnClickListener() {
@@ -190,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
                         connectionManager.sendCommand(RoboRIOCommand.START_UP);
                         dialog.cancel();
                         _isShowingAlertDialog = false;
+                        removeStatusAndNavigationBar();
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
