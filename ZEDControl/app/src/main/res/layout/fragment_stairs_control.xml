@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="ch.hsr.zedcontrol.MainActivity">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ch.hsr.zedcontrol.MainActivity">
 
     <LinearLayout
         android:id="@+id/layout_controls_bottom"
@@ -18,10 +19,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:background="@drawable/button_state_selector"
             android:text="@string/back"
-            android:textColor="@color/button_state_selected_textcolor"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
 
         <Button
             android:id="@+id/button_no_mode"
@@ -54,8 +53,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/button_state_selector"
                 android:drawableStart="@drawable/ic_stairs_up"
-                android:text="@string/button_lift_front_wheels"/>
+                android:text="@string/button_lift_front_wheels"
+                android:textColor="@color/button_state_selected_textcolor"/>
 
             <Button
                 android:id="@+id/button_lift_rear_wheel"
@@ -63,8 +64,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/button_state_selector"
                 android:drawableStart="@drawable/ic_stairs_up"
-                android:text="@string/button_lift_rear_wheels"/>
+                android:text="@string/button_lift_rear_wheels"
+                android:textColor="@color/button_state_selected_textcolor"/>
 
         </LinearLayout>
 
@@ -81,8 +84,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/button_state_selector"
                 android:drawableStart="@drawable/ic_stairs_down"
-                android:text="@string/button_lower_front_wheels"/>
+                android:text="@string/button_lower_front_wheels"
+                android:textColor="@color/button_state_selected_textcolor"/>
 
             <Button
                 android:id="@+id/button_lower_rear_wheel"
@@ -90,8 +95,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/button_state_selector"
                 android:drawableStart="@drawable/ic_stairs_down"
-                android:text="@string/button_lower_rear_wheels"/>
+                android:text="@string/button_lower_rear_wheels"
+                android:textColor="@color/button_state_selected_textcolor"/>
 
         </LinearLayout>
 
@@ -102,9 +109,11 @@
             android:layout_height="match_parent"
             android:layout_above="@id/layout_lower_wheels"
             android:layout_below="@id/layout_lift_wheels"
+            android:background="@drawable/button_state_selector"
             android:drawableEnd="@drawable/ic_fall_protection"
             android:drawableStart="@drawable/ic_fall_protection"
-            android:text="@string/button_mode_drive_fall_protection"/>
+            android:text="@string/button_mode_drive_fall_protection"
+            android:textColor="@color/button_state_selected_textcolor"/>
 
     </RelativeLayout>
 

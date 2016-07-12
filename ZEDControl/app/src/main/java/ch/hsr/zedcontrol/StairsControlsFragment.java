@@ -224,9 +224,15 @@ public class StairsControlsFragment extends Fragment {
     private void selectButtonDistinct(Button shallBeSelectedButton) {
         if (shallBeSelectedButton.isSelected()) {
             Log.d(TAG, "selectButtonDistinct() -> IGNORE already selected button: " + shallBeSelectedButton.getText());
+            return;
         }
 
         Log.i(TAG, "selectButtonDistinct() -> going to select button: " + shallBeSelectedButton.getText());
+        _buttonLiftFrontWheels.setSelected(_buttonLiftFrontWheels == shallBeSelectedButton);
+        _buttonLiftRearWheels.setSelected(_buttonLiftRearWheels == shallBeSelectedButton);
+        _buttonDriveWithFallProtection.setSelected(_buttonDriveWithFallProtection == shallBeSelectedButton);
+        _buttonLowerFrontWheels.setSelected(_buttonLowerFrontWheels == shallBeSelectedButton);
+        _buttonLowerRearWheels.setSelected(_buttonLowerRearWheels == shallBeSelectedButton);
         _buttonNoMode.setSelected(_buttonNoMode == shallBeSelectedButton);
     }
 
