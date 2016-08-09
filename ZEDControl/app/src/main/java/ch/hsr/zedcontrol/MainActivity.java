@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             if (voltage <= THRESHOLD_VOLTAGE) {
                 tv.setTextColor(Color.RED);
             } else {
-                tv.setTextColor(getResources().getColor(R.color.primary_text));
+                tv.setTextColor(getResources().getColor(R.color.primary_light));
             }
         }
     }
