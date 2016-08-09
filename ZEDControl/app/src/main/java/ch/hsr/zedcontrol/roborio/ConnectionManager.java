@@ -55,6 +55,8 @@ public class ConnectionManager {
     private UsbDevice _usbDevice;
     private UsbSerialDevice _serialPort;
 
+    private RoboRIOState _currentState = RoboRIOState.NO_MODE;
+
     private final Handler _handler = new Handler();
     private final Runnable _timeoutRunnable = new Runnable() {
         @Override
@@ -164,6 +166,8 @@ public class ConnectionManager {
                 Intent stateIntent = new Intent(ACTION_SERIAL_PORT_READ_STATE);
                 stateIntent.putExtra(EXTRA_SERIAL_PORT_READ_STATE, state);
                 _localBroadcastManager.sendBroadcast(stateIntent);
+
+                _currentState = state;
             }
         }
     };
@@ -233,6 +237,15 @@ public class ConnectionManager {
         }
 
         return null;
+    }
+
+
+    /**
+     * Returns the last known state of the RoboRIO.
+     * @return Object of type {@link RoboRIOState}
+     */
+    public RoboRIOState getCurrentState() {
+        return _currentState;
     }
 
 

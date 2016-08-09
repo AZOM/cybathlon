@@ -25,6 +25,13 @@ public class MainFragment extends Fragment {
 
     protected static final String TAG = MainFragment.class.getSimpleName();
 
+    private ConnectionManager _connectionManager;
+    private Button _buttonPowerOff;
+    private Button _buttonStartUp;
+    private Button _buttonDriveThrottled;
+    private Button _buttonDriveFast;
+    private Button _buttonNoMode;
+
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -41,14 +48,6 @@ public class MainFragment extends Fragment {
             }
         }
     };
-
-    private ConnectionManager _connectionManager;
-
-    private Button _buttonPowerOff;
-    private Button _buttonStartUp;
-    private Button _buttonDriveThrottled;
-    private Button _buttonDriveFast;
-    private Button _buttonNoMode;
 
 
     @Nullable
@@ -105,10 +104,12 @@ public class MainFragment extends Fragment {
         _buttonDriveThrottled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.isSelected()) {
-                    return;
-                }
-                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_THROTTLED);
+                getFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
+                                R.anim.enter_from_right, R.anim.exit_to_left)
+                        .replace(R.id.fragment_container, new SteeringModeFragment())
+                        .addToBackStack(TAG)
+                        .commit();
             }
         });
     }
@@ -191,11 +192,11 @@ public class MainFragment extends Fragment {
             case START_UP:
                 selectButtonDistinct(_buttonStartUp);
                 break;
-            case DRIVE_FREE:
-                selectButtonDistinct(_buttonDriveFast);
-                break;
             case DRIVE_THROTTLED:
                 selectButtonDistinct(_buttonDriveThrottled);
+                break;
+            case DRIVE_FREE:
+                selectButtonDistinct(_buttonDriveFast);
                 break;
             case NO_MODE:
                 selectButtonDistinct(_buttonNoMode);

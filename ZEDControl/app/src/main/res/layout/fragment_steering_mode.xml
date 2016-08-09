@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="ch.hsr.zedcontrol.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/layout_steering_modes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_steering_front"
+            style="@style/ButtonWithDrawable"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="@drawable/button_state_selector"
+            android:text="Front"
+            android:textColor="@color/button_state_selected_textcolor"/>
+
+        <Button
+            android:id="@+id/button_steering_rear"
+            style="@style/ButtonWithDrawable"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="@drawable/button_state_selector"
+            android:text="Rear"
+            android:textColor="@color/button_state_selected_textcolor"/>
+
+        <Button
+            android:id="@+id/button_steering_both"
+            style="@style/ButtonWithDrawable"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="@drawable/button_state_selector"
+            android:text="Front + Rear"
+            android:textColor="@color/button_state_selected_textcolor"/>
+
+        <Button
+            android:id="@+id/button_steering_both_mirrored"
+            style="@style/ButtonWithDrawable"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="@drawable/button_state_selector"
+            android:text="Front + Rear (mirrored)"
+            android:textColor="@color/button_state_selected_textcolor"/>
+
+        <Button
+            android:id="@+id/button_back_from_steering"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:text="@string/back"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

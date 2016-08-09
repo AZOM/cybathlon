@@ -14,8 +14,11 @@ public enum RoboRIOState {
 
     START_UP("State:M_StartUp:0;"),
 
-    DRIVE_FREE("State:M_Drive:0;"),
-    DRIVE_THROTTLED("State:M_Drive:1;"),
+    DRIVE_THROTTLED("State:M_Drive:0;"),
+    DRIVE_THROTTLED_STEERING_REAR("State:M_Drive:1;"),
+    DRIVE_THROTTLED_STEERING_BOTH("State:M_Drive:2;"),
+    DRIVE_THROTTLED_STEERING_BOTH_MIRRORED("State:M_Drive:3;"),
+    DRIVE_FREE("State:M_Drive:4;"),
 
     LIFT_FRONT_WHEELS("State:M_Stairs:0;"),
     LIFT_REAR_WHEELS("State:M_Stairs:1;"),
