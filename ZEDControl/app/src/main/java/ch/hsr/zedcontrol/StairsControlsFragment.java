@@ -178,6 +178,7 @@ public class StairsControlsFragment extends Fragment {
         _connectionManager = ((MainActivity) getActivity()).connectionManager;
         initConnectionReceiver();
 
+        // ensure that no driving mode is active when (re-)entering this fragment (security reason)
         _buttonNoMode.performClick();
     }
 
@@ -195,8 +196,8 @@ public class StairsControlsFragment extends Fragment {
     }
 
 
-    private void handleStateChanged(RoboRIOState newState) {
-        switch (newState) {
+    private void handleStateChanged(final RoboRIOState currentState) {
+        switch (currentState) {
             case LIFT_FRONT_WHEELS:
                 selectButtonDistinct(_buttonLiftFrontWheels);
                 break;
@@ -216,7 +217,8 @@ public class StairsControlsFragment extends Fragment {
                 selectButtonDistinct(_buttonNoMode);
                 break;
             default:
-                Log.w(TAG, "handleStateChanged() -> ignored state: " + newState.name() + " (not relevant for this UI)");
+                Log.w(TAG, "handleStateChanged() -> ignoring state: " + currentState.name()
+                        + " (not relevant for this UI)");
         }
     }
 

@@ -142,6 +142,7 @@ public class ConnectionManager {
         }
 
         private void handleResultMode(ModeData modeData) {
+            // this only means that the requested mode has been understood - not yet active (see handleResultState)
             RoboRIOCommand command = RoboRIOCommand.getCommandFromStringDescription(modeData.getDescription());
             Log.i(TAG, "handleResultMode() -> Got ACK for requested command: " + command);
         }
@@ -321,5 +322,6 @@ public class ConnectionManager {
             Log.w(TAG, "tryCloseSerialPort() -> catch NullPointerException, was the port open already?");
         }
     }
+
 
 }

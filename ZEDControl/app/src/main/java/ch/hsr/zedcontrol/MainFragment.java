@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import ch.hsr.zedcontrol.roborio.ConnectionManager;
 import ch.hsr.zedcontrol.roborio.RoboRIOCommand;
@@ -166,6 +165,7 @@ public class MainFragment extends Fragment {
         _connectionManager = ((MainActivity) getActivity()).connectionManager;
         initConnectionReceiver();
 
+        // ensure that no driving mode is active when (re-)entering this fragment (security reason)
         _buttonNoMode.performClick();
     }
 
