@@ -84,6 +84,19 @@
             android:textSize="18sp"/>
 
         <Button
+            android:id="@+id/button_drive_maneuver"
+            style="@style/ButtonWithDrawable"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_state_selector"
+            android:drawableEnd="@android:drawable/ic_menu_compass"
+            android:drawableStart="@android:drawable/ic_menu_compass"
+            android:text="@string/button_mode_drive_maneuver"
+            android:textColor="@color/button_state_selected_textcolor"
+            android:textSize="18sp"/>
+
+        <Button
             android:id="@+id/button_drive_fast"
             style="@style/ButtonWithDrawable"
             android:layout_width="match_parent"

@@ -29,6 +29,7 @@ public class MainFragment extends Fragment {
     private Button _buttonPowerOff;
     private Button _buttonStartUp;
     private Button _buttonDriveThrottled;
+    private Button _buttonDriveManeuver;
     private Button _buttonDriveFast;
     private Button _buttonNoMode;
 
@@ -65,6 +66,7 @@ public class MainFragment extends Fragment {
         initButtonPowerOff(view);
         initButtonStartUp(view);
         initButtonDriveSlow(view);
+        initButtonDriveManeuver(view);
         initButtonDriveFast(view);
         initButtonStairs(view);
         initButtonNoMode(view);
@@ -104,16 +106,26 @@ public class MainFragment extends Fragment {
         _buttonDriveThrottled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
-                                R.anim.enter_from_right, R.anim.exit_to_left)
-                        .replace(R.id.fragment_container, new SteeringModeFragment())
-                        .addToBackStack(TAG)
-                        .commit();
+                if (v.isSelected()) {
+                    return;
+                }
+                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_THROTTLED);
             }
         });
     }
 
+    private void initButtonDriveManeuver(View view) {
+        _buttonDriveManeuver = (Button) view.findViewById(R.id.button_drive_maneuver);
+        _buttonDriveManeuver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.isSelected()) {
+                    return;
+                }
+                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_THROTTLED_STEERING_BOTH_MIRRORED);
+            }
+        });
+    }
 
     private void initButtonDriveFast(View view) {
         _buttonDriveFast = (Button) view.findViewById(R.id.button_drive_fast);
@@ -195,6 +207,9 @@ public class MainFragment extends Fragment {
             case DRIVE_THROTTLED:
                 selectButtonDistinct(_buttonDriveThrottled);
                 break;
+            case DRIVE_THROTTLED_STEERING_BOTH_MIRRORED:
+                selectButtonDistinct(_buttonDriveManeuver);
+                break;
             case DRIVE_FREE:
                 selectButtonDistinct(_buttonDriveFast);
                 break;
@@ -217,6 +232,7 @@ public class MainFragment extends Fragment {
         _buttonPowerOff.setSelected(_buttonPowerOff == shallBeSelectedButton);
         _buttonStartUp.setSelected(_buttonStartUp == shallBeSelectedButton);
         _buttonDriveThrottled.setSelected(_buttonDriveThrottled == shallBeSelectedButton);
+        _buttonDriveManeuver.setSelected(_buttonDriveManeuver == shallBeSelectedButton);
         _buttonDriveFast.setSelected(_buttonDriveFast == shallBeSelectedButton);
         _buttonNoMode.setSelected(_buttonNoMode == shallBeSelectedButton);
     }

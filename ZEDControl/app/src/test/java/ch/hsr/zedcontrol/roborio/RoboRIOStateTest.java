@@ -64,7 +64,7 @@ public class RoboRIOStateTest {
     @Test
     public void equalsState_DriveFree_returnsTrue() {
         // Arrange
-        String otherState = "State:M_Drive:0;";
+        String otherState = "State:M_Drive:4;";
         RoboRIOState state = RoboRIOState.DRIVE_FREE;
 
         // Act
