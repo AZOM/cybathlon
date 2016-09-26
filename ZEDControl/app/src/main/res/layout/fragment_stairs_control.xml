@@ -49,6 +49,8 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/button_state_selector"
+            android:drawableEnd="@drawable/ic_steering_fixed"
+            android:drawableStart="@drawable/ic_steering_fixed"
             android:text="@string/button_drive_fixed_steering"
             android:textColor="@color/button_state_selected_textcolor"/>
 
