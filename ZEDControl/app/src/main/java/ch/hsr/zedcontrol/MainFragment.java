@@ -179,7 +179,9 @@ public class MainFragment extends Fragment {
         initConnectionReceiver();
 
         // ensure that no driving mode is active when (re-)entering this fragment (security reason)
-        _buttonNoMode.performClick();
+        _connectionManager.sendCommand(RoboRIOCommand.NO_MODE);
+        // used to have the button "no mode" immediately selected when returning from EmergencyFragment
+        handleStateChanged(_connectionManager.getCurrentState());
     }
 
 

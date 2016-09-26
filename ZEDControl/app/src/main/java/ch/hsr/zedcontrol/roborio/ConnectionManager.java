@@ -55,7 +55,7 @@ public class ConnectionManager {
     private UsbDevice _usbDevice;
     private UsbSerialDevice _serialPort;
 
-    //TODO: check if this is really necessary and cannot be achieved by listening to the internal broadcasts properly
+    // save the last known state to access it faster than the 10s keep-alive-signal from RoboRIO
     private RoboRIOState _currentState = RoboRIOState.NO_MODE;
 
     private final Handler _handler = new Handler();
