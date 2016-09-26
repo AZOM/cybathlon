@@ -16,6 +16,7 @@
     <string name="button_mode_none">No mode</string>
 
     <!-- StairsControlsFragment -->
+    <string name="button_drive_fixed_steering">Drive with fixed steering</string>
     <string name="button_lift_front_wheels">Lift front wheels</string>
     <string name="button_lift_rear_wheels">Lift rear wheels</string>
     <string name="button_mode_drive_fall_protection">Drive with fall protection</string>

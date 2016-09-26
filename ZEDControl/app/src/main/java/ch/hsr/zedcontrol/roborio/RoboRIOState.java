@@ -24,7 +24,8 @@ public enum RoboRIOState {
     LIFT_REAR_WHEELS("State:M_Stairs:1;"),
     DRIVE_FALL_PROTECTION("State:M_Stairs:2;"),
     LOWER_FRONT_WHEELS("State:M_Stairs:3;"),
-    LOWER_REAR_WHEELS("State:M_Stairs:4;");
+    LOWER_REAR_WHEELS("State:M_Stairs:4;"),
+    DRIVE_FIXED_STEERING("State:M_Stairs:5;");
 
     private final String state;
 
