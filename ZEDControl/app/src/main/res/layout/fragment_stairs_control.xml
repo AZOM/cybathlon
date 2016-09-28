@@ -78,18 +78,6 @@
             android:textColor="@color/button_state_selected_textcolor"/>
 
         <Button
-            android:id="@+id/button_mode_drive_fall_protection"
-            style="@style/ButtonWithDrawable"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_state_selector"
-            android:drawableEnd="@drawable/ic_fall_protection"
-            android:drawableStart="@drawable/ic_fall_protection"
-            android:text="@string/button_mode_drive_fall_protection"
-            android:textColor="@color/button_state_selected_textcolor"/>
-
-        <Button
             android:id="@+id/button_lift_rear_wheel"
             style="@style/ButtonWithDrawable"
             android:layout_width="match_parent"

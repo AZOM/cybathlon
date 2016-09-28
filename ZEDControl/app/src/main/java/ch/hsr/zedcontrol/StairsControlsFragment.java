@@ -31,7 +31,6 @@ public class StairsControlsFragment extends Fragment {
     private Button _buttonDriveWithFixedSteering;
     private Button _buttonLiftFrontWheels;
     private Button _buttonLiftRearWheels;
-    private Button _buttonDriveWithFallProtection;
     private Button _buttonLowerFrontWheels;
     private Button _buttonLowerRearWheels;
     private Button _buttonNoMode;
@@ -69,7 +68,6 @@ public class StairsControlsFragment extends Fragment {
         initButtonDriveWithFixedSteering(view);
         initButtonLiftFrontWheels(view);
         initButtonLiftRearWheels(view);
-        initButtonFallProtection(view);
         initButtonLowerFrontWheels(view);
         initButtonLowerRearWheels(view);
 
@@ -115,20 +113,6 @@ public class StairsControlsFragment extends Fragment {
                     return;
                 }
                 _connectionManager.sendCommand(RoboRIOCommand.LIFT_REAR_WHEELS);
-            }
-        });
-    }
-
-
-    private void initButtonFallProtection(final View view) {
-        _buttonDriveWithFallProtection = (Button) view.findViewById(R.id.button_mode_drive_fall_protection);
-        _buttonDriveWithFallProtection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.isSelected()) {
-                    return;
-                }
-                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_FALL_PROTECTION);
             }
         });
     }
@@ -225,9 +209,6 @@ public class StairsControlsFragment extends Fragment {
             case LIFT_REAR_WHEELS:
                 selectButtonDistinct(_buttonLiftRearWheels);
                 break;
-            case DRIVE_FALL_PROTECTION:
-                selectButtonDistinct(_buttonDriveWithFallProtection);
-                break;
             case LOWER_FRONT_WHEELS:
                 selectButtonDistinct(_buttonLowerFrontWheels);
                 break;
@@ -254,7 +235,6 @@ public class StairsControlsFragment extends Fragment {
         _buttonDriveWithFixedSteering.setSelected(_buttonDriveWithFixedSteering == shallBeSelectedButton);
         _buttonLiftFrontWheels.setSelected(_buttonLiftFrontWheels == shallBeSelectedButton);
         _buttonLiftRearWheels.setSelected(_buttonLiftRearWheels == shallBeSelectedButton);
-        _buttonDriveWithFallProtection.setSelected(_buttonDriveWithFallProtection == shallBeSelectedButton);
         _buttonLowerFrontWheels.setSelected(_buttonLowerFrontWheels == shallBeSelectedButton);
         _buttonLowerRearWheels.setSelected(_buttonLowerRearWheels == shallBeSelectedButton);
         _buttonNoMode.setSelected(_buttonNoMode == shallBeSelectedButton);
