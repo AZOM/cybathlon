@@ -31,8 +31,6 @@ public class StairsControlsFragment extends Fragment {
     private Button _buttonDriveWithFixedSteering;
     private Button _buttonLiftFrontWheels;
     private Button _buttonLiftRearWheels;
-    private Button _buttonLowerFrontWheels;
-    private Button _buttonLowerRearWheels;
     private Button _buttonNoMode;
 
     private final BroadcastReceiver _connectionReceiver = new BroadcastReceiver() {
@@ -65,28 +63,12 @@ public class StairsControlsFragment extends Fragment {
 
 
     private void initButtons(View view) {
-        initButtonDriveWithFixedSteering(view);
         initButtonLiftFrontWheels(view);
         initButtonLiftRearWheels(view);
-        initButtonLowerFrontWheels(view);
-        initButtonLowerRearWheels(view);
+        initButtonDriveWithFixedSteering(view);
 
         initButtonBack(view);
         initButtonNoMode(view);
-    }
-
-
-    private void initButtonDriveWithFixedSteering(final View view) {
-        _buttonDriveWithFixedSteering = (Button) view.findViewById(R.id.button_drive_fixed_steering);
-        _buttonDriveWithFixedSteering.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.isSelected()) {
-                    return;
-                }
-                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_FIXED_STEERING);
-            }
-        });
     }
 
 
@@ -118,29 +100,15 @@ public class StairsControlsFragment extends Fragment {
     }
 
 
-    private void initButtonLowerFrontWheels(final View view) {
-        _buttonLowerFrontWheels = (Button) view.findViewById(R.id.button_lower_front_wheels);
-        _buttonLowerFrontWheels.setOnClickListener(new View.OnClickListener() {
+    private void initButtonDriveWithFixedSteering(final View view) {
+        _buttonDriveWithFixedSteering = (Button) view.findViewById(R.id.button_drive_fixed_steering);
+        _buttonDriveWithFixedSteering.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.isSelected()) {
                     return;
                 }
-                _connectionManager.sendCommand(RoboRIOCommand.LOWER_FRONT_WHEELS);
-            }
-        });
-    }
-
-
-    private void initButtonLowerRearWheels(final View view) {
-        _buttonLowerRearWheels = (Button) view.findViewById(R.id.button_lower_rear_wheel);
-        _buttonLowerRearWheels.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.isSelected()) {
-                    return;
-                }
-                _connectionManager.sendCommand(RoboRIOCommand.LOWER_REAR_WHEELS);
+                _connectionManager.sendCommand(RoboRIOCommand.DRIVE_FIXED_STEERING);
             }
         });
     }
@@ -209,12 +177,6 @@ public class StairsControlsFragment extends Fragment {
             case LIFT_REAR_WHEELS:
                 selectButtonDistinct(_buttonLiftRearWheels);
                 break;
-            case LOWER_FRONT_WHEELS:
-                selectButtonDistinct(_buttonLowerFrontWheels);
-                break;
-            case LOWER_REAR_WHEELS:
-                selectButtonDistinct(_buttonLowerRearWheels);
-                break;
             case NO_MODE:
                 selectButtonDistinct(_buttonNoMode);
                 break;
@@ -235,8 +197,6 @@ public class StairsControlsFragment extends Fragment {
         _buttonDriveWithFixedSteering.setSelected(_buttonDriveWithFixedSteering == shallBeSelectedButton);
         _buttonLiftFrontWheels.setSelected(_buttonLiftFrontWheels == shallBeSelectedButton);
         _buttonLiftRearWheels.setSelected(_buttonLiftRearWheels == shallBeSelectedButton);
-        _buttonLowerFrontWheels.setSelected(_buttonLowerFrontWheels == shallBeSelectedButton);
-        _buttonLowerRearWheels.setSelected(_buttonLowerRearWheels == shallBeSelectedButton);
         _buttonNoMode.setSelected(_buttonNoMode == shallBeSelectedButton);
     }
 

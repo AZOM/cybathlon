@@ -42,39 +42,15 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/button_lower_rear_wheel"
+            android:id="@+id/button_lift_front_wheels"
             style="@style/ButtonWithDrawable"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/button_state_selector"
-            android:drawableEnd="@drawable/ic_stairs_down"
-            android:drawableStart="@drawable/ic_stairs_down"
-            android:text="@string/button_lower_rear_wheels"
-            android:textColor="@color/button_state_selected_textcolor"/>
-
-        <Button
-            android:id="@+id/button_lower_front_wheels"
-            style="@style/ButtonWithDrawable"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_state_selector"
-            android:drawableEnd="@drawable/ic_stairs_down"
-            android:drawableStart="@drawable/ic_stairs_down"
-            android:text="@string/button_lower_front_wheels"
-            android:textColor="@color/button_state_selected_textcolor"/>
-
-        <Button
-            android:id="@+id/button_drive_fixed_steering"
-            style="@style/ButtonWithDrawable"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_state_selector"
-            android:drawableEnd="@drawable/ic_steering_fixed"
-            android:drawableStart="@drawable/ic_steering_fixed"
-            android:text="@string/button_drive_fixed_steering"
+            android:drawableEnd="@drawable/ic_stairs_up"
+            android:drawableStart="@drawable/ic_stairs_up"
+            android:text="@string/button_lift_front_wheels"
             android:textColor="@color/button_state_selected_textcolor"/>
 
         <Button
@@ -90,15 +66,15 @@
             android:textColor="@color/button_state_selected_textcolor"/>
 
         <Button
-            android:id="@+id/button_lift_front_wheels"
+            android:id="@+id/button_drive_fixed_steering"
             style="@style/ButtonWithDrawable"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/button_state_selector"
-            android:drawableEnd="@drawable/ic_stairs_up"
-            android:drawableStart="@drawable/ic_stairs_up"
-            android:text="@string/button_lift_front_wheels"
+            android:drawableEnd="@drawable/ic_steering_fixed"
+            android:drawableStart="@drawable/ic_steering_fixed"
+            android:text="@string/button_drive_fixed_steering"
             android:textColor="@color/button_state_selected_textcolor"/>
 
     </LinearLayout>
