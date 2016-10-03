@@ -4,6 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/black_overlay_2"
+                android:clickable="true"
                 tools:context="ch.hsr.zedcontrol.MainActivity">
 
     <ImageView
