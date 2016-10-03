@@ -45,4 +45,11 @@
         android:layout_above="@id/layout_battery_status"
         tools:layout="@layout/fragment_main"/>
 
+    <FrameLayout
+        android:id="@+id/fragment_container_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/layout_battery_status"
+        tools:layout="@layout/fragment_main"/>
+
 </RelativeLayout>

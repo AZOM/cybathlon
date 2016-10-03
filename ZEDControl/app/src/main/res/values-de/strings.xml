@@ -26,4 +26,5 @@
     <string name="text_emergency_off">Bittte l\u00F6sen Sie den Not-Aus Schalter um die Kontrolle wiederzuerlangen.</string>
     <string name="button_mode_drive_maneuver">Manövrieren</string>
     <string name="button_drive_fixed_steering">Fahren mit limitierter Lenkung</string>
+    <string name="text_check_seat_position">Sitzposition überprüfen!</string>
 </resources>

@@ -29,6 +29,9 @@
     <!-- EmergencyFragment -->
     <string name="text_emergency_off">Please release the emergency-off button to re-establish control.</string>
 
+    <!-- WarningSeatPositionFragment -->
+    <string name="text_check_seat_position">Check your seat position!</string>
+
     <!-- Error messages -->
     <string name="error_no_usb_connection">Could not establish connection to UsbDevice.</string>
     <string name="error_create_serialport">Could not create UsbSerialDevice.</string>

@@ -95,8 +95,18 @@ public class StairsControlsFragment extends Fragment {
                     return;
                 }
                 _connectionManager.sendCommand(RoboRIOCommand.LIFT_REAR_WHEELS);
+
+                showWarningSeatPosition();
             }
         });
+    }
+
+
+    private void showWarningSeatPosition() {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container_overlay, new WarningSeatPositionFragment())
+                .addToBackStack(TAG)
+                .commit();
     }
 
 
